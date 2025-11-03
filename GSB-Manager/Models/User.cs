@@ -1,0 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace GSB_Manager.Models
+{
+    public class User
+    {
+        public int Users_id { get; set; } // C'est une propriété (attribut), permet d'accéder en lecture et écriture via get set
+
+        public string Name { get; set; }
+
+        public string Firstname { get; set; }
+
+        public string Email { get; set; }
+
+        public string Password { get; set; }
+
+        public bool Role { get; set; }
+        public User() // c'est le constructeur par défaut qui permettra d'instancier Users et avoir accès à toutes ses propriétés (attributs)
+        {      }
+
+        public User(int users_id, string name, string firstname, bool role) // c'est une surcharge du constructeur, ça permettrea la création d'objet Users qui sera instancié avec les valeurs passées en paramètre
+        {
+            this.Users_id = users_id;
+            this.Name = name;
+            this.Firstname = firstname;
+            this.Role = role;
+        }
+    }
+}

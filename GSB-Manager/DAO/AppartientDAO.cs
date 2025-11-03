@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GSB_Manager.Models
+namespace GSB_Manager.DAO
 {
-    internal class Users
+    public class AppartientDAO
     {
     }
 }
