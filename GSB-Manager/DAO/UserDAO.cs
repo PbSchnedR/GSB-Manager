@@ -57,5 +57,47 @@ namespace GSB_Manager.DAO
                 }
             }
         }
+
+        public List<User> GetAllDoctors()
+        {
+            List<User> doctors = new List<User>();
+
+            string name = string.Empty;
+            string firstName = string.Empty;
+
+            var connection = db.GetConnection();
+            connection.Open();
+
+            {
+                try
+                {
+                    // create a MySQL command and set the SQL statement with parameters
+                    MySqlCommand myCommand = new MySqlCommand();
+                    myCommand.Connection = connection;
+                    myCommand.CommandText = @"SELECT * FROM `Users` WHERE role = 0";
+
+                    // execute the command and read the results
+                    using var myReader = myCommand.ExecuteReader();
+                    {
+                        while (myReader.Read())
+                        {
+                            name = myReader.GetString("name");
+                            firstName = myReader.GetString("firstname");
+
+                            doctors.Add(new User(name, firstName));
+                        }
+                    }
+
+
+                    connection.Close();
+                    return doctors;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                    return null;
+                }
+            }
+        }
     }
 }

@@ -14,6 +14,11 @@ namespace GSB_Manager.Models
 
         public string Firstname { get; set; }
 
+        public string Full_name
+        {
+            get { return $"{Firstname} {Name}"; }
+        }
+
         public string Email { get; set; }
 
         public string Password { get; set; }
@@ -28,6 +33,12 @@ namespace GSB_Manager.Models
             this.Name = name;
             this.Firstname = firstname;
             this.Role = role;
+        }
+
+        public User(string name, string firstname) // c'est une surcharge du constructeur, ça permettrea la création d'objet Users qui sera instancié avec les valeurs passées en paramètre
+        {
+            this.Name = name;
+            this.Firstname = firstname;
         }
     }
 }

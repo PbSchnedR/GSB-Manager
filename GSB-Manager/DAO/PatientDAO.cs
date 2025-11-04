@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -17,48 +18,75 @@ namespace GSB_Manager.DAO
 
         private readonly Database db = new Database();
 
-        public List<object> GetAllPatients()
+        public List<Patient> GetAllPatients()
         {
-            var patients = new List<object>();
+            List<Patient> medicines = new List<Patient>();
 
-            using (var connection = db.GetConnection())
+            int id = 0;
+            int user_id = 0;
+            string name = string.Empty;
+            string firstName = string.Empty;
+            string lastName = string.Empty;
+            string email = string.Empty;
+            string gender = "helicoptère";
+            int age = 0;
+            string full_name = string.Empty;
+            string user_full_name = string.Empty;
+
+            var connection = db.GetConnection();
+            connection.Open();
+
             {
-                connection.Open();
+                
 
                 try
                 {
+                    // create a MySQL command and set the SQL statement with parameters
                     MySqlCommand myCommand = new MySqlCommand();
                     myCommand.Connection = connection;
-                    myCommand.CommandText = @"SELECT * FROM Patients";
+                    myCommand.CommandText = @"
+                        SELECT 
+                        p.patients_id, 
+                        p.users_id, 
+                        p.name, 
+                        p.firstname, 
+                        p.age, 
+                        p.gender, 
+                        u.name, 
+                        u.firstname 
+                        FROM `Patients` as p 
+                        inner join Users as u on p.users_id = u.users_id
+";
 
+                    // execute the command and read the results
                     using var myReader = myCommand.ExecuteReader();
-                    while (myReader.Read())
                     {
-                        var item = new
+                        while (myReader.Read())
                         {
-                            id = myReader.GetInt32("patients_id"),
-                            user_id = myReader.GetInt32("users_id"),
-                            name = myReader.GetString("name"),
-                            firstName = myReader.GetString("firstname"),
-                            gender = myReader.GetString("gender"),
-                            age = myReader.GetInt32("age"),
-                            FullName = myReader.GetString("firstname") + " " + myReader.GetString("name")
-                        };
+                            id = myReader.GetInt32("patients_id");
+                            user_id = myReader.GetInt32("users_id");
+                            name = myReader.GetString("name");
+                            firstName = myReader.GetString("firstname");
+                            gender = myReader.GetString("gender");
+                            age = myReader.GetInt32("age");
+                            full_name = myReader.GetString("firstname") + " " + myReader.GetString("name");
+                            user_full_name = "Dr. " + myReader.GetString("firstname") + " " + myReader.GetString("name");
 
-                        patients.Add(item);
+                            medicines.Add(new Patient(id, user_id, name, firstName, age, gender, full_name, user_full_name));
+                        }
                     }
 
-                    return patients;
+
+                    connection.Close();
+                    return medicines;
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(ex.ToString());
                     return null;
                 }
             }
         }
-
-
 
         public Patient GetPatientById(int patientId)
         {
