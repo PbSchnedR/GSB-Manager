@@ -78,7 +78,6 @@
             panelPrescriptionDetails = new Panel();
             dateTimePickerPrescriptionValidity = new DateTimePicker();
             comboBoxPrescriptionPatient = new ComboBox();
-            comboBoxPrescriptionDoctor = new ComboBox();
             comboBoxPrescriptionMedicine = new ComboBox();
             textBoxPrescriptionPatient = new TextBox();
             labelPrescriptionPatient = new Label();
@@ -99,6 +98,11 @@
             buttonPatientCancel = new Button();
             buttonPatientRegister = new Button();
             panelPatientDetails = new Panel();
+            labelPatientFirstname = new Label();
+            textBoxPatientFirstname = new TextBox();
+            textBoxPatientName = new TextBox();
+            labelPatientName = new Label();
+            comboBoxPatientGender = new ComboBox();
             textBoxPatientAge = new TextBox();
             textBoxPatientDoctor = new TextBox();
             textBoxPatientGender = new TextBox();
@@ -316,6 +320,7 @@
             btnDeleteMedicine.Size = new Size(75, 29);
             btnDeleteMedicine.TabIndex = 4;
             btnDeleteMedicine.Text = "Delete";
+            btnDeleteMedicine.Click += btnDeleteMedicine_Click;
             // 
             // tabPrescriptions
             // 
@@ -361,7 +366,6 @@
             panelPrescriptionDetails.BorderStyle = BorderStyle.FixedSingle;
             panelPrescriptionDetails.Controls.Add(dateTimePickerPrescriptionValidity);
             panelPrescriptionDetails.Controls.Add(comboBoxPrescriptionPatient);
-            panelPrescriptionDetails.Controls.Add(comboBoxPrescriptionDoctor);
             panelPrescriptionDetails.Controls.Add(comboBoxPrescriptionMedicine);
             panelPrescriptionDetails.Controls.Add(textBoxPrescriptionPatient);
             panelPrescriptionDetails.Controls.Add(labelPrescriptionPatient);
@@ -397,15 +401,6 @@
             comboBoxPrescriptionPatient.TabIndex = 13;
             comboBoxPrescriptionPatient.Visible = false;
             // 
-            // comboBoxPrescriptionDoctor
-            // 
-            comboBoxPrescriptionDoctor.FormattingEnabled = true;
-            comboBoxPrescriptionDoctor.Location = new Point(27, 301);
-            comboBoxPrescriptionDoctor.Name = "comboBoxPrescriptionDoctor";
-            comboBoxPrescriptionDoctor.Size = new Size(211, 28);
-            comboBoxPrescriptionDoctor.TabIndex = 12;
-            comboBoxPrescriptionDoctor.Visible = false;
-            // 
             // comboBoxPrescriptionMedicine
             // 
             comboBoxPrescriptionMedicine.FormattingEnabled = true;
@@ -414,6 +409,7 @@
             comboBoxPrescriptionMedicine.Size = new Size(211, 28);
             comboBoxPrescriptionMedicine.TabIndex = 11;
             comboBoxPrescriptionMedicine.Visible = false;
+            comboBoxPrescriptionMedicine.SelectedIndexChanged += comboBoxPrescriptionMedicine_SelectedIndexChanged;
             // 
             // textBoxPrescriptionPatient
             // 
@@ -547,6 +543,7 @@
             btnDeletePrescription.Size = new Size(75, 29);
             btnDeletePrescription.TabIndex = 4;
             btnDeletePrescription.Text = "Delete";
+            btnDeletePrescription.Click += btnDeletePrescription_Click;
             // 
             // tabPatients
             // 
@@ -584,11 +581,17 @@
             buttonPatientRegister.TabIndex = 6;
             buttonPatientRegister.Text = "Register";
             buttonPatientRegister.Visible = false;
+            buttonPatientRegister.Click += buttonPatientRegister_Click;
             // 
             // panelPatientDetails
             // 
             panelPatientDetails.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panelPatientDetails.BorderStyle = BorderStyle.FixedSingle;
+            panelPatientDetails.Controls.Add(labelPatientFirstname);
+            panelPatientDetails.Controls.Add(textBoxPatientFirstname);
+            panelPatientDetails.Controls.Add(textBoxPatientName);
+            panelPatientDetails.Controls.Add(labelPatientName);
+            panelPatientDetails.Controls.Add(comboBoxPatientGender);
             panelPatientDetails.Controls.Add(textBoxPatientAge);
             panelPatientDetails.Controls.Add(textBoxPatientDoctor);
             panelPatientDetails.Controls.Add(textBoxPatientGender);
@@ -602,6 +605,51 @@
             panelPatientDetails.Name = "panelPatientDetails";
             panelPatientDetails.Size = new Size(450, 474);
             panelPatientDetails.TabIndex = 0;
+            // 
+            // labelPatientFirstname
+            // 
+            labelPatientFirstname.AutoSize = true;
+            labelPatientFirstname.Location = new Point(31, 315);
+            labelPatientFirstname.Name = "labelPatientFirstname";
+            labelPatientFirstname.Size = new Size(72, 20);
+            labelPatientFirstname.TabIndex = 12;
+            labelPatientFirstname.Text = "Firstame :";
+            labelPatientFirstname.Visible = false;
+            // 
+            // textBoxPatientFirstname
+            // 
+            textBoxPatientFirstname.Location = new Point(27, 338);
+            textBoxPatientFirstname.Name = "textBoxPatientFirstname";
+            textBoxPatientFirstname.Size = new Size(175, 27);
+            textBoxPatientFirstname.TabIndex = 11;
+            textBoxPatientFirstname.Visible = false;
+            // 
+            // textBoxPatientName
+            // 
+            textBoxPatientName.Location = new Point(27, 246);
+            textBoxPatientName.Name = "textBoxPatientName";
+            textBoxPatientName.Size = new Size(175, 27);
+            textBoxPatientName.TabIndex = 10;
+            textBoxPatientName.Visible = false;
+            // 
+            // labelPatientName
+            // 
+            labelPatientName.AutoSize = true;
+            labelPatientName.Location = new Point(31, 223);
+            labelPatientName.Name = "labelPatientName";
+            labelPatientName.Size = new Size(56, 20);
+            labelPatientName.TabIndex = 9;
+            labelPatientName.Text = "Name :";
+            labelPatientName.Visible = false;
+            // 
+            // comboBoxPatientGender
+            // 
+            comboBoxPatientGender.FormattingEnabled = true;
+            comboBoxPatientGender.Location = new Point(27, 90);
+            comboBoxPatientGender.Name = "comboBoxPatientGender";
+            comboBoxPatientGender.Size = new Size(151, 28);
+            comboBoxPatientGender.TabIndex = 8;
+            comboBoxPatientGender.Visible = false;
             // 
             // textBoxPatientAge
             // 
@@ -690,6 +738,7 @@
             btnAddPatient.Size = new Size(75, 29);
             btnAddPatient.TabIndex = 2;
             btnAddPatient.Text = "Add";
+            btnAddPatient.Click += btnAddPatient_Click;
             // 
             // btnEditPatient
             // 
@@ -708,6 +757,7 @@
             btnDeletePatient.Size = new Size(75, 29);
             btnDeletePatient.TabIndex = 4;
             btnDeletePatient.Text = "Delete";
+            btnDeletePatient.Click += btnDeletePatient_Click;
             // 
             // UserForm
             // 
@@ -768,9 +818,13 @@
         private Button buttonPrescriptionCancel;
         private Button buttonPrescriptionRegister;
         private ComboBox comboBoxPrescriptionPatient;
-        private ComboBox comboBoxPrescriptionDoctor;
         private Button buttonPatientCancel;
         private Button buttonPatientRegister;
         private DateTimePicker dateTimePickerPrescriptionValidity;
+        private ComboBox comboBoxPatientGender;
+        private TextBox textBoxPatientName;
+        private Label labelPatientName;
+        private Label labelPatientFirstname;
+        private TextBox textBoxPatientFirstname;
     }
 }

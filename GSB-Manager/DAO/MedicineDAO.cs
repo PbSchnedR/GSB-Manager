@@ -159,6 +159,112 @@ namespace GSB_Manager.DAO
                 }
             }
         }
+
+        public int FindMedicineIdByName(string name)
+        {
+            int id = -1;
+
+            using (var connection = db.GetConnection())
+            {
+                connection.Open();
+
+                try
+                {
+                    MySqlCommand myCommand = new MySqlCommand();
+                    myCommand.Connection = connection;
+                    myCommand.CommandText = @"SELECT medicine_id FROM Medicine WHERE name = @name LIMIT 1;";
+                    myCommand.Parameters.AddWithValue("@name", name);
+
+                    object result = myCommand.ExecuteScalar(); // renvoie la première colonne du premier résultat
+
+                    if (result != null && result != DBNull.Value)
+                    {
+                        id = Convert.ToInt32(result);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erreur dans FindMedicineIdByName : " + ex.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+
+            return id;
+        }
+
+        public bool EditMedicine(int medicine_id, int user_id, string name, string description, string molecule, int dosage)
+        {
+            using (var connection = db.GetConnection())
+            {
+                connection.Open();
+                try
+                {
+                    MySqlCommand myCommand = new MySqlCommand();
+                    myCommand.Connection = connection;
+                    myCommand.CommandText = @"
+                UPDATE Medicine 
+                SET users_id = @user_id, 
+                    name = @name, 
+                    description = @description, 
+                    molecule = @molecule, 
+                    dosage = @dosage
+                WHERE medicine_id = @medicine_id;
+            ";
+
+                    myCommand.Parameters.AddWithValue("@medicine_id", medicine_id);
+                    myCommand.Parameters.AddWithValue("@user_id", user_id);
+                    myCommand.Parameters.AddWithValue("@name", name);
+                    myCommand.Parameters.AddWithValue("@description", description);
+                    myCommand.Parameters.AddWithValue("@molecule", molecule);
+                    myCommand.Parameters.AddWithValue("@dosage", dosage);
+
+                    int rowsAffected = myCommand.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erreur dans EditMedicine : " + ex.Message);
+                    return false;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        public bool DeleteMedicine(int medicine_id)
+        {
+            using (var connection = db.GetConnection())
+            {
+                connection.Open();
+                try
+                {
+                    MySqlCommand myCommand = new MySqlCommand();
+                    myCommand.Connection = connection;
+                    myCommand.CommandText = @"DELETE FROM Medicine WHERE medicine_id = @medicine_id;";
+                    myCommand.Parameters.AddWithValue("@medicine_id", medicine_id);
+
+                    int rowsAffected = myCommand.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erreur dans DeleteMedicine : " + ex.Message);
+                    return false;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+
+
     }
 }
 

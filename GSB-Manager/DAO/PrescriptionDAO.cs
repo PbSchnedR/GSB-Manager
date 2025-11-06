@@ -137,48 +137,46 @@ namespace GSB_Manager.DAO
         }
 
 
-        public Prescription CreatePrescription(int user_id, int patient_id, int quantity, DateTime validity)
+        public int CreatePrescription(int user_id, int patient_id, int quantity, DateTime validity)
         {
-            int id = 0;
+            int newId = 0;
             var connection = db.GetConnection();
             connection.Open();
+
+            try
             {
-                try
-                {
-                    // create a MySQL command and set the SQL statement with parameters
-                    MySqlCommand myCommand = new MySqlCommand();
-                    myCommand.Connection = connection;
-                    myCommand.CommandText = @"INSERT INTO Prescription (users_id, patients_id, quantity, validity) VALUES (@user_id, @patient_id, @quantity, @validity);";
-                    myCommand.Parameters.AddWithValue("@user_id", user_id);
-                    myCommand.Parameters.AddWithValue("@patient_id", user_id);
-                    myCommand.Parameters.AddWithValue("@quantity", quantity);
-                    myCommand.Parameters.AddWithValue("@validity", validity);
+                MySqlCommand myCommand = new MySqlCommand();
+                myCommand.Connection = connection;
+                myCommand.CommandText = @"
+            INSERT INTO Prescription (users_id, patients_id, quantity, validity)
+            VALUES (@user_id, @patient_id, @quantity, @validity);
+            SELECT LAST_INSERT_ID();
+        ";
 
-                    // execute the command and read the results
-                    using var myReader = myCommand.ExecuteReader();
-                    {
-                        while (myReader.Read())
-                        {
-                            id = myReader.GetInt32("Prescription_id");
-                            user_id = myReader.GetInt32("users_id");
-                            patient_id = myReader.GetInt32("patients_id");
-                            quantity = myReader.GetInt32("quantity");
-                            validity = myReader.GetDateTime("validity");
-                        }
-                    }
-                    Prescription Prescription = new Prescription(id, user_id, patient_id, quantity, validity);
+                myCommand.Parameters.AddWithValue("@user_id", user_id);
+                myCommand.Parameters.AddWithValue("@patient_id", patient_id);
+                myCommand.Parameters.AddWithValue("@quantity", quantity);
+                myCommand.Parameters.AddWithValue("@validity", validity);
 
+                // ExecuteScalar récupère directement la première valeur (ici le nouvel ID)
+                object result = myCommand.ExecuteScalar();
 
-                    connection.Close();
-                    return Prescription;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString());
-                    return null;
-                }
+                if (result != null)
+                    newId = Convert.ToInt32(result);
+
+                return newId;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return 0;
+            }
+            finally
+            {
+                connection.Close();
             }
         }
+
 
 
         public List<string> GetPrescriptionMedicines(int PrescriptionId)
@@ -226,6 +224,111 @@ namespace GSB_Manager.DAO
                 }
             }
         }
+
+        public void AddMedicineToPrescription(int prescription_id, int medicine_id)
+        {
+            var connection = db.GetConnection();
+            connection.Open();
+
+            try
+            {
+                MySqlCommand myCommand = new MySqlCommand();
+                myCommand.Connection = connection;
+                myCommand.CommandText = @"
+            INSERT INTO Appartient (prescription_id, medicine_id)
+            VALUES (@prescription_id, @medicine_id);";
+
+                myCommand.Parameters.AddWithValue("@prescription_id", prescription_id);
+                myCommand.Parameters.AddWithValue("@medicine_id", medicine_id);
+
+                myCommand.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public bool EditPrescription(int prescription_id, int user_id, int patient_id, int quantity, DateTime validity)
+        {
+            using (var connection = db.GetConnection())
+            {
+                connection.Open();
+                try
+                {
+                    MySqlCommand myCommand = new MySqlCommand();
+                    myCommand.Connection = connection;
+                    myCommand.CommandText = @"
+                UPDATE Prescription
+                SET users_id = @user_id,
+                    patients_id = @patient_id,
+                    quantity = @quantity,
+                    validity = @validity
+                WHERE prescription_id = @prescription_id;
+            ";
+
+                    myCommand.Parameters.AddWithValue("@prescription_id", prescription_id);
+                    myCommand.Parameters.AddWithValue("@user_id", user_id);
+                    myCommand.Parameters.AddWithValue("@patient_id", patient_id);
+                    myCommand.Parameters.AddWithValue("@quantity", quantity);
+                    myCommand.Parameters.AddWithValue("@validity", validity);
+
+                    int rowsAffected = myCommand.ExecuteNonQuery();
+                    return rowsAffected > 0; // true si au moins une ligne a été mise à jour
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erreur dans EditPrescription : " + ex.Message);
+                    return false;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        public bool DeletePrescription(int prescription_id)
+        {
+            using (var connection = db.GetConnection())
+            {
+                connection.Open();
+                try
+                {
+                    // D’abord, on supprime les associations dans la table Appartient
+                    // pour éviter les erreurs de clé étrangère
+                    MySqlCommand deleteRelations = new MySqlCommand();
+                    deleteRelations.Connection = connection;
+                    deleteRelations.CommandText = @"DELETE FROM Appartient WHERE prescription_id = @prescription_id;";
+                    deleteRelations.Parameters.AddWithValue("@prescription_id", prescription_id);
+                    deleteRelations.ExecuteNonQuery();
+
+                    // Ensuite, on supprime la prescription
+                    MySqlCommand deletePrescription = new MySqlCommand();
+                    deletePrescription.Connection = connection;
+                    deletePrescription.CommandText = @"DELETE FROM Prescription WHERE prescription_id = @prescription_id;";
+                    deletePrescription.Parameters.AddWithValue("@prescription_id", prescription_id);
+
+                    int rowsAffected = deletePrescription.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erreur dans DeletePrescription : " + ex.Message);
+                    return false;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+
     }
 }
 
