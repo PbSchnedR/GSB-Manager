@@ -55,6 +55,7 @@
         {
             tabControl = new TabControl();
             tabMedicines = new TabPage();
+            buttonMedicineModify = new Button();
             buttonMedicineCancel = new Button();
             buttonMedicineRegister = new Button();
             panelMedicineDetails = new Panel();
@@ -73,6 +74,7 @@
             btnEditMedicine = new Button();
             btnDeleteMedicine = new Button();
             tabPrescriptions = new TabPage();
+            buttonPrescriptionModify = new Button();
             buttonPrescriptionCancel = new Button();
             buttonPrescriptionRegister = new Button();
             panelPrescriptionDetails = new Panel();
@@ -95,6 +97,7 @@
             btnEditPrescription = new Button();
             btnDeletePrescription = new Button();
             tabPatients = new TabPage();
+            buttonPatientModify = new Button();
             buttonPatientCancel = new Button();
             buttonPatientRegister = new Button();
             panelPatientDetails = new Panel();
@@ -139,6 +142,7 @@
             // 
             // tabMedicines
             // 
+            tabMedicines.Controls.Add(buttonMedicineModify);
             tabMedicines.Controls.Add(buttonMedicineCancel);
             tabMedicines.Controls.Add(buttonMedicineRegister);
             tabMedicines.Controls.Add(panelMedicineDetails);
@@ -153,6 +157,17 @@
             tabMedicines.TabIndex = 0;
             tabMedicines.Text = "Medicines";
             tabMedicines.UseVisualStyleBackColor = true;
+            // 
+            // buttonMedicineModify
+            // 
+            buttonMedicineModify.Location = new Point(480, 457);
+            buttonMedicineModify.Margin = new Padding(3, 4, 3, 4);
+            buttonMedicineModify.Name = "buttonMedicineModify";
+            buttonMedicineModify.Size = new Size(119, 29);
+            buttonMedicineModify.TabIndex = 7;
+            buttonMedicineModify.Text = "Modify";
+            buttonMedicineModify.Visible = false;
+            buttonMedicineModify.Click += buttonMedicineModify_Click;
             // 
             // buttonMedicineCancel
             // 
@@ -311,6 +326,7 @@
             btnEditMedicine.Size = new Size(75, 29);
             btnEditMedicine.TabIndex = 3;
             btnEditMedicine.Text = "Edit";
+            btnEditMedicine.Click += btnEditMedicine_Click;
             // 
             // btnDeleteMedicine
             // 
@@ -324,6 +340,7 @@
             // 
             // tabPrescriptions
             // 
+            tabPrescriptions.Controls.Add(buttonPrescriptionModify);
             tabPrescriptions.Controls.Add(buttonPrescriptionCancel);
             tabPrescriptions.Controls.Add(buttonPrescriptionRegister);
             tabPrescriptions.Controls.Add(panelPrescriptionDetails);
@@ -338,6 +355,17 @@
             tabPrescriptions.TabIndex = 1;
             tabPrescriptions.Text = "Prescriptions";
             tabPrescriptions.UseVisualStyleBackColor = true;
+            // 
+            // buttonPrescriptionModify
+            // 
+            buttonPrescriptionModify.Location = new Point(480, 457);
+            buttonPrescriptionModify.Margin = new Padding(3, 4, 3, 4);
+            buttonPrescriptionModify.Name = "buttonPrescriptionModify";
+            buttonPrescriptionModify.Size = new Size(119, 29);
+            buttonPrescriptionModify.TabIndex = 8;
+            buttonPrescriptionModify.Text = "Modify";
+            buttonPrescriptionModify.Visible = false;
+            buttonPrescriptionModify.Click += buttonPrescriptionModify_Click;
             // 
             // buttonPrescriptionCancel
             // 
@@ -534,6 +562,7 @@
             btnEditPrescription.Size = new Size(75, 29);
             btnEditPrescription.TabIndex = 3;
             btnEditPrescription.Text = "Edit";
+            btnEditPrescription.Click += btnEditPrescription_Click;
             // 
             // btnDeletePrescription
             // 
@@ -547,6 +576,7 @@
             // 
             // tabPatients
             // 
+            tabPatients.Controls.Add(buttonPatientModify);
             tabPatients.Controls.Add(buttonPatientCancel);
             tabPatients.Controls.Add(buttonPatientRegister);
             tabPatients.Controls.Add(panelPatientDetails);
@@ -561,6 +591,17 @@
             tabPatients.TabIndex = 2;
             tabPatients.Text = "Patients";
             tabPatients.UseVisualStyleBackColor = true;
+            // 
+            // buttonPatientModify
+            // 
+            buttonPatientModify.Location = new Point(480, 457);
+            buttonPatientModify.Margin = new Padding(3, 4, 3, 4);
+            buttonPatientModify.Name = "buttonPatientModify";
+            buttonPatientModify.Size = new Size(119, 29);
+            buttonPatientModify.TabIndex = 13;
+            buttonPatientModify.Text = "Modify";
+            buttonPatientModify.Visible = false;
+            buttonPatientModify.Click += buttonPatientModify_Click;
             // 
             // buttonPatientCancel
             // 
@@ -748,6 +789,7 @@
             btnEditPatient.Size = new Size(75, 29);
             btnEditPatient.TabIndex = 3;
             btnEditPatient.Text = "Edit";
+            btnEditPatient.Click += btnEditPatient_Click;
             // 
             // btnDeletePatient
             // 
@@ -826,5 +868,8 @@
         private Label labelPatientName;
         private Label labelPatientFirstname;
         private TextBox textBoxPatientFirstname;
+        private Button buttonMedicineModify;
+        private Button buttonPrescriptionModify;
+        private Button buttonPatientModify;
     }
 }

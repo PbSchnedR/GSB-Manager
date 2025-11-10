@@ -329,6 +329,47 @@ namespace GSB_Manager.DAO
         }
 
 
+        public void EditMedicineToPrescription(int prescription_id, List<int> medicine_ids)
+        {
+            using (var connection = db.GetConnection())
+            {
+                connection.Open();
+                try
+                {
+                    // Supprimer tous les anciens liens
+                    MySqlCommand deleteCmd = new MySqlCommand();
+                    deleteCmd.Connection = connection;
+                    deleteCmd.CommandText = @"DELETE FROM Appartient WHERE prescription_id = @prescription_id;";
+                    deleteCmd.Parameters.AddWithValue("@prescription_id", prescription_id);
+                    deleteCmd.ExecuteNonQuery();
+
+                    // Réinsérer chaque médicament
+                    foreach (int medicine_id in medicine_ids)
+                    {
+                        MySqlCommand insertCmd = new MySqlCommand();
+                        insertCmd.Connection = connection;
+                        insertCmd.CommandText = @"
+                            INSERT INTO Appartient (prescription_id, medicine_id)
+                            VALUES (@prescription_id, @medicine_id);
+                        ";
+                        insertCmd.Parameters.AddWithValue("@prescription_id", prescription_id);
+                        insertCmd.Parameters.AddWithValue("@medicine_id", medicine_id);
+                        insertCmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erreur dans EditMedicineToPrescription : " + ex.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+
+
     }
 }
 

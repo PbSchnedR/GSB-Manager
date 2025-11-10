@@ -419,5 +419,224 @@ namespace GSB_Manager.Forms
                 MessageBox.Show("Error, medicine not found !");
             }
         }
+
+        private void buttonMedicineModify_Click(object sender, EventArgs e)
+        {
+            var medicineDAO = new MedicineDAO();
+            Medicine selectedMedicine = listMedicines.SelectedItem as Medicine;
+
+            if (selectedMedicine != null)
+            {
+                if (textBoxMedicineDescription.Text != string.Empty && textBoxMedicineDosage.Text != string.Empty && textBoxMedicineMolecule.Text != string.Empty && textBoxMedicineName.Text != string.Empty)
+                {
+                    try
+                    {
+                        string no_space_name = Regex.Replace(textBoxMedicineName.Text, @"\s", "");
+                        medicineDAO.EditMedicine(selectedMedicine.Medicine_id, _connectedUser.Users_id, no_space_name, textBoxMedicineDescription.Text, textBoxMedicineMolecule.Text, int.Parse(textBoxMedicineDosage.Text));
+                        MessageBox.Show("Medicine edited successfully");
+                        btnAddMedicine.Visible = true;
+                        btnDeleteMedicine.Visible = true;
+                        btnEditMedicine.Visible = true;
+                        buttonMedicineModify.Visible = false;
+                        buttonMedicineCancel.Visible = false;
+                        textBoxMedicineName.Visible = false;
+                        labelMedicineName.Visible = false;
+
+                        textBoxMedicineDosage.ReadOnly = true;
+                        textBoxMedicineDescription.ReadOnly = true;
+                        textBoxMedicineMolecule.ReadOnly = true;
+                        textBoxMedicineName.Clear();
+                        Initialise_Listbox();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Please fill the fields correctly");
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please fill all the fields");
+                }
+            }
+        }
+
+        private void btnEditMedicine_Click(object sender, EventArgs e)
+        {
+            btnAddMedicine.Visible = false;
+            btnDeleteMedicine.Visible = false;
+            btnEditMedicine.Visible = false;
+            buttonMedicineModify.Visible = true;
+            buttonMedicineCancel.Visible = true;
+            textBoxMedicineName.Visible = true;
+            labelMedicineName.Visible = true;
+            textBoxMedicineDosage.ReadOnly = false;
+            textBoxMedicineDescription.ReadOnly = false;
+            textBoxMedicineMolecule.ReadOnly = false;
+            textBoxMedicineName.Text = labelMedicine.Text;
+        }
+
+        private void btnEditPrescription_Click(object sender, EventArgs e)
+        {
+            textBoxPrescriptionDoctor.Visible = false;
+            textBoxPrescriptionPatient.Visible = false;
+            textBoxPrescriptionQuantity.ReadOnly = false;
+            textBoxPrescriptionValidity.Visible = false;
+            labelPrescriptionDoctor.Visible = false;
+
+            comboBoxPrescriptionPatient.Visible = true;
+            comboBoxPrescriptionMedicine.Visible = true;
+            dateTimePickerPrescriptionValidity.Visible = true;
+
+            btnAddPrescription.Visible = false;
+            btnDeletePrescription.Visible = false;
+            btnEditPrescription.Visible = false;
+            buttonPrescriptionModify.Visible = true;
+            buttonPrescriptionCancel.Visible = true;
+
+            var medicineDAO = new MedicineDAO();
+            List<Medicine> medicines = medicineDAO.GetAllMedicine();
+            medicines.ForEach(m => comboBoxPrescriptionMedicine.Items.Add(m.Name));
+
+            var patientDAO = new PatientDAO();
+            List<Patient> patients = patientDAO.GetAllPatients();
+            patients.ForEach(p => comboBoxPrescriptionPatient.Items.Add(p.Full_name));
+        }
+
+        private void buttonPrescriptionModify_Click(object sender, EventArgs e)
+        {
+            var prescriptionDAO = new PrescriptionDAO();
+            var medicineDAO = new MedicineDAO();
+            Prescription selectedPrescription = listPrescriptions.SelectedItem as Prescription;
+
+            if (selectedPrescription != null)
+            {
+                if (textBoxPrescriptionMedicines.Text != string.Empty &&
+                    textBoxPrescriptionQuantity.Text != string.Empty &&
+                    comboBoxPrescriptionPatient.Text != string.Empty)
+                {
+                    try
+                    {
+                        int patientId = comboBoxPrescriptionPatient.SelectedIndex + 1;
+
+                        bool prescriptionEdited = prescriptionDAO.EditPrescription(
+                            selectedPrescription.Prescription_id,
+                            _connectedUser.Users_id,
+                            patientId,
+                            int.Parse(textBoxPrescriptionQuantity.Text),
+                            dateTimePickerPrescriptionValidity.Value
+                        );
+
+                        // ✅ Préparer la liste des nouveaux médicaments
+                        var splited = allocatedMedicine.Trim().Split(" ").ToList();
+                        List<int> medicineIds = new List<int>();
+
+                        foreach (var item in splited)
+                        {
+                            int medicine_id = medicineDAO.FindMedicineIdByName(item);
+                            medicineIds.Add(medicine_id);
+                        }
+
+                        // ✅ Mise à jour de tous les médicaments d’un coup
+                        prescriptionDAO.EditMedicineToPrescription(selectedPrescription.Prescription_id, medicineIds);
+
+                        MessageBox.Show("Prescription edited successfully");
+
+                        // 🧹 Rétablir l’interface
+                        textBoxPrescriptionDoctor.Visible = true;
+                        textBoxPrescriptionPatient.Visible = true;
+                        textBoxPrescriptionQuantity.ReadOnly = true;
+                        dateTimePickerPrescriptionValidity.Visible = false;
+                        labelPrescriptionDoctor.Visible = true;
+                        comboBoxPrescriptionPatient.Visible = false;
+                        comboBoxPrescriptionMedicine.Visible = false;
+                        buttonPrescriptionCancel.Visible = false;
+                        buttonPrescriptionModify.Visible = false;
+                        btnAddPrescription.Visible = true;
+                        btnDeletePrescription.Visible = true;
+                        btnEditPrescription.Visible = true;
+                        textBoxPrescriptionMedicines.Clear();
+                        comboBoxPrescriptionMedicine.Items.Clear();
+                        Initialise_Listbox();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Please fill the fields correctly");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please fill all the fields");
+                }
+            }
+        }
+
+        private void btnEditPatient_Click(object sender, EventArgs e)
+        {
+            btnAddPatient.Visible = false;
+            btnDeletePatient.Visible = false;
+            btnEditPatient.Visible = false;
+            buttonPatientModify.Visible = true;
+            buttonPatientCancel.Visible = true;
+
+            textBoxPatientAge.ReadOnly = false;
+            textBoxPatientGender.Visible = false;
+            textBoxPatientDoctor.Visible = false;
+            labelPatientDoctor.Visible = false;
+            labelPatientFirstname.Visible = true;
+            textBoxPatientFirstname.Visible = true;
+            labelPatientName.Visible = true;
+            textBoxPatientName.Visible = true;
+
+
+            comboBoxPatientGender.Visible = true;
+            comboBoxPatientGender.Items.Add("Male");
+            comboBoxPatientGender.Items.Add("Female");
+
+            textBoxPatientFirstname.Text = labelPatient.Text.Split(' ')[0];
+            textBoxPatientName.Text = labelPatient.Text.Split(' ')[1];
+        }
+
+        private void buttonPatientModify_Click(object sender, EventArgs e)
+        {
+            var patientDAO = new PatientDAO();
+            Patient selectedPatient = listPatients.SelectedItem as Patient;
+
+            if (selectedPatient != null) {
+                if (textBoxPatientAge.Text != string.Empty && textBoxPatientFirstname.Text != string.Empty && textBoxPatientName.Text != string.Empty && comboBoxPatientGender.Text != string.Empty)
+                {
+                    try
+                    {
+                        patientDAO.EditPatient(selectedPatient.Patients_id ,_connectedUser.Users_id, textBoxPatientName.Text, textBoxPatientFirstname.Text, int.Parse(textBoxPatientAge.Text), comboBoxPatientGender.SelectedItem.ToString());
+                        MessageBox.Show("Patient edited successfully");
+                        btnAddPatient.Visible = true;
+                        btnDeletePatient.Visible = true;
+                        btnEditPatient.Visible = true;
+                        buttonPatientModify.Visible = false;
+                        buttonPatientCancel.Visible = false;
+                        labelPatientFirstname.Visible = false;
+                        textBoxPatientFirstname.Visible = false;
+                        labelPatientName.Visible = false;
+                        textBoxPatientName.Visible = false;
+                        comboBoxPatientGender.Visible = false;
+                        textBoxPatientAge.ReadOnly = true;
+                        textBoxPatientGender.Visible = true;
+                        labelPatientDoctor.Visible = true;
+                        textBoxPatientDoctor.Visible = true;
+
+                        Initialise_Listbox();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Please fill the fields correctly");
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please fill all the fields");
+                }
+            }
+        }
     }
 }

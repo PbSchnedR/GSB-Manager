@@ -87,6 +87,7 @@
             textBoxPassword.Name = "textBoxPassword";
             textBoxPassword.Size = new Size(125, 27);
             textBoxPassword.TabIndex = 2;
+            textBoxPassword.UseSystemPasswordChar = true;
             // 
             // textBoxEmail
             // 
