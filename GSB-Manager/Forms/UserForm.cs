@@ -560,7 +560,6 @@ namespace GSB_Manager.Forms
                             dateTimePickerPrescriptionValidity.Value
                         );
 
-                        // ✅ Préparer la liste des nouveaux médicaments
                         var splited = allocatedMedicine.Trim().Split(" ").ToList();
                         List<int> medicineIds = new List<int>();
 
@@ -570,12 +569,10 @@ namespace GSB_Manager.Forms
                             medicineIds.Add(medicine_id);
                         }
 
-                        // ✅ Mise à jour de tous les médicaments d’un coup
                         prescriptionDAO.EditMedicineToPrescription(selectedPrescription.Prescription_id, medicineIds);
 
                         MessageBox.Show("Prescription edited successfully");
 
-                        // 🧹 Rétablir l’interface
                         textBoxPrescriptionDoctor.Visible = true;
                         textBoxPrescriptionPatient.Visible = true;
                         textBoxPrescriptionQuantity.ReadOnly = true;
@@ -812,6 +809,93 @@ namespace GSB_Manager.Forms
             User selectedUser = listUsers.SelectedItem as User;
             textBoxUserEmail.Text = selectedUser.Email;
             labelUser.Text = selectedUser.Full_name;
+        }
+
+        private void buttonMedicineCancel_Click(object sender, EventArgs e)
+        {
+            buttonMedicineCancel.Visible = false;
+            buttonMedicineRegister.Visible = false;
+            buttonMedicineModify.Visible = false;
+            btnAddMedicine.Visible = true;
+            btnDeleteMedicine.Visible = true;
+            btnEditMedicine.Visible = true;
+
+            textBoxMedicineName.Visible = false;
+            labelMedicineName.Visible = false;
+            textBoxMedicineDosage.ReadOnly = true;
+            textBoxMedicineDescription.ReadOnly = true;
+            textBoxMedicineMolecule.ReadOnly = true;
+
+            Medicine selectedMedicine = listMedicines.SelectedItem as Medicine;
+
+            if (selectedMedicine != null)
+            {
+                textBoxMedicineDosage.Text = selectedMedicine.Dosage.ToString();
+                labelMedicine.Text = selectedMedicine.Name;
+                textBoxMedicineDescription.Text = selectedMedicine.Description;
+                textBoxMedicineMolecule.Text = selectedMedicine.Molecule;
+            }
+        }
+
+        private void buttonPrescriptionCancel_Click(object sender, EventArgs e)
+        {
+            buttonPrescriptionCancel.Visible = false;
+            buttonPrescriptionRegister.Visible = false;
+            buttonPrescriptionModify.Visible = false;
+            btnAddPrescription.Visible = true;
+            btnDeletePrescription.Visible = true;
+            btnEditPrescription.Visible = true;
+            textBoxPrescriptionDoctor.Visible = true;
+            textBoxPrescriptionPatient.Visible = true;
+            textBoxPrescriptionQuantity.ReadOnly = true;
+            dateTimePickerPrescriptionValidity.Visible = false;
+            labelPrescriptionDoctor.Visible = true;
+            comboBoxPrescriptionPatient.Visible = false;
+            comboBoxPrescriptionMedicine.Visible = false;
+            textBoxPrescriptionMedicines.Clear();
+            comboBoxPrescriptionMedicine.Items.Clear();
+
+            Prescription selectedPrescription = listPrescriptions.SelectedItem as Prescription;
+            if (selectedPrescription != null)
+            {
+                labelPrescription.Text = selectedPrescription.Prescription_id.ToString();
+                textBoxPrescriptionQuantity.Text = selectedPrescription.Quantity.ToString();
+                textBoxPrescriptionValidity.Text = selectedPrescription.Validity.ToString("d");
+                textBoxPrescriptionDoctor.Text = selectedPrescription.User_Full_name;
+                textBoxPrescriptionPatient.Text = selectedPrescription.Patient_full_name;
+
+                PrescriptionDAO prescriptionDAO = new PrescriptionDAO();
+                List<string> prescription_medicines = prescriptionDAO.GetPrescriptionMedicines(selectedPrescription.Prescription_id);
+                string parsed_medicines = string.Join(", ", prescription_medicines);
+                textBoxPrescriptionMedicines.Text = parsed_medicines;
+            }
+        }
+
+        private void buttonPatientCancel_Click(object sender, EventArgs e)
+        {
+            buttonPatientCancel.Visible = false;
+            buttonPatientRegister.Visible = false;
+            buttonPatientModify.Visible = false;
+            btnAddPatient.Visible = true;
+            btnDeletePatient.Visible = true;
+            btnEditPatient.Visible = true;
+            textBoxPatientAge.ReadOnly = true;
+            textBoxPatientGender.Visible = true;
+            textBoxPatientDoctor.Visible = true;
+            labelPatientDoctor.Visible = true;
+            labelPatientFirstname.Visible = false;
+            textBoxPatientFirstname.Visible = false;
+            labelPatientName.Visible = false;
+            textBoxPatientName.Visible = false;
+            comboBoxPatientGender.Visible = false;
+
+            Patient selectedPatient = listPatients.SelectedItem as Patient;
+            if (selectedPatient != null) { 
+                textBoxPatientAge.Text = selectedPatient.Age.ToString();
+                textBoxPatientGender.Text = selectedPatient.Gender.ToString();
+                labelPatient.Text = selectedPatient.Firstname + " " + selectedPatient.Name;
+            }
+
         }
     }
 }

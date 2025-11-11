@@ -203,6 +203,7 @@
             buttonMedicineCancel.TabIndex = 6;
             buttonMedicineCancel.Text = "Cancel";
             buttonMedicineCancel.Visible = false;
+            buttonMedicineCancel.Click += buttonMedicineCancel_Click;
             // 
             // buttonMedicineRegister
             // 
@@ -401,6 +402,7 @@
             buttonPrescriptionCancel.TabIndex = 7;
             buttonPrescriptionCancel.Text = "Cancel";
             buttonPrescriptionCancel.Visible = false;
+            buttonPrescriptionCancel.Click += buttonPrescriptionCancel_Click;
             // 
             // buttonPrescriptionRegister
             // 
@@ -637,6 +639,7 @@
             buttonPatientCancel.TabIndex = 7;
             buttonPatientCancel.Text = "Cancel";
             buttonPatientCancel.Visible = false;
+            buttonPatientCancel.Click += buttonPatientCancel_Click;
             // 
             // buttonPatientRegister
             // 
