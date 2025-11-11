@@ -14,13 +14,28 @@ namespace GSB_Manager.Forms
         public UserForm(User connectedUser)
         {
             InitializeComponent();
-            Initialise_Listbox();
             _connectedUser = connectedUser;
+            Initialise_Tab();
+            Initialise_Listbox();
         }
 
         string allocatedMedicine = "";
 
-
+        private void Initialise_Tab()
+        {
+            if (_connectedUser.Role == true)
+            {
+                tabControl.TabPages.Clear();
+                tabControl.TabPages.Add(tabPageManager);
+            }
+            else
+            {
+                tabControl.TabPages.Clear();
+                tabControl.TabPages.Add(tabMedicines);
+                tabControl.TabPages.Add(tabPrescriptions);
+                tabControl.TabPages.Add(tabPatients);
+            }
+        }
         private void Initialise_Listbox()
         {
             var medicineDAO = new MedicineDAO();
@@ -40,6 +55,12 @@ namespace GSB_Manager.Forms
 
             listPrescriptions.DataSource = prescriptions;
             listPrescriptions.DisplayMember = "Full_line";
+
+            var userDAO = new UserDAO();
+            var users = userDAO.GetAllUsers();
+
+            listUsers.DataSource = users;
+            listUsers.DisplayMember = "Full_name";
         }
 
         private void Handle_listbox_change()
@@ -80,6 +101,18 @@ namespace GSB_Manager.Forms
                 textBoxPatientGender.Text = selectedPatient.Gender.ToString();
                 textBoxPatientDoctor.Text = selectedPatient.Full_User_Name;
 
+            }
+
+            User selectedUser = listUsers.SelectedItem as User;
+            if (selectedUser != null)
+            {
+                labelUser.Text = selectedUser.Full_name;
+                textBoxUserEmail.Text = selectedUser.Email;
+                if (selectedUser.Role == false)
+                {
+                    textBoxUserRole.Text = "Doctor";
+                }
+                else { textBoxUserRole.Text = "Admin"; }
             }
         }
 
@@ -602,12 +635,13 @@ namespace GSB_Manager.Forms
             var patientDAO = new PatientDAO();
             Patient selectedPatient = listPatients.SelectedItem as Patient;
 
-            if (selectedPatient != null) {
+            if (selectedPatient != null)
+            {
                 if (textBoxPatientAge.Text != string.Empty && textBoxPatientFirstname.Text != string.Empty && textBoxPatientName.Text != string.Empty && comboBoxPatientGender.Text != string.Empty)
                 {
                     try
                     {
-                        patientDAO.EditPatient(selectedPatient.Patients_id ,_connectedUser.Users_id, textBoxPatientName.Text, textBoxPatientFirstname.Text, int.Parse(textBoxPatientAge.Text), comboBoxPatientGender.SelectedItem.ToString());
+                        patientDAO.EditPatient(selectedPatient.Patients_id, _connectedUser.Users_id, textBoxPatientName.Text, textBoxPatientFirstname.Text, int.Parse(textBoxPatientAge.Text), comboBoxPatientGender.SelectedItem.ToString());
                         MessageBox.Show("Patient edited successfully");
                         btnAddPatient.Visible = true;
                         btnDeletePatient.Visible = true;
@@ -637,6 +671,147 @@ namespace GSB_Manager.Forms
                     MessageBox.Show("Please fill all the fields");
                 }
             }
+        }
+
+        private void listUsers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Handle_listbox_change();
+        }
+
+        private void buttonUserModify_Click(object sender, EventArgs e)
+        {
+            var userDAO = new UserDAO();
+            User selectedUser = listUsers.SelectedItem as User;
+            if (selectedUser != null)
+            {
+                if (textBoxUserEmail.Text != string.Empty && textBoxUserName.Text != string.Empty && textBoxUserFirstname.Text != string.Empty)
+                {
+                    try
+                    {
+                        userDAO.EditUser(selectedUser.Users_id, textBoxUserName.Text, textBoxUserFirstname.Text, textBoxUserEmail.Text);
+                        MessageBox.Show("User edited successfully");
+                        buttonUserAdd.Visible = true;
+                        buttonUserEdit.Visible = true;
+                        buttonUserModify.Visible = false;
+                        buttonUserCancel.Visible = false;
+                        textBoxUserName.Visible = false;
+                        labelUserName.Visible = false;
+                        textBoxUserFirstname.Visible = false;
+                        labelUserFirstname.Visible = false;
+                        textBoxUserEmail.ReadOnly = true;
+
+                        Initialise_Listbox();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Please fill the fields correctly");
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please fill all the fields");
+                }
+            }
+        }
+
+        private void buttonUserAdd_Click(object sender, EventArgs e)
+        {
+            buttonUserAdd.Visible = false;
+            buttonUserEdit.Visible = false;
+            buttonUserRegister.Visible = true;
+            buttonUserCancel.Visible = true;
+
+            textBoxUserName.Visible = true;
+            labelUserName.Visible = true;
+            textBoxUserFirstname.Visible = true;
+            labelUserFirstname.Visible = true;
+            textBoxUserEmail.ReadOnly = false;
+            textBoxUserRole.Visible = false;
+            comboBoxUserRole.Visible = true;
+            textBoxUserPassword.Visible = true;
+            labelUserPassword.Visible = true;
+
+            comboBoxUserRole.Items.Add("Doctor");
+            comboBoxUserRole.Items.Add("Admin");
+            textBoxUserEmail.Clear();
+            labelUser.Text = "New User";
+        }
+
+        private void buttonUserRegister_Click(object sender, EventArgs e)
+        {
+            var userDAO = new UserDAO();
+            if (textBoxUserEmail.Text != string.Empty && textBoxUserName.Text != string.Empty && textBoxUserFirstname.Text != string.Empty && comboBoxUserRole.Text != string.Empty && textBoxUserPassword.Text != string.Empty)
+            {
+                try
+                {
+                    bool role = comboBoxUserRole.SelectedItem.ToString() == "Admin" ? true : false;
+                    userDAO.CreateUser(textBoxUserName.Text, textBoxUserFirstname.Text, textBoxUserEmail.Text, textBoxUserPassword.Text, role);
+                    MessageBox.Show("User added successfully");
+                    buttonUserAdd.Visible = true;
+                    buttonUserEdit.Visible = true;
+                    buttonUserRegister.Visible = false;
+                    buttonUserCancel.Visible = false;
+                    textBoxUserName.Visible = false;
+                    labelUserName.Visible = false;
+                    textBoxUserFirstname.Visible = false;
+                    labelUserFirstname.Visible = false;
+                    textBoxUserEmail.ReadOnly = true;
+                    textBoxUserRole.Visible = true;
+                    comboBoxUserRole.Visible = false;
+
+                    Initialise_Listbox();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Please fill the fields correctly");
+                    return;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please fill all the fields");
+            }
+        }
+
+        private void buttonUserEdit_Click(object sender, EventArgs e)
+        {
+            buttonUserAdd.Visible = false;
+            buttonUserEdit.Visible = false;
+            buttonUserModify.Visible = true;
+            buttonUserCancel.Visible = true;
+
+            textBoxUserName.Visible = true;
+            labelUserName.Visible = true;
+            textBoxUserFirstname.Visible = true;
+            labelUserFirstname.Visible = true;
+            textBoxUserEmail.ReadOnly = false;
+
+            textBoxUserName.Text = labelUser.Text.Split(' ')[0];
+            textBoxUserFirstname.Text = labelUser.Text.Split(' ')[1];
+        }
+
+        private void buttonUserCancel_Click(object sender, EventArgs e)
+        {
+            buttonUserAdd.Visible = true;
+            buttonUserEdit.Visible = true;
+            buttonUserModify.Visible = false;
+            buttonUserCancel.Visible = false;
+            buttonUserRegister.Visible = false;
+
+            textBoxUserName.Visible = false;
+            labelUserName.Visible = false;
+            textBoxUserFirstname.Visible = false;
+            labelUserFirstname.Visible = false;
+            textBoxUserEmail.ReadOnly = true;
+            textBoxUserRole.Visible = true;
+            comboBoxUserRole.Visible = false;
+            textBoxUserPassword.Visible = false;
+            labelUserPassword.Visible = false;
+
+            User selectedUser = listUsers.SelectedItem as User;
+            textBoxUserEmail.Text = selectedUser.Email;
+            labelUser.Text = selectedUser.Full_name;
         }
     }
 }

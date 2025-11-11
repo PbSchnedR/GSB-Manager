@@ -40,5 +40,14 @@ namespace GSB_Manager.Models
             this.Name = name;
             this.Firstname = firstname;
         }
+
+        public User(int users_id, string name, string firstname, string email, bool role) // c'est une surcharge du constructeur, ça permettrea la création d'objet Users qui sera instancié avec les valeurs passées en paramètre
+        {
+            this.Users_id = users_id;
+            this.Name = name;
+            this.Firstname = firstname;
+            this.Email = email;
+            this.Role = role;
+        }
     }
 }

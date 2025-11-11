@@ -118,6 +118,28 @@
             btnAddPatient = new Button();
             btnEditPatient = new Button();
             btnDeletePatient = new Button();
+            tabPageManager = new TabPage();
+            buttonUserModify = new Button();
+            buttonUserCancel = new Button();
+            buttonUserRegister = new Button();
+            panel1 = new Panel();
+            labelUserPassword = new Label();
+            textBoxUserPassword = new TextBox();
+            labelUserFirstname = new Label();
+            textBoxUserFirstname = new TextBox();
+            textBoxUserName = new TextBox();
+            labelUserName = new Label();
+            comboBoxUserRole = new ComboBox();
+            textBoxUserEmail = new TextBox();
+            textBoxUserRole = new TextBox();
+            labelUserRole = new Label();
+            labelUserEmail = new Label();
+            label7 = new Label();
+            label6 = new Label();
+            labelUser = new Label();
+            listUsers = new ListBox();
+            buttonUserAdd = new Button();
+            buttonUserEdit = new Button();
             tabControl.SuspendLayout();
             tabMedicines.SuspendLayout();
             panelMedicineDetails.SuspendLayout();
@@ -125,6 +147,8 @@
             panelPrescriptionDetails.SuspendLayout();
             tabPatients.SuspendLayout();
             panelPatientDetails.SuspendLayout();
+            tabPageManager.SuspendLayout();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // tabControl
@@ -132,6 +156,7 @@
             tabControl.Controls.Add(tabMedicines);
             tabControl.Controls.Add(tabPrescriptions);
             tabControl.Controls.Add(tabPatients);
+            tabControl.Controls.Add(tabPageManager);
             tabControl.Dock = DockStyle.Fill;
             tabControl.Location = new Point(0, 0);
             tabControl.Margin = new Padding(3, 4, 3, 4);
@@ -801,6 +826,233 @@
             btnDeletePatient.Text = "Delete";
             btnDeletePatient.Click += btnDeletePatient_Click;
             // 
+            // tabPageManager
+            // 
+            tabPageManager.Controls.Add(buttonUserModify);
+            tabPageManager.Controls.Add(buttonUserCancel);
+            tabPageManager.Controls.Add(buttonUserRegister);
+            tabPageManager.Controls.Add(panel1);
+            tabPageManager.Controls.Add(listUsers);
+            tabPageManager.Controls.Add(buttonUserAdd);
+            tabPageManager.Controls.Add(buttonUserEdit);
+            tabPageManager.Location = new Point(4, 29);
+            tabPageManager.Name = "tabPageManager";
+            tabPageManager.Padding = new Padding(3);
+            tabPageManager.Size = new Size(792, 529);
+            tabPageManager.TabIndex = 3;
+            tabPageManager.Text = "Manager";
+            tabPageManager.UseVisualStyleBackColor = true;
+            // 
+            // buttonUserModify
+            // 
+            buttonUserModify.Location = new Point(481, 472);
+            buttonUserModify.Margin = new Padding(3, 4, 3, 4);
+            buttonUserModify.Name = "buttonUserModify";
+            buttonUserModify.Size = new Size(119, 29);
+            buttonUserModify.TabIndex = 21;
+            buttonUserModify.Text = "Modify";
+            buttonUserModify.Visible = false;
+            buttonUserModify.Click += buttonUserModify_Click;
+            // 
+            // buttonUserCancel
+            // 
+            buttonUserCancel.Location = new Point(606, 472);
+            buttonUserCancel.Margin = new Padding(3, 4, 3, 4);
+            buttonUserCancel.Name = "buttonUserCancel";
+            buttonUserCancel.Size = new Size(110, 29);
+            buttonUserCancel.TabIndex = 20;
+            buttonUserCancel.Text = "Cancel";
+            buttonUserCancel.Visible = false;
+            buttonUserCancel.Click += buttonUserCancel_Click;
+            // 
+            // buttonUserRegister
+            // 
+            buttonUserRegister.Location = new Point(481, 472);
+            buttonUserRegister.Margin = new Padding(3, 4, 3, 4);
+            buttonUserRegister.Name = "buttonUserRegister";
+            buttonUserRegister.Size = new Size(119, 29);
+            buttonUserRegister.TabIndex = 19;
+            buttonUserRegister.Text = "Register";
+            buttonUserRegister.Visible = false;
+            buttonUserRegister.Click += buttonUserRegister_Click;
+            // 
+            // panel1
+            // 
+            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            panel1.BorderStyle = BorderStyle.FixedSingle;
+            panel1.Controls.Add(labelUserPassword);
+            panel1.Controls.Add(textBoxUserPassword);
+            panel1.Controls.Add(labelUserFirstname);
+            panel1.Controls.Add(textBoxUserFirstname);
+            panel1.Controls.Add(textBoxUserName);
+            panel1.Controls.Add(labelUserName);
+            panel1.Controls.Add(comboBoxUserRole);
+            panel1.Controls.Add(textBoxUserEmail);
+            panel1.Controls.Add(textBoxUserRole);
+            panel1.Controls.Add(labelUserRole);
+            panel1.Controls.Add(labelUserEmail);
+            panel1.Controls.Add(label7);
+            panel1.Controls.Add(label6);
+            panel1.Controls.Add(labelUser);
+            panel1.Location = new Point(11, 27);
+            panel1.Margin = new Padding(3, 4, 3, 4);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(450, 474);
+            panel1.TabIndex = 14;
+            // 
+            // labelUserPassword
+            // 
+            labelUserPassword.AutoSize = true;
+            labelUserPassword.Location = new Point(48, 389);
+            labelUserPassword.Name = "labelUserPassword";
+            labelUserPassword.Size = new Size(77, 20);
+            labelUserPassword.TabIndex = 26;
+            labelUserPassword.Text = "Password :";
+            labelUserPassword.Visible = false;
+            // 
+            // textBoxUserPassword
+            // 
+            textBoxUserPassword.Location = new Point(44, 412);
+            textBoxUserPassword.Name = "textBoxUserPassword";
+            textBoxUserPassword.Size = new Size(175, 27);
+            textBoxUserPassword.TabIndex = 25;
+            textBoxUserPassword.Visible = false;
+            // 
+            // labelUserFirstname
+            // 
+            labelUserFirstname.AutoSize = true;
+            labelUserFirstname.Location = new Point(50, 320);
+            labelUserFirstname.Name = "labelUserFirstname";
+            labelUserFirstname.Size = new Size(72, 20);
+            labelUserFirstname.TabIndex = 24;
+            labelUserFirstname.Text = "Firstame :";
+            labelUserFirstname.Visible = false;
+            // 
+            // textBoxUserFirstname
+            // 
+            textBoxUserFirstname.Location = new Point(46, 343);
+            textBoxUserFirstname.Name = "textBoxUserFirstname";
+            textBoxUserFirstname.Size = new Size(175, 27);
+            textBoxUserFirstname.TabIndex = 23;
+            textBoxUserFirstname.Visible = false;
+            // 
+            // textBoxUserName
+            // 
+            textBoxUserName.Location = new Point(50, 251);
+            textBoxUserName.Name = "textBoxUserName";
+            textBoxUserName.Size = new Size(175, 27);
+            textBoxUserName.TabIndex = 22;
+            textBoxUserName.Visible = false;
+            // 
+            // labelUserName
+            // 
+            labelUserName.AutoSize = true;
+            labelUserName.Location = new Point(48, 228);
+            labelUserName.Name = "labelUserName";
+            labelUserName.Size = new Size(56, 20);
+            labelUserName.TabIndex = 21;
+            labelUserName.Text = "Name :";
+            labelUserName.Visible = false;
+            // 
+            // comboBoxUserRole
+            // 
+            comboBoxUserRole.FormattingEnabled = true;
+            comboBoxUserRole.Location = new Point(44, 94);
+            comboBoxUserRole.Name = "comboBoxUserRole";
+            comboBoxUserRole.Size = new Size(151, 28);
+            comboBoxUserRole.TabIndex = 20;
+            comboBoxUserRole.Visible = false;
+            // 
+            // textBoxUserEmail
+            // 
+            textBoxUserEmail.Location = new Point(44, 176);
+            textBoxUserEmail.Name = "textBoxUserEmail";
+            textBoxUserEmail.ReadOnly = true;
+            textBoxUserEmail.Size = new Size(153, 27);
+            textBoxUserEmail.TabIndex = 19;
+            // 
+            // textBoxUserRole
+            // 
+            textBoxUserRole.Location = new Point(44, 95);
+            textBoxUserRole.Name = "textBoxUserRole";
+            textBoxUserRole.ReadOnly = true;
+            textBoxUserRole.Size = new Size(153, 27);
+            textBoxUserRole.TabIndex = 17;
+            // 
+            // labelUserRole
+            // 
+            labelUserRole.AutoSize = true;
+            labelUserRole.Location = new Point(44, 72);
+            labelUserRole.Name = "labelUserRole";
+            labelUserRole.Size = new Size(46, 20);
+            labelUserRole.TabIndex = 16;
+            labelUserRole.Text = "Role :";
+            // 
+            // labelUserEmail
+            // 
+            labelUserEmail.AutoSize = true;
+            labelUserEmail.Location = new Point(44, 153);
+            labelUserEmail.Name = "labelUserEmail";
+            labelUserEmail.Size = new Size(53, 20);
+            labelUserEmail.TabIndex = 15;
+            labelUserEmail.Text = "Email :";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(197, 294);
+            label7.Name = "label7";
+            label7.Size = new Size(0, 20);
+            label7.TabIndex = 14;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(86, 274);
+            label6.Name = "label6";
+            label6.Size = new Size(0, 20);
+            label6.TabIndex = 2;
+            // 
+            // labelUser
+            // 
+            labelUser.AutoSize = true;
+            labelUser.Location = new Point(194, 18);
+            labelUser.Name = "labelUser";
+            labelUser.Size = new Size(38, 20);
+            labelUser.TabIndex = 0;
+            labelUser.Text = "User";
+            // 
+            // listUsers
+            // 
+            listUsers.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            listUsers.HorizontalScrollbar = true;
+            listUsers.Location = new Point(481, 27);
+            listUsers.Margin = new Padding(3, 4, 3, 4);
+            listUsers.Name = "listUsers";
+            listUsers.Size = new Size(300, 384);
+            listUsers.TabIndex = 15;
+            listUsers.SelectedIndexChanged += listUsers_SelectedIndexChanged;
+            // 
+            // buttonUserAdd
+            // 
+            buttonUserAdd.Location = new Point(481, 440);
+            buttonUserAdd.Margin = new Padding(3, 4, 3, 4);
+            buttonUserAdd.Name = "buttonUserAdd";
+            buttonUserAdd.Size = new Size(75, 29);
+            buttonUserAdd.TabIndex = 16;
+            buttonUserAdd.Text = "Add";
+            buttonUserAdd.Click += buttonUserAdd_Click;
+            // 
+            // buttonUserEdit
+            // 
+            buttonUserEdit.Location = new Point(561, 440);
+            buttonUserEdit.Margin = new Padding(3, 4, 3, 4);
+            buttonUserEdit.Name = "buttonUserEdit";
+            buttonUserEdit.Size = new Size(75, 29);
+            buttonUserEdit.TabIndex = 17;
+            buttonUserEdit.Text = "Edit";
+            buttonUserEdit.Click += buttonUserEdit_Click;
+            // 
             // UserForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -820,6 +1072,9 @@
             tabPatients.ResumeLayout(false);
             panelPatientDetails.ResumeLayout(false);
             panelPatientDetails.PerformLayout();
+            tabPageManager.ResumeLayout(false);
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -871,5 +1126,27 @@
         private Button buttonMedicineModify;
         private Button buttonPrescriptionModify;
         private Button buttonPatientModify;
+        private TabPage tabPageManager;
+        private Button buttonUserModify;
+        private Button buttonUserCancel;
+        private Button buttonUserRegister;
+        private Panel panel1;
+        private Label label6;
+        private Label labelUser;
+        private ListBox listUsers;
+        private Button buttonUserAdd;
+        private Button buttonUserEdit;
+        private Label labelUserFirstname;
+        private TextBox textBoxUserFirstname;
+        private TextBox textBoxUserName;
+        private Label labelUserName;
+        private ComboBox comboBoxUserRole;
+        private TextBox textBoxUserEmail;
+        private TextBox textBoxUserRole;
+        private Label labelUserRole;
+        private Label labelUserEmail;
+        private Label label7;
+        private Label labelUserPassword;
+        private TextBox textBoxUserPassword;
     }
 }

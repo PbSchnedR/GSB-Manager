@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GSB_Manager.Models;
 using MySql.Data.MySqlClient;
-using MySqlX.XDevAPI;
 
 namespace GSB_Manager.DAO
 {
@@ -24,79 +22,183 @@ namespace GSB_Manager.DAO
             var connection = db.GetConnection();
             connection.Open();
 
+            try
             {
-                try
+                MySqlCommand myCommand = new MySqlCommand();
+                myCommand.Connection = connection;
+                myCommand.CommandText = @"SELECT * FROM Users WHERE email = @email AND password = SHA2(@password, 256);";
+                myCommand.Parameters.AddWithValue("@email", email);
+                myCommand.Parameters.AddWithValue("@password", password);
+
+                using var myReader = myCommand.ExecuteReader();
+                while (myReader.Read())
                 {
-                    // create a MySQL command and set the SQL statement with parameters
-                    MySqlCommand myCommand = new MySqlCommand();
-                    myCommand.Connection = connection;
-                    myCommand.CommandText = @"SELECT * FROM Users WHERE email = @email AND password = SHA2(@password, 256);";
-                    myCommand.Parameters.AddWithValue("@email", email);
-                    myCommand.Parameters.AddWithValue("@password", password);
-
-                    // execute the command and read the results
-                    using var myReader = myCommand.ExecuteReader();
-                    {
-                        while (myReader.Read())
-                        {
-                             id = myReader.GetInt32("users_id");
-                             name = myReader.GetString("name");
-                             firstName = myReader.GetString("firstname");
-                             role = myReader.GetBoolean("role");
-                        }
-                    }
-                    User user = new User(id, name, firstName, role);
-
-
-                    connection.Close();
-                    return user;
+                    id = myReader.GetInt32("users_id");
+                    name = myReader.GetString("name");
+                    firstName = myReader.GetString("firstname");
+                    role = myReader.GetBoolean("role");
                 }
-                catch (Exception ex) {
-                    MessageBox.Show(ex.ToString());
-                    return null;
-                }
+
+                return new User(id, name, firstName, role);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                connection.Close();
             }
         }
 
         public List<User> GetAllDoctors()
         {
             List<User> doctors = new List<User>();
-
-            string name = string.Empty;
-            string firstName = string.Empty;
-
             var connection = db.GetConnection();
             connection.Open();
 
+            try
             {
-                try
+                MySqlCommand myCommand = new MySqlCommand();
+                myCommand.Connection = connection;
+                myCommand.CommandText = @"SELECT * FROM `Users` WHERE role = 0";
+
+                using var myReader = myCommand.ExecuteReader();
+                while (myReader.Read())
                 {
-                    // create a MySQL command and set the SQL statement with parameters
-                    MySqlCommand myCommand = new MySqlCommand();
-                    myCommand.Connection = connection;
-                    myCommand.CommandText = @"SELECT * FROM `Users` WHERE role = 0";
+                    string name = myReader.GetString("name");
+                    string firstName = myReader.GetString("firstname");
 
-                    // execute the command and read the results
-                    using var myReader = myCommand.ExecuteReader();
-                    {
-                        while (myReader.Read())
-                        {
-                            name = myReader.GetString("name");
-                            firstName = myReader.GetString("firstname");
-
-                            doctors.Add(new User(name, firstName));
-                        }
-                    }
-
-
-                    connection.Close();
-                    return doctors;
+                    doctors.Add(new User(name, firstName));
                 }
-                catch (Exception ex)
+
+                return doctors;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public List<User> GetAllUsers()
+        {
+            List<User> users = new List<User>();
+            var connection = db.GetConnection();
+            connection.Open();
+
+            try
+            {
+                MySqlCommand myCommand = new MySqlCommand();
+                myCommand.Connection = connection;
+                myCommand.CommandText = @"SELECT * FROM `Users`";
+
+                using var myReader = myCommand.ExecuteReader();
+                while (myReader.Read())
                 {
-                    MessageBox.Show(ex.ToString());
-                    return null;
+                    int user_id = myReader.GetInt32("users_id");
+                    string name = myReader.GetString("name");
+                    string firstName = myReader.GetString("firstname");
+                    string email = myReader.GetString("email");
+                    bool role = myReader.GetBoolean("role");
+
+                    users.Add(new User(user_id, name, firstName, email, role));
                 }
+
+                return users;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public int CreateUser(string name, string firstname, string email, string password, bool role)
+        {
+            int newId = 0;
+            var connection = db.GetConnection();
+            connection.Open();
+
+            try
+            {
+                MySqlCommand myCommand = new MySqlCommand();
+                myCommand.Connection = connection;
+                myCommand.CommandText = @"
+                    INSERT INTO Users (name, firstname, email, password, role)
+                    VALUES (@name, @firstname, @email, SHA2(@password, 256), @role);
+                    SELECT LAST_INSERT_ID();
+                ";
+
+                myCommand.Parameters.AddWithValue("@name", name);
+                myCommand.Parameters.AddWithValue("@firstname", firstname);
+                myCommand.Parameters.AddWithValue("@email", email);
+                myCommand.Parameters.AddWithValue("@password", password);
+                myCommand.Parameters.AddWithValue("@role", role);
+
+                object result = myCommand.ExecuteScalar();
+                if (result != null)
+                    newId = Convert.ToInt32(result);
+
+                return newId;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erreur dans AddUser : " + ex.Message);
+                return 0;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public bool EditUser(int user_id, string name, string firstname, string email)
+        {
+            var connection = db.GetConnection();
+            connection.Open();
+
+            try
+            {
+                MySqlCommand myCommand = new MySqlCommand();
+                myCommand.Connection = connection;
+
+                {
+                    myCommand.CommandText = @"
+                        UPDATE Users
+                        SET name = @name,
+                            firstname = @firstname,
+                            email = @email
+                        WHERE users_id = @user_id;
+                    ";
+                }
+                
+
+                myCommand.Parameters.AddWithValue("@user_id", user_id);
+                myCommand.Parameters.AddWithValue("@name", name);
+                myCommand.Parameters.AddWithValue("@firstname", firstname);
+                myCommand.Parameters.AddWithValue("@email", email);
+
+                int rowsAffected = myCommand.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erreur dans EditUser : " + ex.Message);
+                return false;
+            }
+            finally
+            {
+                connection.Close();
             }
         }
     }
