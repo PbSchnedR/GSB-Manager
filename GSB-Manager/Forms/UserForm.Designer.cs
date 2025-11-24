@@ -78,6 +78,7 @@
             buttonPrescriptionCancel = new Button();
             buttonPrescriptionRegister = new Button();
             panelPrescriptionDetails = new Panel();
+            comboBoxPrescriptionQuantity = new ComboBox();
             dateTimePickerPrescriptionValidity = new DateTimePicker();
             comboBoxPrescriptionPatient = new ComboBox();
             comboBoxPrescriptionMedicine = new ComboBox();
@@ -419,6 +420,7 @@
             // 
             panelPrescriptionDetails.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panelPrescriptionDetails.BorderStyle = BorderStyle.FixedSingle;
+            panelPrescriptionDetails.Controls.Add(comboBoxPrescriptionQuantity);
             panelPrescriptionDetails.Controls.Add(dateTimePickerPrescriptionValidity);
             panelPrescriptionDetails.Controls.Add(comboBoxPrescriptionPatient);
             panelPrescriptionDetails.Controls.Add(comboBoxPrescriptionMedicine);
@@ -439,9 +441,18 @@
             panelPrescriptionDetails.Size = new Size(450, 474);
             panelPrescriptionDetails.TabIndex = 0;
             // 
+            // comboBoxPrescriptionQuantity
+            // 
+            comboBoxPrescriptionQuantity.FormattingEnabled = true;
+            comboBoxPrescriptionQuantity.Location = new Point(27, 187);
+            comboBoxPrescriptionQuantity.Name = "comboBoxPrescriptionQuantity";
+            comboBoxPrescriptionQuantity.Size = new Size(250, 28);
+            comboBoxPrescriptionQuantity.TabIndex = 15;
+            comboBoxPrescriptionQuantity.SelectedIndexChanged += comboBoxPrescriptionQuantity_SelectedIndexChanged;
+            // 
             // dateTimePickerPrescriptionValidity
             // 
-            dateTimePickerPrescriptionValidity.Location = new Point(27, 230);
+            dateTimePickerPrescriptionValidity.Location = new Point(27, 267);
             dateTimePickerPrescriptionValidity.Name = "dateTimePickerPrescriptionValidity";
             dateTimePickerPrescriptionValidity.Size = new Size(250, 27);
             dateTimePickerPrescriptionValidity.TabIndex = 14;
@@ -450,7 +461,7 @@
             // comboBoxPrescriptionPatient
             // 
             comboBoxPrescriptionPatient.FormattingEnabled = true;
-            comboBoxPrescriptionPatient.Location = new Point(27, 375);
+            comboBoxPrescriptionPatient.Location = new Point(27, 412);
             comboBoxPrescriptionPatient.Name = "comboBoxPrescriptionPatient";
             comboBoxPrescriptionPatient.Size = new Size(211, 28);
             comboBoxPrescriptionPatient.TabIndex = 13;
@@ -468,7 +479,7 @@
             // 
             // textBoxPrescriptionPatient
             // 
-            textBoxPrescriptionPatient.Location = new Point(27, 375);
+            textBoxPrescriptionPatient.Location = new Point(27, 412);
             textBoxPrescriptionPatient.Name = "textBoxPrescriptionPatient";
             textBoxPrescriptionPatient.ReadOnly = true;
             textBoxPrescriptionPatient.Size = new Size(211, 27);
@@ -477,7 +488,7 @@
             // labelPrescriptionPatient
             // 
             labelPrescriptionPatient.AutoSize = true;
-            labelPrescriptionPatient.Location = new Point(27, 352);
+            labelPrescriptionPatient.Location = new Point(27, 389);
             labelPrescriptionPatient.Name = "labelPrescriptionPatient";
             labelPrescriptionPatient.Size = new Size(61, 20);
             labelPrescriptionPatient.TabIndex = 9;
@@ -485,7 +496,7 @@
             // 
             // textBoxPrescriptionDoctor
             // 
-            textBoxPrescriptionDoctor.Location = new Point(27, 301);
+            textBoxPrescriptionDoctor.Location = new Point(27, 338);
             textBoxPrescriptionDoctor.Name = "textBoxPrescriptionDoctor";
             textBoxPrescriptionDoctor.ReadOnly = true;
             textBoxPrescriptionDoctor.Size = new Size(211, 27);
@@ -493,7 +504,7 @@
             // 
             // textBoxPrescriptionValidity
             // 
-            textBoxPrescriptionValidity.Location = new Point(27, 230);
+            textBoxPrescriptionValidity.Location = new Point(27, 267);
             textBoxPrescriptionValidity.Name = "textBoxPrescriptionValidity";
             textBoxPrescriptionValidity.ReadOnly = true;
             textBoxPrescriptionValidity.Size = new Size(211, 27);
@@ -506,6 +517,7 @@
             textBoxPrescriptionQuantity.ReadOnly = true;
             textBoxPrescriptionQuantity.Size = new Size(109, 27);
             textBoxPrescriptionQuantity.TabIndex = 6;
+            textBoxPrescriptionQuantity.TextChanged += textBoxPrescriptionQuantity_TextChanged;
             // 
             // textBoxPrescriptionMedicines
             // 
@@ -518,7 +530,7 @@
             // labelPrescriptionValidity
             // 
             labelPrescriptionValidity.AutoSize = true;
-            labelPrescriptionValidity.Location = new Point(27, 207);
+            labelPrescriptionValidity.Location = new Point(27, 244);
             labelPrescriptionValidity.Name = "labelPrescriptionValidity";
             labelPrescriptionValidity.Size = new Size(65, 20);
             labelPrescriptionValidity.TabIndex = 4;
@@ -545,7 +557,7 @@
             // labelPrescriptionDoctor
             // 
             labelPrescriptionDoctor.AutoSize = true;
-            labelPrescriptionDoctor.Location = new Point(27, 278);
+            labelPrescriptionDoctor.Location = new Point(27, 315);
             labelPrescriptionDoctor.Name = "labelPrescriptionDoctor";
             labelPrescriptionDoctor.Size = new Size(62, 20);
             labelPrescriptionDoctor.TabIndex = 1;
@@ -1151,5 +1163,6 @@
         private Label label7;
         private Label labelUserPassword;
         private TextBox textBoxUserPassword;
+        private ComboBox comboBoxPrescriptionQuantity;
     }
 }

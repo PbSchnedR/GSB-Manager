@@ -46,8 +46,8 @@ namespace GSB_Manager.DAO
                     myCommand.Connection = connection;
                     myCommand.CommandText = @"
                         SELECT 
-                        p.patients_id, 
-                        p.users_id, 
+                        p.patient_id, 
+                        p.user_id, 
                         p.name, 
                         p.firstname, 
                         p.age, 
@@ -55,7 +55,7 @@ namespace GSB_Manager.DAO
                         u.name as user_name, 
                         u.firstname as user_firstname
                         FROM `Patients` as p 
-                        inner join Users as u on p.users_id = u.users_id
+                        inner join Users as u on p.user_id = u.user_id
 ";
 
                     // execute the command and read the results
@@ -63,8 +63,8 @@ namespace GSB_Manager.DAO
                     {
                         while (myReader.Read())
                         {
-                            id = myReader.GetInt32("patients_id");
-                            user_id = myReader.GetInt32("users_id");
+                            id = myReader.GetInt32("patient_id");
+                            user_id = myReader.GetInt32("user_id");
                             name = myReader.GetString("name");
                             firstName = myReader.GetString("firstname");
                             gender = myReader.GetString("gender");
@@ -105,7 +105,7 @@ namespace GSB_Manager.DAO
                     // create a MySQL command and set the SQL statement with parameters
                     MySqlCommand myCommand = new MySqlCommand();
                     myCommand.Connection = connection;
-                    myCommand.CommandText = @"SELECT * FROM Patients WHERE patients_id = @patient_id;";
+                    myCommand.CommandText = @"SELECT * FROM Patients WHERE patient_id = @patient_id;";
                     myCommand.Parameters.AddWithValue("@patient_id", patientId);
 
                     // execute the command and read the results
@@ -113,8 +113,8 @@ namespace GSB_Manager.DAO
                     {
                         while (myReader.Read())
                         {
-                            id = myReader.GetInt32("patients_id");
-                            user_id = myReader.GetInt32("users_id");
+                            id = myReader.GetInt32("patient_id");
+                            user_id = myReader.GetInt32("user_id");
                             name = myReader.GetString("name");
                             firstName = myReader.GetString("firstname");
                             gender = myReader.GetString("gender");
@@ -137,6 +137,8 @@ namespace GSB_Manager.DAO
 
         }
 
+      
+
 
         public Patient CreatePatient(int user_id, string name, string firstName, int age, string gender)
         {
@@ -148,7 +150,7 @@ namespace GSB_Manager.DAO
                     // create a MySQL command and set the SQL statement with parameters
                     MySqlCommand myCommand = new MySqlCommand();
                     myCommand.Connection = connection;
-                    myCommand.CommandText = @"INSERT INTO Patients (users_id, name, firstName, age, gender) VALUES (@user_id, @name, @firstName, @age, @gender);";
+                    myCommand.CommandText = @"INSERT INTO Patients (user_id, name, firstName, age, gender) VALUES (@user_id, @name, @firstName, @age, @gender);";
                     myCommand.Parameters.AddWithValue("@user_id", user_id);
                     myCommand.Parameters.AddWithValue("@name", name);
                     myCommand.Parameters.AddWithValue("@firstName", firstName);
@@ -160,7 +162,7 @@ namespace GSB_Manager.DAO
                     {
                         while (myReader.Read())
                         {
-                            user_id = myReader.GetInt32("users_id");
+                            user_id = myReader.GetInt32("user_id");
                             name = myReader.GetString("name");
                             firstName = myReader.GetString("firstname");
                             gender = myReader.GetString("gender");
@@ -192,12 +194,12 @@ namespace GSB_Manager.DAO
                     myCommand.Connection = connection;
                     myCommand.CommandText = @"
                 UPDATE Patients
-                SET users_id = @user_id,
+                SET user_id = @user_id,
                     name = @name,
                     firstname = @firstName,
                     age = @age,
                     gender = @gender
-                WHERE patients_id = @patient_id;
+                WHERE patient_id = @patient_id;
             ";
 
                     myCommand.Parameters.AddWithValue("@patient_id", patient_id);
@@ -229,9 +231,26 @@ namespace GSB_Manager.DAO
                 connection.Open();
                 try
                 {
+                    var prescriptionDAO = new PrescriptionDAO();
+                    var prescriptions = prescriptionDAO.GetPrescriptionIdForPatient(patient_id);
+                    foreach (var item in prescriptions)
+                    {
+                        MySqlCommand deleteRelationsAppartient = new MySqlCommand();
+                        deleteRelationsAppartient.Connection = connection;
+                        deleteRelationsAppartient.CommandText = @"DELETE FROM Appartient WHERE prescription_id = @prescription_id;";
+                        deleteRelationsAppartient.Parameters.AddWithValue("@prescription_id", item);
+                        deleteRelationsAppartient.ExecuteNonQuery();
+                    }
+                    
+                    MySqlCommand deleteRelations = new MySqlCommand();
+                    deleteRelations.Connection = connection;
+                    deleteRelations.CommandText = @"DELETE FROM Prescription WHERE patient_id = @patient_id;";
+                    deleteRelations.Parameters.AddWithValue("@patient_id", patient_id);
+                    deleteRelations.ExecuteNonQuery();
+
                     MySqlCommand myCommand = new MySqlCommand();
                     myCommand.Connection = connection;
-                    myCommand.CommandText = @"DELETE FROM Patients WHERE patients_id = @patient_id;";
+                    myCommand.CommandText = @"DELETE FROM Patients WHERE patient_id = @patient_id;";
                     myCommand.Parameters.AddWithValue("@patient_id", patient_id);
 
                     int rowsAffected = myCommand.ExecuteNonQuery();

@@ -20,6 +20,7 @@ namespace GSB_Manager.Forms
         }
 
         string allocatedMedicine = "";
+        Dictionary<string, int> allQuantities = new Dictionary<string, int>();
 
         private void Initialise_Tab()
         {
@@ -62,7 +63,6 @@ namespace GSB_Manager.Forms
             listUsers.DataSource = users;
             listUsers.DisplayMember = "Full_name";
         }
-
         private void Handle_listbox_change()
         {
             Medicine selectedMedicine = listMedicines.SelectedItem as Medicine;
@@ -78,8 +78,8 @@ namespace GSB_Manager.Forms
 
             if (selectedPrescription != null)
             {
+                comboBoxPrescriptionQuantity.Items.Clear();
                 labelPrescription.Text = selectedPrescription.Prescription_id.ToString();
-                textBoxPrescriptionQuantity.Text = selectedPrescription.Quantity.ToString();
                 textBoxPrescriptionValidity.Text = selectedPrescription.Validity.ToString("d");
                 textBoxPrescriptionDoctor.Text = selectedPrescription.User_Full_name;
                 textBoxPrescriptionPatient.Text = selectedPrescription.Patient_full_name;
@@ -87,8 +87,19 @@ namespace GSB_Manager.Forms
 
                 PrescriptionDAO prescriptionDAO = new PrescriptionDAO();
                 List<string> prescription_medicines = prescriptionDAO.GetPrescriptionMedicines(selectedPrescription.Prescription_id);
-                string parsed_medicines = string.Join(", ", prescription_medicines);
+                string parsed_medicines = string.Join(" ", prescription_medicines);
                 textBoxPrescriptionMedicines.Text = parsed_medicines;
+                foreach (var item in prescription_medicines)
+                {
+                    comboBoxPrescriptionQuantity.Items.Add("Quantity of " + item);
+                    comboBoxPrescriptionQuantity.SelectedIndex = 0;
+                }
+
+                var patientDAO = new PatientDAO();
+            List<Patient> patients = patientDAO.GetAllPatients();
+            comboBoxPrescriptionPatient.DataSource = null;
+            comboBoxPrescriptionPatient.DataSource = patients;
+            comboBoxPrescriptionPatient.DisplayMember = "Full_name";
             }
 
 
@@ -97,10 +108,12 @@ namespace GSB_Manager.Forms
             {
                 labelPatient.Text = selectedPatient.Full_name;
                 textBoxPatientAge.Text = selectedPatient.Age.ToString();
-                textBoxPatientDoctor.Text = selectedPatient.Users_id.ToString();
+                textBoxPatientDoctor.Text = selectedPatient.user_id.ToString();
                 textBoxPatientGender.Text = selectedPatient.Gender.ToString();
                 textBoxPatientDoctor.Text = selectedPatient.Full_User_Name;
-
+                comboBoxPatientGender.Items.Clear();
+                comboBoxPatientGender.Items.Add("Male");
+                comboBoxPatientGender.Items.Add("Female");
             }
 
             User selectedUser = listUsers.SelectedItem as User;
@@ -115,7 +128,6 @@ namespace GSB_Manager.Forms
                 else { textBoxUserRole.Text = "Admin"; }
             }
         }
-
         private void btnAddMedicine_Click(object sender, EventArgs e)
         {
             btnAddMedicine.Visible = false;
@@ -159,7 +171,7 @@ namespace GSB_Manager.Forms
                 try
                 {
                     string no_space_name = Regex.Replace(textBoxMedicineName.Text, @"\s", "");
-                    medicineDAO.CreateMedicine(_connectedUser.Users_id, no_space_name, textBoxMedicineDescription.Text, textBoxMedicineMolecule.Text, int.Parse(textBoxMedicineDosage.Text));
+                    medicineDAO.CreateMedicine(_connectedUser.user_id, no_space_name, textBoxMedicineDescription.Text, textBoxMedicineMolecule.Text, int.Parse(textBoxMedicineDosage.Text));
                     MessageBox.Show("Medicine added successfully");
                     btnAddMedicine.Visible = true;
                     btnDeleteMedicine.Visible = true;
@@ -190,46 +202,65 @@ namespace GSB_Manager.Forms
         {
             var prescriptionDAO = new PrescriptionDAO();
             var medicineDAO = new MedicineDAO();
-            if (textBoxPrescriptionMedicines.Text != string.Empty && textBoxPrescriptionQuantity.Text != string.Empty && comboBoxPrescriptionPatient.Text != string.Empty)
+            var patientDAO = new PatientDAO();
+
+
+            if (textBoxPrescriptionMedicines.Text != string.Empty && allQuantities.Count > 0 && comboBoxPrescriptionPatient.Text != string.Empty)
             {
+                
                 try
                 {
-                    int patientId = comboBoxPrescriptionPatient.SelectedIndex + 1;
-                    int prescriptionId = prescriptionDAO.CreatePrescription(_connectedUser.Users_id, patientId, int.Parse(textBoxPrescriptionQuantity.Text), dateTimePickerPrescriptionValidity.Value);
-                    var splited = allocatedMedicine.Trim().Split(" ").ToList();
+
+                    var selectedPatient = comboBoxPrescriptionPatient.SelectedItem as Patient;
+                    int patientId = selectedPatient.patient_id;
+                    int prescriptionId = prescriptionDAO.CreatePrescription(_connectedUser.user_id, patientId, dateTimePickerPrescriptionValidity.Value);
+                    var splited = allocatedMedicine.Split(' ', StringSplitOptions.RemoveEmptyEntries);
                     foreach (var item in splited)
                     {
                         int medicine_id = medicineDAO.FindMedicineIdByName(item);
 
                         prescriptionDAO.AddMedicineToPrescription(prescriptionId, medicine_id);
                     }
+
+                    foreach (var kvp in allQuantities)
+                    {
+                        int medicine_id = medicineDAO.FindMedicineIdByName(kvp.Key);
+                        prescriptionDAO.AddQuantityToAppartient(medicine_id, prescriptionId, kvp.Value);
+                    }
                     MessageBox.Show("Prescription added successfully");
-                    textBoxPrescriptionDoctor.Visible = true;
-                    textBoxPrescriptionPatient.Visible = true;
-                    textBoxPrescriptionQuantity.ReadOnly = true;
-                    dateTimePickerPrescriptionValidity.Visible = false;
-                    labelPrescriptionDoctor.Visible = true;
-                    comboBoxPrescriptionPatient.Visible = false;
-                    comboBoxPrescriptionMedicine.Visible = false;
-                    buttonPrescriptionCancel.Visible = false;
-                    buttonPrescriptionRegister.Visible = false;
-                    btnAddPrescription.Visible = true;
-                    btnDeletePrescription.Visible = true;
-                    btnEditPrescription.Visible = true;
-                    textBoxPrescriptionMedicines.Clear();
-                    comboBoxPrescriptionMedicine.Items.Clear();
-                    Initialise_Listbox();
+                    
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Please fill the fields correctly");
+                    allQuantities.Clear();
                     return;
                 }
             }
             else
             {
                 MessageBox.Show("Please fill all the fields");
+                allQuantities.Clear();
             }
+
+            textBoxPrescriptionDoctor.Visible = true;
+            textBoxPrescriptionPatient.Visible = true;
+            textBoxPrescriptionQuantity.ReadOnly = true;
+            dateTimePickerPrescriptionValidity.Visible = false;
+            labelPrescriptionDoctor.Visible = true;
+            comboBoxPrescriptionPatient.Visible = false;
+            comboBoxPrescriptionMedicine.Visible = false;
+            buttonPrescriptionCancel.Visible = false;
+            buttonPrescriptionRegister.Visible = false;
+            btnAddPrescription.Visible = true;
+            btnDeletePrescription.Visible = true;
+            btnEditPrescription.Visible = true;
+            textBoxPrescriptionValidity.Visible = true;
+            textBoxPrescriptionMedicines.Clear();
+            comboBoxPrescriptionMedicine.Items.Clear();
+            allQuantities.Clear();
+            allocatedMedicine = "";
+            Initialise_Listbox();
 
         }
 
@@ -237,9 +268,9 @@ namespace GSB_Manager.Forms
         {
             textBoxPrescriptionDoctor.Visible = false;
             textBoxPrescriptionPatient.Visible = false;
-            textBoxPrescriptionQuantity.ReadOnly = false;
             textBoxPrescriptionValidity.Visible = false;
             labelPrescriptionDoctor.Visible = false;
+            textBoxPrescriptionQuantity.ReadOnly = false;
 
             comboBoxPrescriptionPatient.Visible = true;
             comboBoxPrescriptionMedicine.Visible = true;
@@ -253,23 +284,34 @@ namespace GSB_Manager.Forms
 
             textBoxPrescriptionQuantity.Clear();
             textBoxPrescriptionMedicines.Clear();
+            comboBoxPrescriptionQuantity.Items.Clear();
 
 
             var medicineDAO = new MedicineDAO();
             List<Medicine> medicines = medicineDAO.GetAllMedicine();
             medicines.ForEach(m => comboBoxPrescriptionMedicine.Items.Add(m.Name));
 
-            var patientDAO = new PatientDAO();
-            List<Patient> patients = patientDAO.GetAllPatients();
-            patients.ForEach(p => comboBoxPrescriptionPatient.Items.Add(p.Full_name));
+            
         }
 
         private void comboBoxPrescriptionMedicine_SelectedIndexChanged(object sender, EventArgs e)
         {
             string selectedItem = comboBoxPrescriptionMedicine.SelectedItem.ToString();
-            allocatedMedicine += selectedItem + " ";
+            if(allocatedMedicine == "")
+            {
+                allocatedMedicine += selectedItem + " ";
+            }
+            else
+            {
+                allocatedMedicine += " " + selectedItem + " ";
+            }
             textBoxPrescriptionMedicines.Text = allocatedMedicine;
 
+            comboBoxPrescriptionQuantity.Items.Add("Quantity for " + selectedItem);
+            if (!allQuantities.ContainsKey(selectedItem))
+            {
+                allQuantities.Add(selectedItem, 0);
+            }
         }
 
         private void btnAddPatient_Click(object sender, EventArgs e)
@@ -293,8 +335,7 @@ namespace GSB_Manager.Forms
 
 
             comboBoxPatientGender.Visible = true;
-            comboBoxPatientGender.Items.Add("Male");
-            comboBoxPatientGender.Items.Add("Female");
+           
 
         }
 
@@ -305,7 +346,7 @@ namespace GSB_Manager.Forms
             {
                 try
                 {
-                    patientDAO.CreatePatient(_connectedUser.Users_id, textBoxPatientName.Text, textBoxPatientFirstname.Text, int.Parse(textBoxPatientAge.Text), comboBoxPatientGender.SelectedItem.ToString());
+                    patientDAO.CreatePatient(_connectedUser.user_id, textBoxPatientName.Text, textBoxPatientFirstname.Text, int.Parse(textBoxPatientAge.Text), comboBoxPatientGender.SelectedItem.ToString());
                     MessageBox.Show("Patient added successfully");
                     btnAddPatient.Visible = true;
                     btnDeletePatient.Visible = true;
@@ -420,7 +461,7 @@ namespace GSB_Manager.Forms
             Patient selectedPatient = listPatients.SelectedItem as Patient;
             if (selectedPatient != null)
             {
-                int patientId = selectedPatient.Patients_id;
+                int patientId = selectedPatient.patient_id;
                 DialogResult result = MessageBox.Show(
                 "Are you sure you want to delete this item?",
                 "Confirmation",
@@ -465,7 +506,7 @@ namespace GSB_Manager.Forms
                     try
                     {
                         string no_space_name = Regex.Replace(textBoxMedicineName.Text, @"\s", "");
-                        medicineDAO.EditMedicine(selectedMedicine.Medicine_id, _connectedUser.Users_id, no_space_name, textBoxMedicineDescription.Text, textBoxMedicineMolecule.Text, int.Parse(textBoxMedicineDosage.Text));
+                        medicineDAO.EditMedicine(selectedMedicine.Medicine_id, _connectedUser.user_id, no_space_name, textBoxMedicineDescription.Text, textBoxMedicineMolecule.Text, int.Parse(textBoxMedicineDosage.Text));
                         MessageBox.Show("Medicine edited successfully");
                         btnAddMedicine.Visible = true;
                         btnDeleteMedicine.Visible = true;
@@ -511,6 +552,7 @@ namespace GSB_Manager.Forms
 
         private void btnEditPrescription_Click(object sender, EventArgs e)
         {
+            allocatedMedicine = textBoxPrescriptionMedicines.Text;
             textBoxPrescriptionDoctor.Visible = false;
             textBoxPrescriptionPatient.Visible = false;
             textBoxPrescriptionQuantity.ReadOnly = false;
@@ -518,6 +560,30 @@ namespace GSB_Manager.Forms
             labelPrescriptionDoctor.Visible = false;
 
             comboBoxPrescriptionPatient.Visible = true;
+
+            string fullName = textBoxPrescriptionPatient.Text.Trim();
+
+            foreach (Patient p in comboBoxPrescriptionPatient.Items)
+            {
+                string patientFullName = p.Full_name;
+
+                if (patientFullName.Equals(fullName, StringComparison.OrdinalIgnoreCase))
+                {
+                    comboBoxPrescriptionPatient.SelectedItem = p;
+                    break;
+                }
+            }
+
+            if (DateTime.TryParse(textBoxPrescriptionValidity.Text, out DateTime parsedDate))
+            {
+                dateTimePickerPrescriptionValidity.Value = parsedDate;
+            }
+            else
+            {
+                MessageBox.Show("Date invalide dans la prescription.");
+            }
+
+
             comboBoxPrescriptionMedicine.Visible = true;
             dateTimePickerPrescriptionValidity.Visible = true;
 
@@ -527,13 +593,23 @@ namespace GSB_Manager.Forms
             buttonPrescriptionModify.Visible = true;
             buttonPrescriptionCancel.Visible = true;
 
+            var splited = textBoxPrescriptionMedicines.Text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            var prescriptionDAO = new PrescriptionDAO();
             var medicineDAO = new MedicineDAO();
+            Prescription selectedPrescription = listPrescriptions.SelectedItem as Prescription;
+            foreach (var item in splited)
+            {
+                int medicineId = medicineDAO.FindMedicineIdByName(item);
+                int quantity = prescriptionDAO.GetSelectedMedicineQuantity(item, selectedPrescription.Prescription_id);
+                allQuantities.Add(item, quantity);
+            }
+
             List<Medicine> medicines = medicineDAO.GetAllMedicine();
             medicines.ForEach(m => comboBoxPrescriptionMedicine.Items.Add(m.Name));
 
             var patientDAO = new PatientDAO();
             List<Patient> patients = patientDAO.GetAllPatients();
-            patients.ForEach(p => comboBoxPrescriptionPatient.Items.Add(p.Full_name));
+            comboBoxPrescriptionPatient.SelectedItem = textBoxPrescriptionPatient.Text;
         }
 
         private void buttonPrescriptionModify_Click(object sender, EventArgs e)
@@ -550,13 +626,13 @@ namespace GSB_Manager.Forms
                 {
                     try
                     {
-                        int patientId = comboBoxPrescriptionPatient.SelectedIndex + 1;
+                        var selectedPatient = comboBoxPrescriptionPatient.SelectedItem as Patient;
+                        int patientId = selectedPatient.patient_id;
 
                         bool prescriptionEdited = prescriptionDAO.EditPrescription(
                             selectedPrescription.Prescription_id,
-                            _connectedUser.Users_id,
+                            _connectedUser.user_id,
                             patientId,
-                            int.Parse(textBoxPrescriptionQuantity.Text),
                             dateTimePickerPrescriptionValidity.Value
                         );
 
@@ -565,11 +641,20 @@ namespace GSB_Manager.Forms
 
                         foreach (var item in splited)
                         {
-                            int medicine_id = medicineDAO.FindMedicineIdByName(item);
-                            medicineIds.Add(medicine_id);
+                           int medicine_id = medicineDAO.FindMedicineIdByName(item);
+                           medicineIds.Add(medicine_id);
                         }
 
                         prescriptionDAO.EditMedicineToPrescription(selectedPrescription.Prescription_id, medicineIds);
+                        if (allocatedMedicine.Length > 0) {
+                            foreach (var kvp in allQuantities)
+                            {
+                                int medicineId = medicineDAO.FindMedicineIdByName(kvp.Key);
+                                prescriptionDAO.AddQuantityToAppartient(medicineId, selectedPrescription.Prescription_id, kvp.Value);
+                            }
+
+                        }
+
 
                         MessageBox.Show("Prescription edited successfully");
 
@@ -585,8 +670,10 @@ namespace GSB_Manager.Forms
                         btnAddPrescription.Visible = true;
                         btnDeletePrescription.Visible = true;
                         btnEditPrescription.Visible = true;
+                        textBoxPrescriptionValidity.Visible = true;
                         textBoxPrescriptionMedicines.Clear();
                         comboBoxPrescriptionMedicine.Items.Clear();
+                        allQuantities.Clear();
                         Initialise_Listbox();
                     }
                     catch (Exception ex)
@@ -620,8 +707,7 @@ namespace GSB_Manager.Forms
 
 
             comboBoxPatientGender.Visible = true;
-            comboBoxPatientGender.Items.Add("Male");
-            comboBoxPatientGender.Items.Add("Female");
+          
 
             textBoxPatientFirstname.Text = labelPatient.Text.Split(' ')[0];
             textBoxPatientName.Text = labelPatient.Text.Split(' ')[1];
@@ -638,7 +724,7 @@ namespace GSB_Manager.Forms
                 {
                     try
                     {
-                        patientDAO.EditPatient(selectedPatient.Patients_id, _connectedUser.Users_id, textBoxPatientName.Text, textBoxPatientFirstname.Text, int.Parse(textBoxPatientAge.Text), comboBoxPatientGender.SelectedItem.ToString());
+                        patientDAO.EditPatient(selectedPatient.patient_id, _connectedUser.user_id, textBoxPatientName.Text, textBoxPatientFirstname.Text, int.Parse(textBoxPatientAge.Text), comboBoxPatientGender.SelectedItem.ToString());
                         MessageBox.Show("Patient edited successfully");
                         btnAddPatient.Visible = true;
                         btnDeletePatient.Visible = true;
@@ -685,7 +771,7 @@ namespace GSB_Manager.Forms
                 {
                     try
                     {
-                        userDAO.EditUser(selectedUser.Users_id, textBoxUserName.Text, textBoxUserFirstname.Text, textBoxUserEmail.Text);
+                        userDAO.EditUser(selectedUser.user_id, textBoxUserName.Text, textBoxUserFirstname.Text, textBoxUserEmail.Text);
                         MessageBox.Show("User edited successfully");
                         buttonUserAdd.Visible = true;
                         buttonUserEdit.Visible = true;
@@ -851,15 +937,17 @@ namespace GSB_Manager.Forms
             dateTimePickerPrescriptionValidity.Visible = false;
             labelPrescriptionDoctor.Visible = true;
             comboBoxPrescriptionPatient.Visible = false;
+            textBoxPrescriptionValidity.Visible = true;
             comboBoxPrescriptionMedicine.Visible = false;
             textBoxPrescriptionMedicines.Clear();
             comboBoxPrescriptionMedicine.Items.Clear();
+            allocatedMedicine = "";
+            allQuantities.Clear();
 
             Prescription selectedPrescription = listPrescriptions.SelectedItem as Prescription;
             if (selectedPrescription != null)
             {
                 labelPrescription.Text = selectedPrescription.Prescription_id.ToString();
-                textBoxPrescriptionQuantity.Text = selectedPrescription.Quantity.ToString();
                 textBoxPrescriptionValidity.Text = selectedPrescription.Validity.ToString("d");
                 textBoxPrescriptionDoctor.Text = selectedPrescription.User_Full_name;
                 textBoxPrescriptionPatient.Text = selectedPrescription.Patient_full_name;
@@ -890,12 +978,62 @@ namespace GSB_Manager.Forms
             comboBoxPatientGender.Visible = false;
 
             Patient selectedPatient = listPatients.SelectedItem as Patient;
-            if (selectedPatient != null) { 
+            if (selectedPatient != null)
+            {
                 textBoxPatientAge.Text = selectedPatient.Age.ToString();
                 textBoxPatientGender.Text = selectedPatient.Gender.ToString();
                 labelPatient.Text = selectedPatient.Firstname + " " + selectedPatient.Name;
             }
 
+        }
+
+        private void comboBoxPrescriptionQuantity_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var prescriptionDAO = new PrescriptionDAO();
+            Prescription selectedPrescription = listPrescriptions.SelectedItem as Prescription;
+            if (selectedPrescription != null)
+            {
+                string selectedItem = comboBoxPrescriptionQuantity.SelectedItem.ToString();
+                int quantity = prescriptionDAO.GetSelectedMedicineQuantity(selectedItem.Trim().Split(' ')[2], selectedPrescription.Prescription_id);
+                if (quantity > 0)
+                {
+                    textBoxPrescriptionQuantity.Text = quantity.ToString();
+                }
+                else
+                {
+                    string selectedQuantityItem =
+                    comboBoxPrescriptionQuantity.SelectedItem.ToString()
+                    .Trim()
+                    .Split(' ', StringSplitOptions.RemoveEmptyEntries)[2];
+                    if (allQuantities.ContainsKey(selectedQuantityItem))
+                    {
+                        textBoxPrescriptionQuantity.Text = allQuantities[selectedQuantityItem].ToString();
+                    }
+                    else
+                    {
+                        textBoxPrescriptionQuantity.Text = "0";
+                    }
+
+                }
+            }
+        }
+
+        private void textBoxPrescriptionQuantity_TextChanged(object sender, EventArgs e)
+        {
+            string selectedQuantityItem =
+             comboBoxPrescriptionQuantity.SelectedItem.ToString()
+             .Trim()
+             .Split(' ', StringSplitOptions.RemoveEmptyEntries)[2];
+
+            if (selectedQuantityItem != null && allQuantities.ContainsKey(selectedQuantityItem)) {
+                try
+                {
+                    allQuantities[selectedQuantityItem] = int.Parse(textBoxPrescriptionQuantity.Text);
+                }
+                catch (Exception ex) {
+                    MessageBox.Show("Please fill the quantity for the medicine");
+                }
+            }
         }
     }
 }

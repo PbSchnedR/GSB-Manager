@@ -10,7 +10,7 @@ namespace GSB_Manager.Models
     {
         public int Medicine_id { get; set; } // C'est une propriété (attribut), permet d'accéder en lecture et écriture via get set
 
-        public int Users_id { get; set; }
+        public int user_id { get; set; }
 
         public int Dosage { get; set; }
 
@@ -22,10 +22,10 @@ namespace GSB_Manager.Models
         public Medicine() // c'est le constructeur par défaut qui permettra d'instancier Users et avoir accès à toutes ses propriétés (attributs)
         { }
 
-        public Medicine(int medicine_id, int users_id, int dosage, string name, string description, string molecule) // c'est une surcharge du constructeur, ça permettrea la création d'objet Users qui sera instancié avec les valeurs passées en paramètre
+        public Medicine(int medicine_id, int user_id, int dosage, string name, string description, string molecule) // c'est une surcharge du constructeur, ça permettrea la création d'objet Users qui sera instancié avec les valeurs passées en paramètre
         {
            this.Medicine_id = medicine_id;
-           this.Users_id = users_id;
+           this.user_id = user_id;
            this.Dosage = dosage;
            this.Name = name;
            this.Description = description;

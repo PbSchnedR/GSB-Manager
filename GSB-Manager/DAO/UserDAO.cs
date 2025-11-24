@@ -33,7 +33,7 @@ namespace GSB_Manager.DAO
                 using var myReader = myCommand.ExecuteReader();
                 while (myReader.Read())
                 {
-                    id = myReader.GetInt32("users_id");
+                    id = myReader.GetInt32("user_id");
                     name = myReader.GetString("name");
                     firstName = myReader.GetString("firstname");
                     role = myReader.GetBoolean("role");
@@ -101,7 +101,7 @@ namespace GSB_Manager.DAO
                 using var myReader = myCommand.ExecuteReader();
                 while (myReader.Read())
                 {
-                    int user_id = myReader.GetInt32("users_id");
+                    int user_id = myReader.GetInt32("user_id");
                     string name = myReader.GetString("name");
                     string firstName = myReader.GetString("firstname");
                     string email = myReader.GetString("email");
@@ -178,7 +178,7 @@ namespace GSB_Manager.DAO
                         SET name = @name,
                             firstname = @firstname,
                             email = @email
-                        WHERE users_id = @user_id;
+                        WHERE user_id = @user_id;
                     ";
                 }
                 

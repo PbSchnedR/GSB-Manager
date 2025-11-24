@@ -43,7 +43,7 @@ namespace GSB_Manager.DAO
                         while (myReader.Read())
                         {
                             id = myReader.GetInt32("medicine_id");
-                            user_id = myReader.GetInt32("users_id");
+                            user_id = myReader.GetInt32("user_id");
                             name = myReader.GetString("name");
                             description = myReader.GetString("description");
                             molecule = myReader.GetString("molecule");
@@ -91,7 +91,7 @@ namespace GSB_Manager.DAO
                         while (myReader.Read())
                         {
                             id = myReader.GetInt32("medicine_id");
-                            user_id = myReader.GetInt32("users_id");
+                            user_id = myReader.GetInt32("user_id");
                             name = myReader.GetString("name");
                             description = myReader.GetString("description");
                             molecule = myReader.GetString("molecule");
@@ -126,7 +126,7 @@ namespace GSB_Manager.DAO
                     // create a MySQL command and set the SQL statement with parameters
                     MySqlCommand myCommand = new MySqlCommand();
                     myCommand.Connection = connection;
-                    myCommand.CommandText = @"INSERT INTO Medicine (users_id, name, description, molecule, dosage) VALUES (@user_id, @name, @description, @molecule, @dosage);";
+                    myCommand.CommandText = @"INSERT INTO Medicine (user_id, name, description, molecule, dosage) VALUES (@user_id, @name, @description, @molecule, @dosage);";
                     myCommand.Parameters.AddWithValue("@user_id", user_id);
                     myCommand.Parameters.AddWithValue("@name", name);
                     myCommand.Parameters.AddWithValue("@description", description);
@@ -139,7 +139,7 @@ namespace GSB_Manager.DAO
                         while (myReader.Read())
                         {
                             id = myReader.GetInt32("medicine_id");
-                            user_id = myReader.GetInt32("users_id");
+                            user_id = myReader.GetInt32("user_id");
                             name = myReader.GetString("name");
                             description = myReader.GetString("description");
                             molecule = myReader.GetString("molecule");
@@ -206,7 +206,7 @@ namespace GSB_Manager.DAO
                     myCommand.Connection = connection;
                     myCommand.CommandText = @"
                 UPDATE Medicine 
-                SET users_id = @user_id, 
+                SET user_id = @user_id, 
                     name = @name, 
                     description = @description, 
                     molecule = @molecule, 
@@ -243,6 +243,24 @@ namespace GSB_Manager.DAO
                 connection.Open();
                 try
                 {
+                    MySqlCommand deleteRelations = new MySqlCommand();
+                    deleteRelations.Connection = connection;
+                    deleteRelations.CommandText = @"DELETE FROM Appartient WHERE medicine_id = @medicine_id;";
+                    deleteRelations.Parameters.AddWithValue("@medicine_id", medicine_id);
+                    deleteRelations.ExecuteNonQuery();
+
+                    MySqlCommand deleteRelatedPrescriptions = new MySqlCommand();
+                    deleteRelatedPrescriptions.Connection = connection;
+                    deleteRelatedPrescriptions.CommandText = @"
+                    DELETE p, a
+                    FROM Prescription p
+                    JOIN Appartient a ON a.prescription_id = p.prescription_id
+                    WHERE a.medicine_id = @medicine_id;
+
+                    ";
+                    deleteRelatedPrescriptions.Parameters.AddWithValue("@medicine_id", medicine_id);
+                    deleteRelatedPrescriptions.ExecuteNonQuery();
+
                     MySqlCommand myCommand = new MySqlCommand();
                     myCommand.Connection = connection;
                     myCommand.CommandText = @"DELETE FROM Medicine WHERE medicine_id = @medicine_id;";
