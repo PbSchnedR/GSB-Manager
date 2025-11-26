@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using GSB_Manager.Models;
 using GSB_Manager.DAO;
+using GSB_Manager.Utils;
 using System.Text.RegularExpressions;
 
 namespace GSB_Manager.Forms
@@ -96,10 +97,10 @@ namespace GSB_Manager.Forms
                 }
 
                 var patientDAO = new PatientDAO();
-            List<Patient> patients = patientDAO.GetAllPatients();
-            comboBoxPrescriptionPatient.DataSource = null;
-            comboBoxPrescriptionPatient.DataSource = patients;
-            comboBoxPrescriptionPatient.DisplayMember = "Full_name";
+                List<Patient> patients = patientDAO.GetAllPatients();
+                comboBoxPrescriptionPatient.DataSource = null;
+                comboBoxPrescriptionPatient.DataSource = patients;
+                comboBoxPrescriptionPatient.DisplayMember = "Full_name";
             }
 
 
@@ -207,7 +208,7 @@ namespace GSB_Manager.Forms
 
             if (textBoxPrescriptionMedicines.Text != string.Empty && allQuantities.Count > 0 && comboBoxPrescriptionPatient.Text != string.Empty)
             {
-                
+
                 try
                 {
 
@@ -228,7 +229,7 @@ namespace GSB_Manager.Forms
                         prescriptionDAO.AddQuantityToAppartient(medicine_id, prescriptionId, kvp.Value);
                     }
                     MessageBox.Show("Prescription added successfully");
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -291,13 +292,13 @@ namespace GSB_Manager.Forms
             List<Medicine> medicines = medicineDAO.GetAllMedicine();
             medicines.ForEach(m => comboBoxPrescriptionMedicine.Items.Add(m.Name));
 
-            
+
         }
 
         private void comboBoxPrescriptionMedicine_SelectedIndexChanged(object sender, EventArgs e)
         {
             string selectedItem = comboBoxPrescriptionMedicine.SelectedItem.ToString();
-            if(allocatedMedicine == "")
+            if (allocatedMedicine == "")
             {
                 allocatedMedicine += selectedItem + " ";
             }
@@ -335,7 +336,7 @@ namespace GSB_Manager.Forms
 
 
             comboBoxPatientGender.Visible = true;
-           
+
 
         }
 
@@ -641,12 +642,13 @@ namespace GSB_Manager.Forms
 
                         foreach (var item in splited)
                         {
-                           int medicine_id = medicineDAO.FindMedicineIdByName(item);
-                           medicineIds.Add(medicine_id);
+                            int medicine_id = medicineDAO.FindMedicineIdByName(item);
+                            medicineIds.Add(medicine_id);
                         }
 
                         prescriptionDAO.EditMedicineToPrescription(selectedPrescription.Prescription_id, medicineIds);
-                        if (allocatedMedicine.Length > 0) {
+                        if (allocatedMedicine.Length > 0)
+                        {
                             foreach (var kvp in allQuantities)
                             {
                                 int medicineId = medicineDAO.FindMedicineIdByName(kvp.Key);
@@ -707,7 +709,7 @@ namespace GSB_Manager.Forms
 
 
             comboBoxPatientGender.Visible = true;
-          
+
 
             textBoxPatientFirstname.Text = labelPatient.Text.Split(' ')[0];
             textBoxPatientName.Text = labelPatient.Text.Split(' ')[1];
@@ -1025,15 +1027,31 @@ namespace GSB_Manager.Forms
              .Trim()
              .Split(' ', StringSplitOptions.RemoveEmptyEntries)[2];
 
-            if (selectedQuantityItem != null && allQuantities.ContainsKey(selectedQuantityItem)) {
+            if (selectedQuantityItem != null && allQuantities.ContainsKey(selectedQuantityItem))
+            {
                 try
                 {
                     allQuantities[selectedQuantityItem] = int.Parse(textBoxPrescriptionQuantity.Text);
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     MessageBox.Show("Please fill the quantity for the medicine");
                 }
             }
+        }
+
+        private void buttonGenerateMedicine_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void buttonPrescriptionGenerate_Click(object sender, EventArgs e)
+        {
+            PdfExporter pdf = new PdfExporter();
+            Prescription selectedPrescription = listPrescriptions.SelectedItem as Prescription;
+            var prescriptionDAO = new PrescriptionDAO();
+            List<(Medicine med, int quantity)> meds = prescriptionDAO.GetPairsMedicineQuantity(selectedPrescription.Prescription_id);
+
+            pdf.ExportPrescription(selectedPrescription, textBoxPrescriptionPatient.Text, textBoxPrescriptionDoctor.Text, meds);
         }
     }
 }

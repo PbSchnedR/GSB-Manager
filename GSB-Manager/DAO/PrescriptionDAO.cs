@@ -513,6 +513,51 @@ namespace GSB_Manager.DAO
             }
         }
 
+        public List<(Medicine, int)> GetPairsMedicineQuantity(int prescriptionId)
+        {
+            string name = string.Empty;
+            int dosage = 0;
+
+            var pairs = new List<(Medicine, int)>();
+            using (var connection = db.GetConnection())
+            {
+                connection.Open();
+
+                try
+                {
+                    MySqlCommand cmd = new MySqlCommand();
+                    cmd.Connection = connection;
+                    cmd.CommandText = @"
+                SELECT m.medicine_id, m.name, m.dosage, a.quantity
+                FROM Appartient AS a
+                INNER JOIN Medicine AS m ON a.medicine_id = m.medicine_id
+                WHERE a.prescription_id = @prescription_id;
+            ";
+
+                    cmd.Parameters.AddWithValue("@prescription_id", prescriptionId);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int medId = reader.GetInt32("medicine_id");
+                            name = reader.GetString("name");
+                            dosage = reader.GetInt32("dosage");
+                            int quantity = reader.GetInt32("quantity");
+
+                            Medicine med = new Medicine(medId, dosage, name);
+                            pairs.Add((med, quantity));
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erreur GetPairsMedicineQuantity : " + ex.Message);
+                }
+            }
+            return pairs;
+        }
+
     }
 }
 

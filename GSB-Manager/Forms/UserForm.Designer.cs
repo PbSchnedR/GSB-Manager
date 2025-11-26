@@ -74,6 +74,7 @@
             btnEditMedicine = new Button();
             btnDeleteMedicine = new Button();
             tabPrescriptions = new TabPage();
+            buttonPrescriptionGenerate = new Button();
             buttonPrescriptionModify = new Button();
             buttonPrescriptionCancel = new Button();
             buttonPrescriptionRegister = new Button();
@@ -367,6 +368,7 @@
             // 
             // tabPrescriptions
             // 
+            tabPrescriptions.Controls.Add(buttonPrescriptionGenerate);
             tabPrescriptions.Controls.Add(buttonPrescriptionModify);
             tabPrescriptions.Controls.Add(buttonPrescriptionCancel);
             tabPrescriptions.Controls.Add(buttonPrescriptionRegister);
@@ -382,6 +384,16 @@
             tabPrescriptions.TabIndex = 1;
             tabPrescriptions.Text = "Prescriptions";
             tabPrescriptions.UseVisualStyleBackColor = true;
+            // 
+            // buttonPrescriptionGenerate
+            // 
+            buttonPrescriptionGenerate.Location = new Point(480, 492);
+            buttonPrescriptionGenerate.Name = "buttonPrescriptionGenerate";
+            buttonPrescriptionGenerate.Size = new Size(235, 29);
+            buttonPrescriptionGenerate.TabIndex = 9;
+            buttonPrescriptionGenerate.Text = "Generate PDF";
+            buttonPrescriptionGenerate.UseVisualStyleBackColor = true;
+            buttonPrescriptionGenerate.Click += buttonPrescriptionGenerate_Click;
             // 
             // buttonPrescriptionModify
             // 
@@ -1164,5 +1176,6 @@
         private Label labelUserPassword;
         private TextBox textBoxUserPassword;
         private ComboBox comboBoxPrescriptionQuantity;
+        private Button buttonPrescriptionGenerate;
     }
 }

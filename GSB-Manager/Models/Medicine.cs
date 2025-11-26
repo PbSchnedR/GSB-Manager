@@ -31,5 +31,12 @@ namespace GSB_Manager.Models
            this.Description = description;
            this.Molecule = molecule;
         }
+
+        public Medicine(int medicine_id, int dosage, string name) // c'est une surcharge du constructeur, ça permettrea la création d'objet Users qui sera instancié avec les valeurs passées en paramètre
+        {
+            this.Medicine_id = medicine_id;
+            this.Dosage = dosage;
+            this.Name = name;
+        }
     }
 }
