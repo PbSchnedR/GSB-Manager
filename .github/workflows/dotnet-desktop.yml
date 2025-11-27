@@ -1,0 +1,44 @@
+name: Build & Upload gsbMonolith
+on:
+  push:
+    tags:
+      - "v*"
+permissions:
+  contents: write
+jobs:
+  build_upload:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+      
+      
+      
+      - name: Restore
+        run: dotnet restore
+      
+      - name: Build & Publish EXE
+        run: |
+          dotnet publish gsbMonolith.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained true `
+            /p:PublishSingleFile=true `
+            /p:IncludeAllContentForSelfExtract=true `
+            -o publish
+      
+      - name: Rename exe
+        run: |
+          ren publish\gsbMonolith.exe gsbMonolith-${{ github.ref_name }}.exe
+      
+      - name: Upload exe to existing GitHub release
+        shell: bash
+        run: |
+          gh release upload "${{ github.ref_name }}" "publish/gsbMonolith-${{ github.ref_name }}.exe" --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
