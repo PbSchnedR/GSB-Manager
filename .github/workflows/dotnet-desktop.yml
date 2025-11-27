@@ -34,7 +34,7 @@ jobs:
       
       - name: Rename exe
         run: |
-          ren publish\gsbMon.exe gsbMonolith-${{ github.ref_name }}.exe
+          ren publish\GSB-manager.exe GSB-manager-${{ github.ref_name }}.exe
       
       - name: Upload exe to existing GitHub release
         shell: bash
