@@ -10,10 +10,20 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace GSB_Manager.DAO
 {
-    internal class MedicineDAO
+    /// <summary>
+    /// Data Access Object for <see cref="Medicine"/>.
+    /// Provides CRUD operations for medicines in the database.
+    /// </summary>
+    public class MedicineDAO
     {
-
+        /// <summary>
+        /// Database connection helper.
+        /// </summary>
         private readonly Database db = new Database();
+        /// <summary>
+        /// Retrieves all medicines from the database.
+        /// </summary>
+        /// <returns>List of <see cref="Medicine"/> objects.</returns>
 
         public List<Medicine> GetAllMedicine()
         {
@@ -64,7 +74,11 @@ namespace GSB_Manager.DAO
                 }
             }
         }
-
+        /// <summary>
+        /// Retrieves a single medicine by its ID.
+        /// </summary>
+        /// <param name="medicineId">The ID of the medicine.</param>
+        /// <returns>The <see cref="Medicine"/> object if found, otherwise null.</returns>
         public Medicine GetMedicineById(int medicineId)
         {
             int id = 0;
@@ -114,7 +128,15 @@ namespace GSB_Manager.DAO
 
         }
 
-
+        /// <summary>
+        /// Creates a new medicine record in the database.
+        /// </summary>
+        /// <param name="user_id">ID of the user who owns the medicine.</param>
+        /// <param name="name">Name of the medicine.</param>
+        /// <param name="description">Description of the medicine.</param>
+        /// <param name="molecule">Active molecule of the medicine.</param>
+        /// <param name="dosage">Dosage in mg.</param>
+        /// <returns>The created <see cref="Medicine"/> object.</returns>
         public Medicine CreateMedicine(int user_id, string name, string description, string molecule, int dosage)
         {
             int id = 0;
@@ -160,6 +182,11 @@ namespace GSB_Manager.DAO
             }
         }
 
+        /// <summary>
+        /// Finds the ID of a medicine by its name.
+        /// </summary>
+        /// <param name="name">Name of the medicine.</param>
+        /// <returns>ID of the medicine if found, otherwise -1.</returns>
         public int FindMedicineIdByName(string name)
         {
             int id = -1;
@@ -195,6 +222,16 @@ namespace GSB_Manager.DAO
             return id;
         }
 
+        /// <summary>
+        /// Updates an existing medicine in the database.
+        /// </summary>
+        /// <param name="medicine_id">ID of the medicine to update.</param>
+        /// <param name="user_id">ID of the user who owns the medicine.</param>
+        /// <param name="name">Name of the medicine.</param>
+        /// <param name="description">Description of the medicine.</param>
+        /// <param name="molecule">Active molecule.</param>
+        /// <param name="dosage">Dosage in mg.</param>
+        /// <returns>True if the update was successful, otherwise false.</returns>
         public bool EditMedicine(int medicine_id, int user_id, string name, string description, string molecule, int dosage)
         {
             using (var connection = db.GetConnection())
@@ -236,6 +273,11 @@ namespace GSB_Manager.DAO
             }
         }
 
+        /// <summary>
+        /// Deletes a medicine from the database, including related records in <see cref="Appartient"/> and <see cref="Prescription"/>.
+        /// </summary>
+        /// <param name="medicine_id">ID of the medicine to delete.</param>
+        /// <returns>True if deletion was successful, otherwise false.</returns>
         public bool DeleteMedicine(int medicine_id)
         {
             using (var connection = db.GetConnection())

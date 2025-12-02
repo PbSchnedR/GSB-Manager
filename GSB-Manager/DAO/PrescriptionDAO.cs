@@ -10,7 +10,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace GSB_Manager.DAO
 {
-    internal class PrescriptionDAO
+    public class PrescriptionDAO
     {
 
         private readonly Database db = new Database();

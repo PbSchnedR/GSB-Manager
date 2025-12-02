@@ -121,6 +121,7 @@
             btnEditPatient = new Button();
             btnDeletePatient = new Button();
             tabPageManager = new TabPage();
+            buttonUserDelete = new Button();
             buttonUserModify = new Button();
             buttonUserCancel = new Button();
             buttonUserRegister = new Button();
@@ -855,6 +856,7 @@
             // 
             // tabPageManager
             // 
+            tabPageManager.Controls.Add(buttonUserDelete);
             tabPageManager.Controls.Add(buttonUserModify);
             tabPageManager.Controls.Add(buttonUserCancel);
             tabPageManager.Controls.Add(buttonUserRegister);
@@ -869,6 +871,16 @@
             tabPageManager.TabIndex = 3;
             tabPageManager.Text = "Manager";
             tabPageManager.UseVisualStyleBackColor = true;
+            // 
+            // buttonUserDelete
+            // 
+            buttonUserDelete.Location = new Point(641, 440);
+            buttonUserDelete.Margin = new Padding(3, 4, 3, 4);
+            buttonUserDelete.Name = "buttonUserDelete";
+            buttonUserDelete.Size = new Size(75, 29);
+            buttonUserDelete.TabIndex = 22;
+            buttonUserDelete.Text = "Delete";
+            buttonUserDelete.Click += buttonUserDelete_Click;
             // 
             // buttonUserModify
             // 
@@ -930,7 +942,7 @@
             // labelUserPassword
             // 
             labelUserPassword.AutoSize = true;
-            labelUserPassword.Location = new Point(48, 389);
+            labelUserPassword.Location = new Point(44, 373);
             labelUserPassword.Name = "labelUserPassword";
             labelUserPassword.Size = new Size(77, 20);
             labelUserPassword.TabIndex = 26;
@@ -939,7 +951,7 @@
             // 
             // textBoxUserPassword
             // 
-            textBoxUserPassword.Location = new Point(44, 412);
+            textBoxUserPassword.Location = new Point(40, 396);
             textBoxUserPassword.Name = "textBoxUserPassword";
             textBoxUserPassword.Size = new Size(175, 27);
             textBoxUserPassword.TabIndex = 25;
@@ -948,7 +960,7 @@
             // labelUserFirstname
             // 
             labelUserFirstname.AutoSize = true;
-            labelUserFirstname.Location = new Point(50, 320);
+            labelUserFirstname.Location = new Point(46, 304);
             labelUserFirstname.Name = "labelUserFirstname";
             labelUserFirstname.Size = new Size(72, 20);
             labelUserFirstname.TabIndex = 24;
@@ -957,7 +969,7 @@
             // 
             // textBoxUserFirstname
             // 
-            textBoxUserFirstname.Location = new Point(46, 343);
+            textBoxUserFirstname.Location = new Point(42, 327);
             textBoxUserFirstname.Name = "textBoxUserFirstname";
             textBoxUserFirstname.Size = new Size(175, 27);
             textBoxUserFirstname.TabIndex = 23;
@@ -965,7 +977,7 @@
             // 
             // textBoxUserName
             // 
-            textBoxUserName.Location = new Point(50, 251);
+            textBoxUserName.Location = new Point(44, 249);
             textBoxUserName.Name = "textBoxUserName";
             textBoxUserName.Size = new Size(175, 27);
             textBoxUserName.TabIndex = 22;
@@ -974,7 +986,7 @@
             // labelUserName
             // 
             labelUserName.AutoSize = true;
-            labelUserName.Location = new Point(48, 228);
+            labelUserName.Location = new Point(42, 226);
             labelUserName.Name = "labelUserName";
             labelUserName.Size = new Size(56, 20);
             labelUserName.TabIndex = 21;
@@ -1027,7 +1039,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(197, 294);
+            label7.Location = new Point(193, 278);
             label7.Name = "label7";
             label7.Size = new Size(0, 20);
             label7.TabIndex = 14;
@@ -1035,7 +1047,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(86, 274);
+            label6.Location = new Point(80, 272);
             label6.Name = "label6";
             label6.Size = new Size(0, 20);
             label6.TabIndex = 2;
@@ -1177,5 +1189,6 @@
         private TextBox textBoxUserPassword;
         private ComboBox comboBoxPrescriptionQuantity;
         private Button buttonPrescriptionGenerate;
+        private Button buttonUserDelete;
     }
 }

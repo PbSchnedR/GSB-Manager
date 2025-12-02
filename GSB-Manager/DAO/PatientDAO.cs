@@ -13,7 +13,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace GSB_Manager.DAO
 {
-    internal class PatientDAO
+    public class PatientDAO
     {
 
         private readonly Database db = new Database();

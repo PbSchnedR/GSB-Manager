@@ -1053,5 +1053,43 @@ namespace GSB_Manager.Forms
 
             pdf.ExportPrescription(selectedPrescription, textBoxPrescriptionPatient.Text, textBoxPrescriptionDoctor.Text, meds);
         }
+
+        private void buttonUserDelete_Click(object sender, EventArgs e)
+        {
+            var userDAO = new UserDAO();
+            User selectedUser = listUsers.SelectedItem as User;
+            if (selectedUser != null)
+            {
+                DialogResult result = MessageBox.Show(
+                "Are you sure you want to delete this user? All medicines, prescription or patient created by this user will be deleted",
+                "Confirmation",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning
+                                         );
+
+                if (result == DialogResult.Yes)
+                {
+                    if (userDAO.DeleteUser(selectedUser.user_id))
+                    {
+                        MessageBox.Show("Medicine deleted successfully.");
+                        Initialise_Listbox();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error during deletion.");
+                    }
+                }
+                else
+                {
+                    // Action si l'utilisateur annule
+                    MessageBox.Show("Deletion cancelled.");
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("Error, medicine not found !");
+            }
+        }
     }
 }

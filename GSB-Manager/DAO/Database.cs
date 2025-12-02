@@ -8,7 +8,7 @@ using MySql.Data.MySqlClient;
 
 namespace GSB_Manager.DAO
 {
-    internal class Database
+    public class Database
     {
         readonly string myConnectionString = "server=localhost;PORT=3311;uid=root;pwd=root;database=GSB-manager";
         

@@ -3,7 +3,7 @@ using MySql.Data.MySqlClient;
 using System.Diagnostics;
 using GSB_Manager.Forms;
 
-namespace GSB_Manager
+namespace GSB_Manager.Forms
 {
     public partial class MainForm : Form
     {

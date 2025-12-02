@@ -1,4 +1,4 @@
-namespace GSB_Manager
+namespace GSB_Manager.Forms
 {
     internal static class Program
     {
