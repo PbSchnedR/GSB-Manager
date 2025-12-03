@@ -245,6 +245,7 @@ namespace GSB_Manager.Forms
             }
 
             textBoxPrescriptionDoctor.Visible = true;
+            buttonPrescriptionGenerate.Visible = true;
             textBoxPrescriptionPatient.Visible = true;
             textBoxPrescriptionQuantity.ReadOnly = true;
             dateTimePickerPrescriptionValidity.Visible = false;
@@ -278,6 +279,7 @@ namespace GSB_Manager.Forms
             dateTimePickerPrescriptionValidity.Visible = true;
 
             btnAddPrescription.Visible = false;
+            buttonPrescriptionGenerate.Visible = false;
             btnDeletePrescription.Visible = false;
             btnEditPrescription.Visible = false;
             buttonPrescriptionRegister.Visible = true;
@@ -313,6 +315,8 @@ namespace GSB_Manager.Forms
             {
                 allQuantities.Add(selectedItem, 0);
             }
+
+            comboBoxPrescriptionMedicine.Items.Remove(comboBoxPrescriptionMedicine.SelectedItem);
         }
 
         private void btnAddPatient_Click(object sender, EventArgs e)
@@ -929,6 +933,7 @@ namespace GSB_Manager.Forms
         {
             buttonPrescriptionCancel.Visible = false;
             buttonPrescriptionRegister.Visible = false;
+            buttonPrescriptionGenerate.Visible = true;
             buttonPrescriptionModify.Visible = false;
             btnAddPrescription.Visible = true;
             btnDeletePrescription.Visible = true;
