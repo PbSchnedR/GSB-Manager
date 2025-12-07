@@ -19,6 +19,8 @@ namespace GSB_Manager.Models
         public string Description { get; set; }
 
         public string Molecule { get; set; }
+
+        public int Quantity { get; set; }
         public Medicine() // c'est le constructeur par défaut qui permettra d'instancier Users et avoir accès à toutes ses propriétés (attributs)
         { }
 
@@ -36,6 +38,12 @@ namespace GSB_Manager.Models
         {
             this.Medicine_id = medicine_id;
             this.Dosage = dosage;
+            this.Name = name;
+        }
+
+        public Medicine(int quantity, string name) // c'est une surcharge du constructeur, ça permettrea la création d'objet Users qui sera instancié avec les valeurs passées en paramètre
+        {
+            this.Quantity = quantity;
             this.Name = name;
         }
     }

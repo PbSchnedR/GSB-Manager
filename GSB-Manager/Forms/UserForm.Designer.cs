@@ -79,7 +79,7 @@
             buttonPrescriptionCancel = new Button();
             buttonPrescriptionRegister = new Button();
             panelPrescriptionDetails = new Panel();
-            comboBoxPrescriptionQuantity = new ComboBox();
+            dataPrescriptionMedicines = new DataGridView();
             dateTimePickerPrescriptionValidity = new DateTimePicker();
             comboBoxPrescriptionPatient = new ComboBox();
             comboBoxPrescriptionMedicine = new ComboBox();
@@ -87,10 +87,7 @@
             labelPrescriptionPatient = new Label();
             textBoxPrescriptionDoctor = new TextBox();
             textBoxPrescriptionValidity = new TextBox();
-            textBoxPrescriptionQuantity = new TextBox();
-            textBoxPrescriptionMedicines = new TextBox();
             labelPrescriptionValidity = new Label();
-            labelPrescriptionQuantity = new Label();
             labelPrescriptionMedicines = new Label();
             labelPrescriptionDoctor = new Label();
             labelPrescription = new Label();
@@ -148,6 +145,7 @@
             panelMedicineDetails.SuspendLayout();
             tabPrescriptions.SuspendLayout();
             panelPrescriptionDetails.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataPrescriptionMedicines).BeginInit();
             tabPatients.SuspendLayout();
             panelPatientDetails.SuspendLayout();
             tabPageManager.SuspendLayout();
@@ -433,7 +431,7 @@
             // 
             panelPrescriptionDetails.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panelPrescriptionDetails.BorderStyle = BorderStyle.FixedSingle;
-            panelPrescriptionDetails.Controls.Add(comboBoxPrescriptionQuantity);
+            panelPrescriptionDetails.Controls.Add(dataPrescriptionMedicines);
             panelPrescriptionDetails.Controls.Add(dateTimePickerPrescriptionValidity);
             panelPrescriptionDetails.Controls.Add(comboBoxPrescriptionPatient);
             panelPrescriptionDetails.Controls.Add(comboBoxPrescriptionMedicine);
@@ -441,10 +439,7 @@
             panelPrescriptionDetails.Controls.Add(labelPrescriptionPatient);
             panelPrescriptionDetails.Controls.Add(textBoxPrescriptionDoctor);
             panelPrescriptionDetails.Controls.Add(textBoxPrescriptionValidity);
-            panelPrescriptionDetails.Controls.Add(textBoxPrescriptionQuantity);
-            panelPrescriptionDetails.Controls.Add(textBoxPrescriptionMedicines);
             panelPrescriptionDetails.Controls.Add(labelPrescriptionValidity);
-            panelPrescriptionDetails.Controls.Add(labelPrescriptionQuantity);
             panelPrescriptionDetails.Controls.Add(labelPrescriptionMedicines);
             panelPrescriptionDetails.Controls.Add(labelPrescriptionDoctor);
             panelPrescriptionDetails.Controls.Add(labelPrescription);
@@ -454,18 +449,18 @@
             panelPrescriptionDetails.Size = new Size(450, 474);
             panelPrescriptionDetails.TabIndex = 0;
             // 
-            // comboBoxPrescriptionQuantity
+            // dataPrescriptionMedicines
             // 
-            comboBoxPrescriptionQuantity.FormattingEnabled = true;
-            comboBoxPrescriptionQuantity.Location = new Point(27, 187);
-            comboBoxPrescriptionQuantity.Name = "comboBoxPrescriptionQuantity";
-            comboBoxPrescriptionQuantity.Size = new Size(250, 28);
-            comboBoxPrescriptionQuantity.TabIndex = 15;
-            comboBoxPrescriptionQuantity.SelectedIndexChanged += comboBoxPrescriptionQuantity_SelectedIndexChanged;
+            dataPrescriptionMedicines.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataPrescriptionMedicines.Location = new Point(27, 68);
+            dataPrescriptionMedicines.Name = "dataPrescriptionMedicines";
+            dataPrescriptionMedicines.RowHeadersWidth = 51;
+            dataPrescriptionMedicines.Size = new Size(400, 157);
+            dataPrescriptionMedicines.TabIndex = 16;
             // 
             // dateTimePickerPrescriptionValidity
             // 
-            dateTimePickerPrescriptionValidity.Location = new Point(27, 267);
+            dateTimePickerPrescriptionValidity.Location = new Point(27, 285);
             dateTimePickerPrescriptionValidity.Name = "dateTimePickerPrescriptionValidity";
             dateTimePickerPrescriptionValidity.Size = new Size(250, 27);
             dateTimePickerPrescriptionValidity.TabIndex = 14;
@@ -474,7 +469,7 @@
             // comboBoxPrescriptionPatient
             // 
             comboBoxPrescriptionPatient.FormattingEnabled = true;
-            comboBoxPrescriptionPatient.Location = new Point(27, 412);
+            comboBoxPrescriptionPatient.Location = new Point(27, 430);
             comboBoxPrescriptionPatient.Name = "comboBoxPrescriptionPatient";
             comboBoxPrescriptionPatient.Size = new Size(211, 28);
             comboBoxPrescriptionPatient.TabIndex = 13;
@@ -483,16 +478,16 @@
             // comboBoxPrescriptionMedicine
             // 
             comboBoxPrescriptionMedicine.FormattingEnabled = true;
-            comboBoxPrescriptionMedicine.Location = new Point(27, 100);
+            comboBoxPrescriptionMedicine.Location = new Point(27, 231);
             comboBoxPrescriptionMedicine.Name = "comboBoxPrescriptionMedicine";
-            comboBoxPrescriptionMedicine.Size = new Size(211, 28);
+            comboBoxPrescriptionMedicine.Size = new Size(250, 28);
             comboBoxPrescriptionMedicine.TabIndex = 11;
             comboBoxPrescriptionMedicine.Visible = false;
             comboBoxPrescriptionMedicine.SelectedIndexChanged += comboBoxPrescriptionMedicine_SelectedIndexChanged;
             // 
             // textBoxPrescriptionPatient
             // 
-            textBoxPrescriptionPatient.Location = new Point(27, 412);
+            textBoxPrescriptionPatient.Location = new Point(27, 430);
             textBoxPrescriptionPatient.Name = "textBoxPrescriptionPatient";
             textBoxPrescriptionPatient.ReadOnly = true;
             textBoxPrescriptionPatient.Size = new Size(211, 27);
@@ -501,7 +496,7 @@
             // labelPrescriptionPatient
             // 
             labelPrescriptionPatient.AutoSize = true;
-            labelPrescriptionPatient.Location = new Point(27, 389);
+            labelPrescriptionPatient.Location = new Point(27, 407);
             labelPrescriptionPatient.Name = "labelPrescriptionPatient";
             labelPrescriptionPatient.Size = new Size(61, 20);
             labelPrescriptionPatient.TabIndex = 9;
@@ -509,7 +504,7 @@
             // 
             // textBoxPrescriptionDoctor
             // 
-            textBoxPrescriptionDoctor.Location = new Point(27, 338);
+            textBoxPrescriptionDoctor.Location = new Point(27, 356);
             textBoxPrescriptionDoctor.Name = "textBoxPrescriptionDoctor";
             textBoxPrescriptionDoctor.ReadOnly = true;
             textBoxPrescriptionDoctor.Size = new Size(211, 27);
@@ -517,46 +512,20 @@
             // 
             // textBoxPrescriptionValidity
             // 
-            textBoxPrescriptionValidity.Location = new Point(27, 267);
+            textBoxPrescriptionValidity.Location = new Point(27, 285);
             textBoxPrescriptionValidity.Name = "textBoxPrescriptionValidity";
             textBoxPrescriptionValidity.ReadOnly = true;
             textBoxPrescriptionValidity.Size = new Size(211, 27);
             textBoxPrescriptionValidity.TabIndex = 7;
             // 
-            // textBoxPrescriptionQuantity
-            // 
-            textBoxPrescriptionQuantity.Location = new Point(27, 154);
-            textBoxPrescriptionQuantity.Name = "textBoxPrescriptionQuantity";
-            textBoxPrescriptionQuantity.ReadOnly = true;
-            textBoxPrescriptionQuantity.Size = new Size(109, 27);
-            textBoxPrescriptionQuantity.TabIndex = 6;
-            textBoxPrescriptionQuantity.TextChanged += textBoxPrescriptionQuantity_TextChanged;
-            // 
-            // textBoxPrescriptionMedicines
-            // 
-            textBoxPrescriptionMedicines.Location = new Point(27, 69);
-            textBoxPrescriptionMedicines.Name = "textBoxPrescriptionMedicines";
-            textBoxPrescriptionMedicines.ReadOnly = true;
-            textBoxPrescriptionMedicines.Size = new Size(378, 27);
-            textBoxPrescriptionMedicines.TabIndex = 5;
-            // 
             // labelPrescriptionValidity
             // 
             labelPrescriptionValidity.AutoSize = true;
-            labelPrescriptionValidity.Location = new Point(27, 244);
+            labelPrescriptionValidity.Location = new Point(27, 262);
             labelPrescriptionValidity.Name = "labelPrescriptionValidity";
             labelPrescriptionValidity.Size = new Size(65, 20);
             labelPrescriptionValidity.TabIndex = 4;
             labelPrescriptionValidity.Text = "Validity :";
-            // 
-            // labelPrescriptionQuantity
-            // 
-            labelPrescriptionQuantity.AutoSize = true;
-            labelPrescriptionQuantity.Location = new Point(27, 131);
-            labelPrescriptionQuantity.Name = "labelPrescriptionQuantity";
-            labelPrescriptionQuantity.Size = new Size(72, 20);
-            labelPrescriptionQuantity.TabIndex = 3;
-            labelPrescriptionQuantity.Text = "Quantity :";
             // 
             // labelPrescriptionMedicines
             // 
@@ -570,7 +539,7 @@
             // labelPrescriptionDoctor
             // 
             labelPrescriptionDoctor.AutoSize = true;
-            labelPrescriptionDoctor.Location = new Point(27, 315);
+            labelPrescriptionDoctor.Location = new Point(27, 333);
             labelPrescriptionDoctor.Name = "labelPrescriptionDoctor";
             labelPrescriptionDoctor.Size = new Size(62, 20);
             labelPrescriptionDoctor.TabIndex = 1;
@@ -1108,6 +1077,7 @@
             tabPrescriptions.ResumeLayout(false);
             panelPrescriptionDetails.ResumeLayout(false);
             panelPrescriptionDetails.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataPrescriptionMedicines).EndInit();
             tabPatients.ResumeLayout(false);
             panelPatientDetails.ResumeLayout(false);
             panelPatientDetails.PerformLayout();
@@ -1130,11 +1100,8 @@
         private Button buttonMedicineCancel;
         private Label labelPrescription;
         private Label labelMedicineDoctor;
-        private Label labelPrescriptionQuantity;
         private Label labelPrescriptionMedicines;
         private Label labelPrescriptionDoctor;
-        private TextBox textBoxPrescriptionQuantity;
-        private TextBox textBoxPrescriptionMedicines;
         private Label labelPrescriptionValidity;
         private TextBox textBoxPrescriptionDoctor;
         private TextBox textBoxPrescriptionValidity;
@@ -1187,8 +1154,8 @@
         private Label label7;
         private Label labelUserPassword;
         private TextBox textBoxUserPassword;
-        private ComboBox comboBoxPrescriptionQuantity;
         private Button buttonPrescriptionGenerate;
         private Button buttonUserDelete;
+        private DataGridView dataPrescriptionMedicines;
     }
 }

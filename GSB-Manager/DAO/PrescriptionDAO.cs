@@ -169,13 +169,14 @@ namespace GSB_Manager.DAO
             }
         }
 
-        public List<string> GetPrescriptionMedicines(int PrescriptionId)
+        public List<Medicine> GetPrescriptionMedicines(int PrescriptionId)
         {
 
-            var medicines = new List<string>();
+            var medicines = new List<Medicine>();
             var connection = db.GetConnection();
 
             string name = string.Empty;
+            int quantity = 0;
             connection.Open();
             {
                 try
@@ -184,7 +185,7 @@ namespace GSB_Manager.DAO
                     MySqlCommand myCommand = new MySqlCommand();
                     myCommand.Connection = connection;
                     myCommand.CommandText = @"
-                        SELECT m.name 
+                        SELECT m.name, a.quantity 
                         FROM `Appartient` as a
                         INNER JOIN Medicine as m on a.medicine_id = m.medicine_id
                         INNER JOIN Prescription as p on a.prescription_id = p.prescription_id
@@ -198,8 +199,9 @@ namespace GSB_Manager.DAO
                         while (myReader.Read())
                         {
                             name = myReader.GetString("name");
+                            quantity = myReader.GetInt32("quantity");
 
-                            medicines.Add(name);
+                            medicines.Add(new Medicine(quantity, name));
                         }
                     }
 
@@ -215,7 +217,7 @@ namespace GSB_Manager.DAO
             }
         }
 
-        public void AddMedicineToPrescription(int prescription_id, int medicine_id)
+        public void AddMedicineToPrescription(int prescription_id, int medicine_id, int quantity)
         {
             var connection = db.GetConnection();
             connection.Open();
@@ -226,10 +228,11 @@ namespace GSB_Manager.DAO
                 myCommand.Connection = connection;
                 myCommand.CommandText = @"
             INSERT INTO Appartient (prescription_id, medicine_id, quantity)
-            VALUES (@prescription_id, @medicine_id, 0);";
+            VALUES (@prescription_id, @medicine_id, @quantity);";
 
                 myCommand.Parameters.AddWithValue("@prescription_id", prescription_id);
                 myCommand.Parameters.AddWithValue("@medicine_id", medicine_id);
+                myCommand.Parameters.AddWithValue("@quantity", quantity);
 
                 myCommand.ExecuteNonQuery();
             }
@@ -313,7 +316,7 @@ namespace GSB_Manager.DAO
             }
         }
 
-        public void EditMedicineToPrescription(int prescription_id, List<int> medicine_ids)
+        public void EditMedicineToPrescription(int prescription_id, Dictionary<int, int> pairs)
         {
             using (var connection = db.GetConnection())
             {
@@ -328,16 +331,17 @@ namespace GSB_Manager.DAO
                     deleteCmd.ExecuteNonQuery();
 
                     // Réinsérer chaque médicament
-                    foreach (int medicine_id in medicine_ids)
+                    foreach (var p in pairs)
                     {
                         MySqlCommand insertCmd = new MySqlCommand();
                         insertCmd.Connection = connection;
                         insertCmd.CommandText = @"
                             INSERT INTO Appartient (prescription_id, medicine_id, quantity)
-                            VALUES (@prescription_id, @medicine_id, 0);
+                            VALUES (@prescription_id, @medicine_id, @quantity);
                         ";
                         insertCmd.Parameters.AddWithValue("@prescription_id", prescription_id);
-                        insertCmd.Parameters.AddWithValue("@medicine_id", medicine_id);
+                        insertCmd.Parameters.AddWithValue("@medicine_id", p.Key);
+                        insertCmd.Parameters.AddWithValue("@quantity", p.Value);
                         insertCmd.ExecuteNonQuery();
                     }
                 }
