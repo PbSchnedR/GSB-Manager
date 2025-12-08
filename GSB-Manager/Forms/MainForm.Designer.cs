@@ -10,7 +10,6 @@
         /// <summary>
         ///  Clean up any resources being used.
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,107 +21,105 @@
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
-        /// </summary>
+        private Label labelTitle;
+        private Label labelEmail;
+        private Label labelPassword;
+        private TextBox textBoxEmail;
+        private TextBox textBoxPassword;
+        private Button buttonLogin;
+
         private void InitializeComponent()
         {
-            groupBox1 = new GroupBox();
-            buttonLogin = new Button();
-            labelPassword = new Label();
+            labelTitle = new Label();
             labelEmail = new Label();
-            textBoxPassword = new TextBox();
+            labelPassword = new Label();
             textBoxEmail = new TextBox();
-            labelLogin = new Label();
-            groupBox1.SuspendLayout();
+            textBoxPassword = new TextBox();
+            buttonLogin = new Button();
+
             SuspendLayout();
+
             // 
-            // groupBox1
+            // labelTitle
             // 
-            groupBox1.Controls.Add(buttonLogin);
-            groupBox1.Controls.Add(labelPassword);
-            groupBox1.Controls.Add(labelEmail);
-            groupBox1.Controls.Add(textBoxPassword);
-            groupBox1.Controls.Add(textBoxEmail);
-            groupBox1.Controls.Add(labelLogin);
-            groupBox1.Location = new Point(166, 56);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(445, 320);
-            groupBox1.TabIndex = 0;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "groupBox1";
-            // 
-            // buttonLogin
-            // 
-            buttonLogin.Location = new Point(178, 266);
-            buttonLogin.Name = "buttonLogin";
-            buttonLogin.Size = new Size(94, 29);
-            buttonLogin.TabIndex = 5;
-            buttonLogin.Text = "Connect";
-            buttonLogin.UseVisualStyleBackColor = true;
-            buttonLogin.Click += buttonLogin_Click;
-            // 
-            // labelPassword
-            // 
-            labelPassword.AutoSize = true;
-            labelPassword.Location = new Point(166, 192);
-            labelPassword.Name = "labelPassword";
-            labelPassword.Size = new Size(70, 20);
-            labelPassword.TabIndex = 4;
-            labelPassword.Text = "Password";
+            labelTitle.AutoSize = true;
+            labelTitle.Font = new Font("Segoe UI", 20F, FontStyle.Bold, GraphicsUnit.Point);
+            labelTitle.Location = new Point(250, 40);
+            labelTitle.Name = "labelTitle";
+            labelTitle.Size = new Size(240, 46);
+            labelTitle.TabIndex = 0;
+            labelTitle.Text = "GSB Manager";
+            labelTitle.TextAlign = ContentAlignment.MiddleCenter;
+
             // 
             // labelEmail
             // 
             labelEmail.AutoSize = true;
-            labelEmail.Location = new Point(166, 111);
+            labelEmail.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelEmail.Location = new Point(260, 130);
             labelEmail.Name = "labelEmail";
-            labelEmail.Size = new Size(46, 20);
-            labelEmail.TabIndex = 3;
-            labelEmail.Text = "email";
-            // 
-            // textBoxPassword
-            // 
-            textBoxPassword.Location = new Point(166, 215);
-            textBoxPassword.Name = "textBoxPassword";
-            textBoxPassword.Size = new Size(125, 27);
-            textBoxPassword.TabIndex = 2;
-            textBoxPassword.UseSystemPasswordChar = true;
+            labelEmail.Size = new Size(52, 20);
+            labelEmail.TabIndex = 1;
+            labelEmail.Text = "Email :";
+
             // 
             // textBoxEmail
             // 
-            textBoxEmail.Location = new Point(166, 134);
+            textBoxEmail.Location = new Point(260, 155);
             textBoxEmail.Name = "textBoxEmail";
-            textBoxEmail.Size = new Size(125, 27);
-            textBoxEmail.TabIndex = 1;
+            textBoxEmail.Size = new Size(240, 27);
+            textBoxEmail.TabIndex = 2;
+
             // 
-            // labelLogin
+            // labelPassword
             // 
-            labelLogin.AutoSize = true;
-            labelLogin.Location = new Point(194, 44);
-            labelLogin.Name = "labelLogin";
-            labelLogin.Size = new Size(46, 20);
-            labelLogin.TabIndex = 0;
-            labelLogin.Text = "Login";
+            labelPassword.AutoSize = true;
+            labelPassword.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
+            labelPassword.Location = new Point(260, 210);
+            labelPassword.Name = "labelPassword";
+            labelPassword.Size = new Size(84, 20);
+            labelPassword.TabIndex = 3;
+            labelPassword.Text = "Password :";
+
+            // 
+            // textBoxPassword
+            // 
+            textBoxPassword.Location = new Point(260, 235);
+            textBoxPassword.Name = "textBoxPassword";
+            textBoxPassword.Size = new Size(240, 27);
+            textBoxPassword.UseSystemPasswordChar = true;
+            textBoxPassword.TabIndex = 4;
+
+            // 
+            // buttonLogin
+            // 
+            buttonLogin.Location = new Point(310, 300);
+            buttonLogin.Name = "buttonLogin";
+            buttonLogin.Size = new Size(140, 35);
+            buttonLogin.TabIndex = 5;
+            buttonLogin.Text = "Connexion";
+            buttonLogin.UseVisualStyleBackColor = true;
+            buttonLogin.Click += buttonLogin_Click;
+
             // 
             // MainForm
             // 
-            ClientSize = new Size(777, 461);
-            Controls.Add(groupBox1);
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(760, 450);
+            Controls.Add(labelTitle);
+            Controls.Add(labelEmail);
+            Controls.Add(textBoxEmail);
+            Controls.Add(labelPassword);
+            Controls.Add(textBoxPassword);
+            Controls.Add(buttonLogin);
             Name = "MainForm";
-            groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
+            Text = "GSB Manager";
+
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
-
-        private GroupBox groupBox1;
-        private Label labelLogin;
-        private Button buttonLogin;
-        private Label labelPassword;
-        private Label labelEmail;
-        private TextBox textBoxPassword;
-        private TextBox textBoxEmail;
     }
 }

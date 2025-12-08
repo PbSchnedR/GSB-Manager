@@ -807,6 +807,7 @@ namespace GSB_Manager.Forms
         {
             buttonUserAdd.Visible = false;
             buttonUserEdit.Visible = false;
+            buttonUserDelete.Visible = false;
             buttonUserRegister.Visible = true;
             buttonUserCancel.Visible = true;
 
@@ -843,6 +844,8 @@ namespace GSB_Manager.Forms
                     textBoxUserName.Visible = false;
                     labelUserName.Visible = false;
                     textBoxUserFirstname.Visible = false;
+                    labelUserPassword.Visible = false;
+                    textBoxUserPassword.Visible = false;
                     labelUserFirstname.Visible = false;
                     textBoxUserEmail.ReadOnly = true;
                     textBoxUserRole.Visible = true;
