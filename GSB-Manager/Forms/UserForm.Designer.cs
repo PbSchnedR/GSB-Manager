@@ -27,6 +27,10 @@
         private System.Windows.Forms.Button btnAddPatient;
         private System.Windows.Forms.Button btnEditPatient;
         private System.Windows.Forms.Button btnDeletePatient;
+
+        // Taille de référence (la taille par défaut)
+        private readonly Size referenceSize = new Size(800, 562);
+
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -1070,6 +1074,11 @@
             Margin = new Padding(3, 4, 3, 4);
             Name = "UserForm";
             Text = "UserForm";
+            MinimumSize = new Size(600, 400);
+
+            // Gérer le redimensionnement
+            Resize += UserForm_Resize;
+
             tabControl.ResumeLayout(false);
             tabMedicines.ResumeLayout(false);
             panelMedicineDetails.ResumeLayout(false);
@@ -1088,6 +1097,329 @@
         }
 
         #endregion
+
+        private void UserForm_Resize(object sender, EventArgs e)
+        {
+            // Calculer les facteurs d'échelle
+            float scaleX = (float)ClientSize.Width / referenceSize.Width;
+            float scaleY = (float)ClientSize.Height / referenceSize.Height;
+            float scale = Math.Min(scaleX, scaleY);
+
+            // Mise à l'échelle pour chaque onglet
+            ScaleMedicinesTab(scaleX, scaleY, scale);
+            ScalePrescriptionsTab(scaleX, scaleY, scale);
+            ScalePatientsTab(scaleX, scaleY, scale);
+            ScaleManagerTab(scaleX, scaleY, scale);
+        }
+
+        private void ScaleMedicinesTab(float scaleX, float scaleY, float scale)
+        {
+            // Panel Medicine Details
+            panelMedicineDetails.Location = new Point((int)(10 * scaleX), (int)(12 * scaleY));
+            panelMedicineDetails.Size = new Size((int)(450 * scaleX), (int)(474 * scaleY));
+
+            // Éléments dans le panel
+            labelMedicine.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelMedicine.Location = new Point((int)(180 * scaleX), (int)(19 * scaleY));
+
+            labelMedicineDosage.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelMedicineDosage.Location = new Point((int)(25 * scaleX), (int)(58 * scaleY));
+
+            textBoxMedicineDosage.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxMedicineDosage.Location = new Point((int)(25 * scaleX), (int)(81 * scaleY));
+            textBoxMedicineDosage.Size = new Size((int)(125 * scaleX), (int)(27 * scaleY));
+
+            labelMedicineDescription.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelMedicineDescription.Location = new Point((int)(25 * scaleX), (int)(140 * scaleY));
+
+            textBoxMedicineDescription.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxMedicineDescription.Location = new Point((int)(25 * scaleX), (int)(178 * scaleY));
+            textBoxMedicineDescription.Size = new Size((int)(369 * scaleX), (int)(103 * scaleY));
+
+            labelMedicineMolecule.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelMedicineMolecule.Location = new Point((int)(25 * scaleX), (int)(311 * scaleY));
+
+            textBoxMedicineMolecule.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxMedicineMolecule.Location = new Point((int)(25 * scaleX), (int)(334 * scaleY));
+            textBoxMedicineMolecule.Size = new Size((int)(252 * scaleX), (int)(27 * scaleY));
+
+            labelMedicineName.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelMedicineName.Location = new Point((int)(25 * scaleX), (int)(391 * scaleY));
+
+            textBoxMedicineName.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxMedicineName.Location = new Point((int)(25 * scaleX), (int)(414 * scaleY));
+            textBoxMedicineName.Size = new Size((int)(252 * scaleX), (int)(27 * scaleY));
+
+            // Liste et boutons
+            listMedicines.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            listMedicines.Location = new Point((int)(480 * scaleX), (int)(12 * scaleY));
+            listMedicines.Size = new Size((int)(300 * scaleX), (int)(384 * scaleY));
+
+            btnAddMedicine.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnAddMedicine.Location = new Point((int)(480 * scaleX), (int)(425 * scaleY));
+            btnAddMedicine.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            btnEditMedicine.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnEditMedicine.Location = new Point((int)(560 * scaleX), (int)(425 * scaleY));
+            btnEditMedicine.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            btnDeleteMedicine.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnDeleteMedicine.Location = new Point((int)(640 * scaleX), (int)(425 * scaleY));
+            btnDeleteMedicine.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            buttonMedicineRegister.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonMedicineRegister.Location = new Point((int)(480 * scaleX), (int)(457 * scaleY));
+            buttonMedicineRegister.Size = new Size((int)(119 * scaleX), (int)(29 * scaleY));
+
+            buttonMedicineModify.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonMedicineModify.Location = new Point((int)(480 * scaleX), (int)(457 * scaleY));
+            buttonMedicineModify.Size = new Size((int)(119 * scaleX), (int)(29 * scaleY));
+
+            buttonMedicineCancel.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonMedicineCancel.Location = new Point((int)(605 * scaleX), (int)(457 * scaleY));
+            buttonMedicineCancel.Size = new Size((int)(110 * scaleX), (int)(29 * scaleY));
+        }
+
+        private void ScalePrescriptionsTab(float scaleX, float scaleY, float scale)
+        {
+            // Panel Prescription Details
+            panelPrescriptionDetails.Location = new Point((int)(10 * scaleX), (int)(12 * scaleY));
+            panelPrescriptionDetails.Size = new Size((int)(450 * scaleX), (int)(474 * scaleY));
+
+            // Éléments dans le panel
+            labelPrescription.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPrescription.Location = new Point((int)(180 * scaleX), (int)(14 * scaleY));
+
+            labelPrescriptionMedicines.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPrescriptionMedicines.Location = new Point((int)(27 * scaleX), (int)(46 * scaleY));
+
+            dataPrescriptionMedicines.Location = new Point((int)(27 * scaleX), (int)(68 * scaleY));
+            dataPrescriptionMedicines.Size = new Size((int)(400 * scaleX), (int)(157 * scaleY));
+
+            comboBoxPrescriptionMedicine.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            comboBoxPrescriptionMedicine.Location = new Point((int)(27 * scaleX), (int)(231 * scaleY));
+            comboBoxPrescriptionMedicine.Size = new Size((int)(250 * scaleX), (int)(28 * scaleY));
+
+            labelPrescriptionValidity.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPrescriptionValidity.Location = new Point((int)(27 * scaleX), (int)(262 * scaleY));
+
+            textBoxPrescriptionValidity.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxPrescriptionValidity.Location = new Point((int)(27 * scaleX), (int)(285 * scaleY));
+            textBoxPrescriptionValidity.Size = new Size((int)(211 * scaleX), (int)(27 * scaleY));
+
+            dateTimePickerPrescriptionValidity.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            dateTimePickerPrescriptionValidity.Location = new Point((int)(27 * scaleX), (int)(285 * scaleY));
+            dateTimePickerPrescriptionValidity.Size = new Size((int)(250 * scaleX), (int)(27 * scaleY));
+
+            labelPrescriptionDoctor.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPrescriptionDoctor.Location = new Point((int)(27 * scaleX), (int)(333 * scaleY));
+
+            textBoxPrescriptionDoctor.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxPrescriptionDoctor.Location = new Point((int)(27 * scaleX), (int)(356 * scaleY));
+            textBoxPrescriptionDoctor.Size = new Size((int)(211 * scaleX), (int)(27 * scaleY));
+
+            labelPrescriptionPatient.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPrescriptionPatient.Location = new Point((int)(27 * scaleX), (int)(407 * scaleY));
+
+            textBoxPrescriptionPatient.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxPrescriptionPatient.Location = new Point((int)(27 * scaleX), (int)(430 * scaleY));
+            textBoxPrescriptionPatient.Size = new Size((int)(211 * scaleX), (int)(27 * scaleY));
+
+            comboBoxPrescriptionPatient.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            comboBoxPrescriptionPatient.Location = new Point((int)(27 * scaleX), (int)(430 * scaleY));
+            comboBoxPrescriptionPatient.Size = new Size((int)(211 * scaleX), (int)(28 * scaleY));
+
+            // Liste et boutons
+            listPrescriptions.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            listPrescriptions.Location = new Point((int)(480 * scaleX), (int)(12 * scaleY));
+            listPrescriptions.Size = new Size((int)(300 * scaleX), (int)(384 * scaleY));
+
+            btnAddPrescription.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnAddPrescription.Location = new Point((int)(480 * scaleX), (int)(425 * scaleY));
+            btnAddPrescription.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            btnEditPrescription.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnEditPrescription.Location = new Point((int)(560 * scaleX), (int)(425 * scaleY));
+            btnEditPrescription.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            btnDeletePrescription.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnDeletePrescription.Location = new Point((int)(640 * scaleX), (int)(425 * scaleY));
+            btnDeletePrescription.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            buttonPrescriptionRegister.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonPrescriptionRegister.Location = new Point((int)(480 * scaleX), (int)(457 * scaleY));
+            buttonPrescriptionRegister.Size = new Size((int)(119 * scaleX), (int)(29 * scaleY));
+
+            buttonPrescriptionModify.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonPrescriptionModify.Location = new Point((int)(480 * scaleX), (int)(457 * scaleY));
+            buttonPrescriptionModify.Size = new Size((int)(119 * scaleX), (int)(29 * scaleY));
+
+            buttonPrescriptionCancel.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonPrescriptionCancel.Location = new Point((int)(605 * scaleX), (int)(457 * scaleY));
+            buttonPrescriptionCancel.Size = new Size((int)(110 * scaleX), (int)(29 * scaleY));
+
+            buttonPrescriptionGenerate.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonPrescriptionGenerate.Location = new Point((int)(480 * scaleX), (int)(492 * scaleY));
+            buttonPrescriptionGenerate.Size = new Size((int)(235 * scaleX), (int)(29 * scaleY));
+        }
+
+        private void ScalePatientsTab(float scaleX, float scaleY, float scale)
+        {
+            // Panel Patient Details
+            panelPatientDetails.Location = new Point((int)(10 * scaleX), (int)(12 * scaleY));
+            panelPatientDetails.Size = new Size((int)(450 * scaleX), (int)(474 * scaleY));
+
+            // Éléments dans le panel
+            labelPatient.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPatient.Location = new Point((int)(194 * scaleX), (int)(18 * scaleY));
+
+            labelPatientGender.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPatientGender.Location = new Point((int)(25 * scaleX), (int)(67 * scaleY));
+
+            textBoxPatientGender.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxPatientGender.Location = new Point((int)(25 * scaleX), (int)(90 * scaleY));
+            textBoxPatientGender.Size = new Size((int)(153 * scaleX), (int)(27 * scaleY));
+
+            comboBoxPatientGender.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            comboBoxPatientGender.Location = new Point((int)(27 * scaleX), (int)(90 * scaleY));
+            comboBoxPatientGender.Size = new Size((int)(151 * scaleX), (int)(28 * scaleY));
+
+            labelPatientAge.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPatientAge.Location = new Point((int)(25 * scaleX), (int)(148 * scaleY));
+
+            textBoxPatientAge.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxPatientAge.Location = new Point((int)(25 * scaleX), (int)(171 * scaleY));
+            textBoxPatientAge.Size = new Size((int)(153 * scaleX), (int)(27 * scaleY));
+
+            labelPatientDoctor.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPatientDoctor.Location = new Point((int)(25 * scaleX), (int)(223 * scaleY));
+
+            textBoxPatientDoctor.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxPatientDoctor.Location = new Point((int)(25 * scaleX), (int)(246 * scaleY));
+            textBoxPatientDoctor.Size = new Size((int)(153 * scaleX), (int)(27 * scaleY));
+
+            labelPatientName.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPatientName.Location = new Point((int)(31 * scaleX), (int)(223 * scaleY));
+
+            textBoxPatientName.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxPatientName.Location = new Point((int)(27 * scaleX), (int)(246 * scaleY));
+            textBoxPatientName.Size = new Size((int)(175 * scaleX), (int)(27 * scaleY));
+
+            labelPatientFirstname.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPatientFirstname.Location = new Point((int)(31 * scaleX), (int)(315 * scaleY));
+
+            textBoxPatientFirstname.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxPatientFirstname.Location = new Point((int)(27 * scaleX), (int)(338 * scaleY));
+            textBoxPatientFirstname.Size = new Size((int)(175 * scaleX), (int)(27 * scaleY));
+
+            // Liste et boutons
+            listPatients.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            listPatients.Location = new Point((int)(480 * scaleX), (int)(12 * scaleY));
+            listPatients.Size = new Size((int)(300 * scaleX), (int)(384 * scaleY));
+
+            btnAddPatient.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnAddPatient.Location = new Point((int)(480 * scaleX), (int)(425 * scaleY));
+            btnAddPatient.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            btnEditPatient.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnEditPatient.Location = new Point((int)(560 * scaleX), (int)(425 * scaleY));
+            btnEditPatient.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            btnDeletePatient.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnDeletePatient.Location = new Point((int)(640 * scaleX), (int)(425 * scaleY));
+            btnDeletePatient.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            buttonPatientRegister.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonPatientRegister.Location = new Point((int)(480 * scaleX), (int)(457 * scaleY));
+            buttonPatientRegister.Size = new Size((int)(119 * scaleX), (int)(29 * scaleY));
+
+            buttonPatientModify.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonPatientModify.Location = new Point((int)(480 * scaleX), (int)(457 * scaleY));
+            buttonPatientModify.Size = new Size((int)(119 * scaleX), (int)(29 * scaleY));
+
+            buttonPatientCancel.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonPatientCancel.Location = new Point((int)(605 * scaleX), (int)(457 * scaleY));
+            buttonPatientCancel.Size = new Size((int)(110 * scaleX), (int)(29 * scaleY));
+        }
+
+        private void ScaleManagerTab(float scaleX, float scaleY, float scale)
+        {
+            // Panel User Details
+            panel1.Location = new Point((int)(11 * scaleX), (int)(27 * scaleY));
+            panel1.Size = new Size((int)(450 * scaleX), (int)(474 * scaleY));
+
+            // Éléments dans le panel
+            labelUser.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelUser.Location = new Point((int)(194 * scaleX), (int)(18 * scaleY));
+
+            labelUserRole.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelUserRole.Location = new Point((int)(44 * scaleX), (int)(72 * scaleY));
+
+            textBoxUserRole.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxUserRole.Location = new Point((int)(44 * scaleX), (int)(95 * scaleY));
+            textBoxUserRole.Size = new Size((int)(153 * scaleX), (int)(27 * scaleY));
+
+            comboBoxUserRole.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            comboBoxUserRole.Location = new Point((int)(44 * scaleX), (int)(94 * scaleY));
+            comboBoxUserRole.Size = new Size((int)(151 * scaleX), (int)(28 * scaleY));
+
+            labelUserEmail.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelUserEmail.Location = new Point((int)(44 * scaleX), (int)(153 * scaleY));
+
+            textBoxUserEmail.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxUserEmail.Location = new Point((int)(44 * scaleX), (int)(176 * scaleY));
+            textBoxUserEmail.Size = new Size((int)(153 * scaleX), (int)(27 * scaleY));
+
+            labelUserName.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelUserName.Location = new Point((int)(42 * scaleX), (int)(226 * scaleY));
+
+            textBoxUserName.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxUserName.Location = new Point((int)(44 * scaleX), (int)(249 * scaleY));
+            textBoxUserName.Size = new Size((int)(175 * scaleX), (int)(27 * scaleY));
+
+            labelUserFirstname.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelUserFirstname.Location = new Point((int)(46 * scaleX), (int)(304 * scaleY));
+
+            textBoxUserFirstname.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxUserFirstname.Location = new Point((int)(42 * scaleX), (int)(327 * scaleY));
+            textBoxUserFirstname.Size = new Size((int)(175 * scaleX), (int)(27 * scaleY));
+
+            labelUserPassword.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelUserPassword.Location = new Point((int)(44 * scaleX), (int)(373 * scaleY));
+
+            textBoxUserPassword.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxUserPassword.Location = new Point((int)(40 * scaleX), (int)(396 * scaleY));
+            textBoxUserPassword.Size = new Size((int)(175 * scaleX), (int)(27 * scaleY));
+
+            // Liste et boutons
+            listUsers.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            listUsers.Location = new Point((int)(481 * scaleX), (int)(27 * scaleY));
+            listUsers.Size = new Size((int)(300 * scaleX), (int)(384 * scaleY));
+
+            buttonUserAdd.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonUserAdd.Location = new Point((int)(481 * scaleX), (int)(440 * scaleY));
+            buttonUserAdd.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            buttonUserEdit.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonUserEdit.Location = new Point((int)(561 * scaleX), (int)(440 * scaleY));
+            buttonUserEdit.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            buttonUserDelete.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonUserDelete.Location = new Point((int)(641 * scaleX), (int)(440 * scaleY));
+            buttonUserDelete.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            buttonUserRegister.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonUserRegister.Location = new Point((int)(481 * scaleX), (int)(472 * scaleY));
+            buttonUserRegister.Size = new Size((int)(119 * scaleX), (int)(29 * scaleY));
+
+            buttonUserModify.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonUserModify.Location = new Point((int)(481 * scaleX), (int)(472 * scaleY));
+            buttonUserModify.Size = new Size((int)(119 * scaleX), (int)(29 * scaleY));
+
+            buttonUserCancel.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonUserCancel.Location = new Point((int)(606 * scaleX), (int)(472 * scaleY));
+            buttonUserCancel.Size = new Size((int)(110 * scaleX), (int)(29 * scaleY));
+        }
 
         private Label labelMedicine;
         private Label labelMedicineMolecule;
