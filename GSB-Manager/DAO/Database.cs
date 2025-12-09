@@ -22,7 +22,7 @@ namespace GSB_Manager.DAO
 #endif
 
             myConnectionString =
-                $"server={host};PORT={port};uid={user};pwd={password};database=GSB-manager;";
+                $"server={host};PORT={port};uid={user};pwd={password};database=GSB-Manager;";
         }
 
 #if !DEBUG
