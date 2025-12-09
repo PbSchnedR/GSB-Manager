@@ -169,6 +169,8 @@
             tabControl.SelectedIndex = 0;
             tabControl.Size = new Size(800, 562);
             tabControl.TabIndex = 0;
+            tabControl.ItemSize = new Size(100, 30);  // Largeur et hauteur des onglets
+            tabControl.SizeMode = TabSizeMode.Fixed;
             // 
             // tabMedicines
             // 
@@ -461,6 +463,9 @@
             dataPrescriptionMedicines.RowHeadersWidth = 51;
             dataPrescriptionMedicines.Size = new Size(400, 157);
             dataPrescriptionMedicines.TabIndex = 16;
+            dataPrescriptionMedicines.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataPrescriptionMedicines.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dataPrescriptionMedicines.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             // 
             // dateTimePickerPrescriptionValidity
             // 
@@ -1105,6 +1110,8 @@
             float scaleY = (float)ClientSize.Height / referenceSize.Height;
             float scale = Math.Min(scaleX, scaleY);
 
+            tabControl.ItemSize = new Size((int)(100 * scaleX), (int)(30 * scaleY));
+
             // Mise à l'échelle pour chaque onglet
             ScaleMedicinesTab(scaleX, scaleY, scale);
             ScalePrescriptionsTab(scaleX, scaleY, scale);
@@ -1195,6 +1202,17 @@
 
             dataPrescriptionMedicines.Location = new Point((int)(27 * scaleX), (int)(68 * scaleY));
             dataPrescriptionMedicines.Size = new Size((int)(400 * scaleX), (int)(157 * scaleY));
+
+            dataPrescriptionMedicines.ColumnHeadersHeight = (int)(30 * scaleY);
+            dataPrescriptionMedicines.RowTemplate.Height = (int)(25 * scaleY);
+            dataPrescriptionMedicines.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+
+            dataPrescriptionMedicines.ColumnHeadersHeight = (int)(60 * scaleY);
+            dataPrescriptionMedicines.RowTemplate.Height = (int)(50 * scaleY);
+            foreach (DataGridViewColumn col in dataPrescriptionMedicines.Columns)
+            {
+                col.Width = (int)(col.Width * scaleX);
+            }
 
             comboBoxPrescriptionMedicine.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
             comboBoxPrescriptionMedicine.Location = new Point((int)(27 * scaleX), (int)(231 * scaleY));
