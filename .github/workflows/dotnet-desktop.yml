@@ -17,24 +17,22 @@ jobs:
         with:
           dotnet-version: "8.0.x"
 
-      - name: Inject AWS secrets into Database.cs
+      - name: Inject AWS secrets in Database.cs
+        shell: pwsh
         run: |
-          $filePath = Get-ChildItem -Recurse -Filter "Database.cs" | Select-Object -ExpandProperty FullName -First 1
-          Write-Host "Database.cs détecté : $filePath"
-
-          if ($filePath) {
-            $content = Get-Content $filePath -Raw
-
-            $content = $content -replace 'const string AWS_HOST = "DEFAULT_HOST"', 'const string AWS_HOST = "${{ secrets.AWS_HOST }}"'
-            $content = $content -replace 'const string AWS_USER = "DEFAULT_USER"', 'const string AWS_USER = "${{ secrets.AWS_USER }}"'
-            $content = $content -replace 'const string AWS_PASSWORD = "DEFAULT_PASSWORD"', 'const string AWS_PASSWORD = "${{ secrets.AWS_PASSWORD }}"'
-
-            Set-Content $filePath $content
-            Write-Host "✓ Secrets injectés avec succès"
-          } else {
-            Write-Error "Aucun Database.cs trouvé"
-            exit 1
+          $file = Get-ChildItem -Recurse -Filter "Database.cs" | Select-Object -First 1
+          if (-not $file) {
+            Write-Error "Database.cs introuvable !"
           }
+
+          (Get-Content $file.FullName -Raw)
+            .Replace("__AWS_HOST__", "${{ secrets.AWS_HOST }}")
+            .Replace("__AWS_USER__", "${{ secrets.AWS_USER }}")
+            .Replace("__AWS_PASSWORD__", "${{ secrets.AWS_PASSWORD }}") |
+            Set-Content $file.FullName
+
+          Write-Host "✔ Secrets AWS injectés dans Database.cs"
+
 
       
       
