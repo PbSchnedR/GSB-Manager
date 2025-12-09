@@ -21,17 +21,21 @@ jobs:
         shell: pwsh
         run: |
           $file = Get-ChildItem -Recurse -Filter "Database.cs" | Select-Object -First 1
-          if (-not $file) {
-            Write-Error "Database.cs introuvable !"
-          }
+          if (-not $file) { Write-Error "Database.cs introuvable !"; exit 1 }
 
-          (Get-Content $file.FullName -Raw)
-            .Replace("__AWS_HOST__", "${{ secrets.AWS_HOST }}")
-            .Replace("__AWS_USER__", "${{ secrets.AWS_USER }}")
-            .Replace("__AWS_PASSWORD__", "${{ secrets.AWS_PASSWORD }}") |
-            Set-Content $file.FullName
+          # Lire le contenu dans une variable
+          $content = Get-Content $file.FullName -Raw
+
+          # Remplacer les placeholders
+          $content = $content -replace "__AWS_HOST__", "${{ secrets.AWS_HOST }}"
+          $content = $content -replace "__AWS_USER__", "${{ secrets.AWS_USER }}"
+          $content = $content -replace "__AWS_PASSWORD__", "${{ secrets.AWS_PASSWORD }}"
+
+          # Écrire le contenu modifié
+          Set-Content $file.FullName $content
 
           Write-Host "✔ Secrets AWS injectés dans Database.cs"
+
 
 
       
