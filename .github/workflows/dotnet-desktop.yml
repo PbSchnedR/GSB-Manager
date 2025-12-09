@@ -19,7 +19,7 @@ jobs:
 
       - name: Inject AWS secrets into Database.cs
         run: |
-          $filePath = ".\DAO\Database.cs"
+          $filePath = ".GSB-Manager\DAO\Database.cs"
           Write-Host "Cherchant le fichier: $filePath"
           Write-Host "Fichiers présents: $(Get-ChildItem -Recurse -Filter 'Database.cs' | Select-Object -ExpandProperty FullName)"
           
