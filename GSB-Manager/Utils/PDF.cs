@@ -14,6 +14,10 @@ using iText.Kernel.Font;
 using iText.IO.Font.Constants;
 using GSB_Manager.Models;
 
+//
+// ** This PDF Exporter code was created by RyukSylux : https://github.com/RyukSylux **
+//
+
 namespace GSB_Manager.Utils
 {
     /// <summary>
