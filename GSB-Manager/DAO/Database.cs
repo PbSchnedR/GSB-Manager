@@ -16,7 +16,7 @@ namespace GSB_Manager.DAO
             const string password = "root";
 #else
             string host = AWS_HOST;
-            string port = "3306";  // Aurora utilise 3306
+            string port = "3306";  
             string user = AWS_USER;
             string password = AWS_PASSWORD;
 #endif

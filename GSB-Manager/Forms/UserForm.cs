@@ -218,20 +218,19 @@ namespace GSB_Manager.Forms
             var medicineDAO = new MedicineDAO();
             var patientDAO = new PatientDAO();
 
+            var selectedPatient = comboBoxPrescriptionPatient.SelectedItem as Patient;
+            int patientId = selectedPatient.patient_id;
 
-            if (comboBoxPrescriptionPatient.Text != string.Empty)
+            if (comboBoxPrescriptionPatient.SelectedIndex != null)
             {
-
+               
                 try
                 {
-
-                    var selectedPatient = comboBoxPrescriptionPatient.SelectedItem as Patient;
-                    int patientId = selectedPatient.patient_id;
-                    int prescriptionId = prescriptionDAO.CreatePrescription(_connectedUser.user_id, patientId, dateTimePickerPrescriptionValidity.Value);
+                   int prescriptionId = prescriptionDAO.CreatePrescription(_connectedUser.user_id, patientId, dateTimePickerPrescriptionValidity.Value);
 
                     foreach (DataGridViewRow row in dataPrescriptionMedicines.Rows)
                     {
-                        if (!row.IsNewRow) // indispensable pour ignorer la ligne vide de saisie
+                        if (!row.IsNewRow) 
                         {
                             string medicine = row.Cells["Medicine"].Value?.ToString();
                             int quantity = Convert.ToInt32(row.Cells["Quantity"].Value);
@@ -301,6 +300,12 @@ namespace GSB_Manager.Forms
             List<Medicine> medicines = medicineDAO.GetAllMedicine();
             medicines.ForEach(m => comboBoxPrescriptionMedicine.Items.Add(m.Name));
 
+            var patientDAO = new PatientDAO();
+            List<Patient> patients = patientDAO.GetAllPatients();
+            comboBoxPrescriptionPatient.DataSource = null;
+            comboBoxPrescriptionPatient.DataSource = patients;
+            comboBoxPrescriptionPatient.DisplayMember = "Full_name";
+
 
         }
 
@@ -323,6 +328,20 @@ namespace GSB_Manager.Forms
                     }
                 }
             }
+
+            if (dataPrescriptionMedicines.Columns.Count == 0) {
+                var colMedicine = new DataGridViewTextBoxColumn();
+                colMedicine.HeaderText = "Medicine";
+                colMedicine.Name = "Medicine";
+                dataPrescriptionMedicines.Columns.Add(colMedicine);
+
+                // Colonne Quantity
+                var colQuantity = new DataGridViewTextBoxColumn();
+                colQuantity.HeaderText = "Quantity";
+                colQuantity.Name = "Quantity";
+                dataPrescriptionMedicines.Columns.Add(colQuantity);
+            }
+
             // Ajoute une nouvelle ligne dans le DataGridView
             int rowIndex = dataPrescriptionMedicines.Rows.Add();
             dataPrescriptionMedicines.Rows[rowIndex].Cells["Medicine"].Value = selectedMedicine;
@@ -1019,7 +1038,7 @@ namespace GSB_Manager.Forms
                 {
                     if (userDAO.DeleteUser(selectedUser.user_id))
                     {
-                        MessageBox.Show("Medicine deleted successfully.");
+                        MessageBox.Show("User deleted successfully.");
                         Initialise_Listbox();
                     }
                     else
@@ -1036,7 +1055,7 @@ namespace GSB_Manager.Forms
             }
             else
             {
-                MessageBox.Show("Error, medicine not found !");
+                MessageBox.Show("Error, user not found !");
             }
         }
     }
