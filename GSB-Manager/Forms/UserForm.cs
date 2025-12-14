@@ -791,11 +791,19 @@ namespace GSB_Manager.Forms
             User selectedUser = listUsers.SelectedItem as User;
             if (selectedUser != null)
             {
-                if (textBoxUserEmail.Text != string.Empty && textBoxUserName.Text != string.Empty && textBoxUserFirstname.Text != string.Empty)
+                if (textBoxUserEmail.Text != string.Empty && textBoxUserName.Text != string.Empty && textBoxUserFirstname.Text != string.Empty && comboBoxUserRole.SelectedItem != null)
                 {
                     try
                     {
-                        userDAO.EditUser(selectedUser.user_id, textBoxUserName.Text, textBoxUserFirstname.Text, textBoxUserEmail.Text);
+                        if (comboBoxUserRole.SelectedItem.ToString() == "Admin")
+                        {
+                            selectedUser.Role = true;
+                        }
+                        else
+                        {
+                            selectedUser.Role = false;
+                        }
+                        userDAO.EditUser(selectedUser.user_id, textBoxUserName.Text, textBoxUserFirstname.Text, textBoxUserEmail.Text, selectedUser.Role);
                         MessageBox.Show("User edited successfully");
                         buttonUserAdd.Visible = true;
                         buttonUserEdit.Visible = true;
@@ -806,6 +814,10 @@ namespace GSB_Manager.Forms
                         textBoxUserFirstname.Visible = false;
                         labelUserFirstname.Visible = false;
                         textBoxUserEmail.ReadOnly = true;
+                        textBoxUserRole.Visible = true;
+                        comboBoxUserRole.Visible = false;
+                        comboBoxUserRole.Items.Clear();
+                        buttonUserDelete.Visible = true;
 
                         Initialise_Listbox();
                     }
@@ -890,15 +902,20 @@ namespace GSB_Manager.Forms
             buttonUserEdit.Visible = false;
             buttonUserModify.Visible = true;
             buttonUserCancel.Visible = true;
+            textBoxUserRole.Visible = false;
+            buttonUserDelete.Visible = false;
 
             textBoxUserName.Visible = true;
             labelUserName.Visible = true;
             textBoxUserFirstname.Visible = true;
             labelUserFirstname.Visible = true;
             textBoxUserEmail.ReadOnly = false;
+            comboBoxUserRole.Visible = true;
+            comboBoxUserRole.Items.Add("Doctor");
+            comboBoxUserRole.Items.Add("Admin");
 
-            textBoxUserName.Text = labelUser.Text.Split(' ')[0];
-            textBoxUserFirstname.Text = labelUser.Text.Split(' ')[1];
+            textBoxUserName.Text = labelUser.Text.Split(' ')[1];
+            textBoxUserFirstname.Text = labelUser.Text.Split(' ')[0];
         }
 
         private void buttonUserCancel_Click(object sender, EventArgs e)

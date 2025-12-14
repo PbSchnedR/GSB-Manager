@@ -213,7 +213,7 @@ namespace GSB_Manager.DAO
         /// <returns>
         /// <c>true</c> si la mise à jour a réussi, sinon <c>false</c>.
         /// </returns>
-        public bool EditUser(int user_id, string name, string firstname, string email)
+        public bool EditUser(int user_id, string name, string firstname, string email, bool role)
         {
             var connection = db.GetConnection();
             connection.Open();
@@ -227,7 +227,8 @@ namespace GSB_Manager.DAO
                         UPDATE Users
                         SET name = @name,
                             firstname = @firstname,
-                            email = @email
+                            email = @email,
+                            role = @role
                         WHERE user_id = @user_id;
                     ";
 
@@ -235,6 +236,7 @@ namespace GSB_Manager.DAO
                 myCommand.Parameters.AddWithValue("@name", name);
                 myCommand.Parameters.AddWithValue("@firstname", firstname);
                 myCommand.Parameters.AddWithValue("@email", email);
+                myCommand.Parameters.AddWithValue("@role", role);
 
                 int rowsAffected = myCommand.ExecuteNonQuery();
                 return rowsAffected > 0;

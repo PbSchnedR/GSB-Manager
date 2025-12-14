@@ -29,10 +29,17 @@
         private System.Windows.Forms.Button btnDeletePatient;
 
         // Taille de référence (la taille par défaut)
-        private readonly Size referenceSize = new Size(1200, 700);
+        private readonly Size referenceSize = new Size(800, 562);
 
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -44,6 +51,10 @@
 
         #region Windows Form Designer generated code
 
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
         private void InitializeComponent()
         {
             tabControl = new TabControl();
@@ -133,7 +144,6 @@
             listUsers = new ListBox();
             buttonUserAdd = new Button();
             buttonUserEdit = new Button();
-
             tabControl.SuspendLayout();
             tabMedicines.SuspendLayout();
             panelMedicineDetails.SuspendLayout();
@@ -145,21 +155,6 @@
             tabPageManager.SuspendLayout();
             panel1.SuspendLayout();
             SuspendLayout();
-
-            // 
-            // UserForm
-            // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1200, 700);
-            BackColor = Color.FromArgb(15, 23, 42);
-            MinimumSize = new Size(800, 600);
-            Controls.Add(tabControl);
-            Margin = new Padding(3, 4, 3, 4);
-            Name = "UserForm";
-            Text = "GSB Manager - Dashboard";
-            Resize += UserForm_Resize;
-
             // 
             // tabControl
             // 
@@ -169,36 +164,925 @@
             tabControl.Controls.Add(tabPageManager);
             tabControl.Dock = DockStyle.Fill;
             tabControl.Location = new Point(0, 0);
+            tabControl.Margin = new Padding(3, 4, 3, 4);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
-            tabControl.Size = new Size(1200, 700);
+            tabControl.Size = new Size(800, 562);
             tabControl.TabIndex = 0;
-            tabControl.ItemSize = new Size(120, 40);
+            tabControl.ItemSize = new Size(100, 30);  // Largeur et hauteur des onglets
             tabControl.SizeMode = TabSizeMode.Fixed;
-            tabControl.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold, GraphicsUnit.Point);
-            tabControl.Appearance = TabAppearance.FlatButtons;
-            tabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
-            tabControl.DrawItem += tabControl_DrawItem;
-            tabControl.BackColor = Color.FromArgb(15, 23, 42);
-            tabControl.Paint += tabControl_Paint;
+            // 
+            // tabMedicines
+            // 
+            tabMedicines.Controls.Add(buttonMedicineModify);
+            tabMedicines.Controls.Add(buttonMedicineCancel);
+            tabMedicines.Controls.Add(buttonMedicineRegister);
+            tabMedicines.Controls.Add(panelMedicineDetails);
+            tabMedicines.Controls.Add(listMedicines);
+            tabMedicines.Controls.Add(btnAddMedicine);
+            tabMedicines.Controls.Add(btnEditMedicine);
+            tabMedicines.Controls.Add(btnDeleteMedicine);
+            tabMedicines.Location = new Point(4, 29);
+            tabMedicines.Margin = new Padding(3, 4, 3, 4);
+            tabMedicines.Name = "tabMedicines";
+            tabMedicines.Size = new Size(792, 529);
+            tabMedicines.TabIndex = 0;
+            tabMedicines.Text = "Medicines";
+            tabMedicines.UseVisualStyleBackColor = true;
+            // 
+            // buttonMedicineModify
+            // 
+            buttonMedicineModify.Location = new Point(480, 457);
+            buttonMedicineModify.Margin = new Padding(3, 4, 3, 4);
+            buttonMedicineModify.Name = "buttonMedicineModify";
+            buttonMedicineModify.Size = new Size(119, 29);
+            buttonMedicineModify.TabIndex = 7;
+            buttonMedicineModify.Text = "Modify";
+            buttonMedicineModify.Visible = false;
+            buttonMedicineModify.Click += buttonMedicineModify_Click;
+            // 
+            // buttonMedicineCancel
+            // 
+            buttonMedicineCancel.Location = new Point(605, 457);
+            buttonMedicineCancel.Margin = new Padding(3, 4, 3, 4);
+            buttonMedicineCancel.Name = "buttonMedicineCancel";
+            buttonMedicineCancel.Size = new Size(110, 29);
+            buttonMedicineCancel.TabIndex = 6;
+            buttonMedicineCancel.Text = "Cancel";
+            buttonMedicineCancel.Visible = false;
+            buttonMedicineCancel.Click += buttonMedicineCancel_Click;
+            // 
+            // buttonMedicineRegister
+            // 
+            buttonMedicineRegister.Location = new Point(480, 457);
+            buttonMedicineRegister.Margin = new Padding(3, 4, 3, 4);
+            buttonMedicineRegister.Name = "buttonMedicineRegister";
+            buttonMedicineRegister.Size = new Size(119, 29);
+            buttonMedicineRegister.TabIndex = 5;
+            buttonMedicineRegister.Text = "Register";
+            buttonMedicineRegister.Visible = false;
+            buttonMedicineRegister.Click += buttonMedicineRegister_Click;
+            // 
+            // panelMedicineDetails
+            // 
+            panelMedicineDetails.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            panelMedicineDetails.BorderStyle = BorderStyle.FixedSingle;
+            panelMedicineDetails.Controls.Add(textBoxMedicineName);
+            panelMedicineDetails.Controls.Add(labelMedicineName);
+            panelMedicineDetails.Controls.Add(labelMedicineDoctor);
+            panelMedicineDetails.Controls.Add(textBoxMedicineDescription);
+            panelMedicineDetails.Controls.Add(textBoxMedicineMolecule);
+            panelMedicineDetails.Controls.Add(textBoxMedicineDosage);
+            panelMedicineDetails.Controls.Add(labelMedicineMolecule);
+            panelMedicineDetails.Controls.Add(labelMedicineDescription);
+            panelMedicineDetails.Controls.Add(labelMedicineDosage);
+            panelMedicineDetails.Controls.Add(labelMedicine);
+            panelMedicineDetails.Location = new Point(10, 12);
+            panelMedicineDetails.Margin = new Padding(3, 4, 3, 4);
+            panelMedicineDetails.Name = "panelMedicineDetails";
+            panelMedicineDetails.Size = new Size(450, 474);
+            panelMedicineDetails.TabIndex = 0;
+            // 
+            // textBoxMedicineName
+            // 
+            textBoxMedicineName.Location = new Point(25, 414);
+            textBoxMedicineName.Name = "textBoxMedicineName";
+            textBoxMedicineName.Size = new Size(252, 27);
+            textBoxMedicineName.TabIndex = 11;
+            textBoxMedicineName.Visible = false;
+            // 
+            // labelMedicineName
+            // 
+            labelMedicineName.AutoSize = true;
+            labelMedicineName.Location = new Point(25, 391);
+            labelMedicineName.Name = "labelMedicineName";
+            labelMedicineName.Size = new Size(56, 20);
+            labelMedicineName.TabIndex = 10;
+            labelMedicineName.Text = "Name :";
+            labelMedicineName.Visible = false;
+            // 
+            // labelMedicineDoctor
+            // 
+            labelMedicineDoctor.AutoSize = true;
+            labelMedicineDoctor.Location = new Point(25, 382);
+            labelMedicineDoctor.Name = "labelMedicineDoctor";
+            labelMedicineDoctor.Size = new Size(0, 20);
+            labelMedicineDoctor.TabIndex = 9;
+            // 
+            // textBoxMedicineDescription
+            // 
+            textBoxMedicineDescription.Location = new Point(25, 178);
+            textBoxMedicineDescription.Multiline = true;
+            textBoxMedicineDescription.Name = "textBoxMedicineDescription";
+            textBoxMedicineDescription.ReadOnly = true;
+            textBoxMedicineDescription.Size = new Size(369, 103);
+            textBoxMedicineDescription.TabIndex = 8;
+            // 
+            // textBoxMedicineMolecule
+            // 
+            textBoxMedicineMolecule.Location = new Point(25, 334);
+            textBoxMedicineMolecule.Name = "textBoxMedicineMolecule";
+            textBoxMedicineMolecule.ReadOnly = true;
+            textBoxMedicineMolecule.Size = new Size(252, 27);
+            textBoxMedicineMolecule.TabIndex = 7;
+            // 
+            // textBoxMedicineDosage
+            // 
+            textBoxMedicineDosage.Location = new Point(25, 81);
+            textBoxMedicineDosage.Name = "textBoxMedicineDosage";
+            textBoxMedicineDosage.ReadOnly = true;
+            textBoxMedicineDosage.Size = new Size(125, 27);
+            textBoxMedicineDosage.TabIndex = 5;
+            // 
+            // labelMedicineMolecule
+            // 
+            labelMedicineMolecule.AutoSize = true;
+            labelMedicineMolecule.Location = new Point(25, 311);
+            labelMedicineMolecule.Name = "labelMedicineMolecule";
+            labelMedicineMolecule.Size = new Size(77, 20);
+            labelMedicineMolecule.TabIndex = 4;
+            labelMedicineMolecule.Text = "Molecule :";
+            // 
+            // labelMedicineDescription
+            // 
+            labelMedicineDescription.AutoSize = true;
+            labelMedicineDescription.Location = new Point(25, 140);
+            labelMedicineDescription.Name = "labelMedicineDescription";
+            labelMedicineDescription.Size = new Size(92, 20);
+            labelMedicineDescription.TabIndex = 3;
+            labelMedicineDescription.Text = "Description :";
+            // 
+            // labelMedicineDosage
+            // 
+            labelMedicineDosage.AutoSize = true;
+            labelMedicineDosage.Location = new Point(25, 58);
+            labelMedicineDosage.Name = "labelMedicineDosage";
+            labelMedicineDosage.Size = new Size(67, 20);
+            labelMedicineDosage.TabIndex = 1;
+            labelMedicineDosage.Text = "Dosage :";
+            // 
+            // labelMedicine
+            // 
+            labelMedicine.AutoSize = true;
+            labelMedicine.Location = new Point(180, 19);
+            labelMedicine.Name = "labelMedicine";
+            labelMedicine.Size = new Size(70, 20);
+            labelMedicine.TabIndex = 0;
+            labelMedicine.Text = "Medicine";
+            // 
+            // listMedicines
+            // 
+            listMedicines.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            listMedicines.HorizontalScrollbar = true;
+            listMedicines.Location = new Point(480, 12);
+            listMedicines.Margin = new Padding(3, 4, 3, 4);
+            listMedicines.Name = "listMedicines";
+            listMedicines.Size = new Size(300, 384);
+            listMedicines.TabIndex = 1;
+            listMedicines.SelectedIndexChanged += listMedicines_SelectedIndexChanged;
+            // 
+            // btnAddMedicine
+            // 
+            btnAddMedicine.Location = new Point(480, 425);
+            btnAddMedicine.Margin = new Padding(3, 4, 3, 4);
+            btnAddMedicine.Name = "btnAddMedicine";
+            btnAddMedicine.Size = new Size(75, 29);
+            btnAddMedicine.TabIndex = 2;
+            btnAddMedicine.Text = "Add";
+            btnAddMedicine.Click += btnAddMedicine_Click;
+            // 
+            // btnEditMedicine
+            // 
+            btnEditMedicine.Location = new Point(560, 425);
+            btnEditMedicine.Margin = new Padding(3, 4, 3, 4);
+            btnEditMedicine.Name = "btnEditMedicine";
+            btnEditMedicine.Size = new Size(75, 29);
+            btnEditMedicine.TabIndex = 3;
+            btnEditMedicine.Text = "Edit";
+            btnEditMedicine.Click += btnEditMedicine_Click;
+            // 
+            // btnDeleteMedicine
+            // 
+            btnDeleteMedicine.Location = new Point(640, 425);
+            btnDeleteMedicine.Margin = new Padding(3, 4, 3, 4);
+            btnDeleteMedicine.Name = "btnDeleteMedicine";
+            btnDeleteMedicine.Size = new Size(75, 29);
+            btnDeleteMedicine.TabIndex = 4;
+            btnDeleteMedicine.Text = "Delete";
+            btnDeleteMedicine.Click += btnDeleteMedicine_Click;
+            // 
+            // tabPrescriptions
+            // 
+            tabPrescriptions.Controls.Add(buttonPrescriptionGenerate);
+            tabPrescriptions.Controls.Add(buttonPrescriptionModify);
+            tabPrescriptions.Controls.Add(buttonPrescriptionCancel);
+            tabPrescriptions.Controls.Add(buttonPrescriptionRegister);
+            tabPrescriptions.Controls.Add(panelPrescriptionDetails);
+            tabPrescriptions.Controls.Add(listPrescriptions);
+            tabPrescriptions.Controls.Add(btnAddPrescription);
+            tabPrescriptions.Controls.Add(btnEditPrescription);
+            tabPrescriptions.Controls.Add(btnDeletePrescription);
+            tabPrescriptions.Location = new Point(4, 29);
+            tabPrescriptions.Margin = new Padding(3, 4, 3, 4);
+            tabPrescriptions.Name = "tabPrescriptions";
+            tabPrescriptions.Size = new Size(792, 529);
+            tabPrescriptions.TabIndex = 1;
+            tabPrescriptions.Text = "Prescriptions";
+            tabPrescriptions.UseVisualStyleBackColor = true;
+            // 
+            // buttonPrescriptionGenerate
+            // 
+            buttonPrescriptionGenerate.Location = new Point(480, 492);
+            buttonPrescriptionGenerate.Name = "buttonPrescriptionGenerate";
+            buttonPrescriptionGenerate.Size = new Size(235, 29);
+            buttonPrescriptionGenerate.TabIndex = 9;
+            buttonPrescriptionGenerate.Text = "Generate PDF";
+            buttonPrescriptionGenerate.UseVisualStyleBackColor = true;
+            buttonPrescriptionGenerate.Click += buttonPrescriptionGenerate_Click;
+            // 
+            // buttonPrescriptionModify
+            // 
+            buttonPrescriptionModify.Location = new Point(480, 457);
+            buttonPrescriptionModify.Margin = new Padding(3, 4, 3, 4);
+            buttonPrescriptionModify.Name = "buttonPrescriptionModify";
+            buttonPrescriptionModify.Size = new Size(119, 29);
+            buttonPrescriptionModify.TabIndex = 8;
+            buttonPrescriptionModify.Text = "Modify";
+            buttonPrescriptionModify.Visible = false;
+            buttonPrescriptionModify.Click += buttonPrescriptionModify_Click;
+            // 
+            // buttonPrescriptionCancel
+            // 
+            buttonPrescriptionCancel.Location = new Point(605, 457);
+            buttonPrescriptionCancel.Margin = new Padding(3, 4, 3, 4);
+            buttonPrescriptionCancel.Name = "buttonPrescriptionCancel";
+            buttonPrescriptionCancel.Size = new Size(110, 29);
+            buttonPrescriptionCancel.TabIndex = 7;
+            buttonPrescriptionCancel.Text = "Cancel";
+            buttonPrescriptionCancel.Visible = false;
+            buttonPrescriptionCancel.Click += buttonPrescriptionCancel_Click;
+            // 
+            // buttonPrescriptionRegister
+            // 
+            buttonPrescriptionRegister.Location = new Point(480, 457);
+            buttonPrescriptionRegister.Margin = new Padding(3, 4, 3, 4);
+            buttonPrescriptionRegister.Name = "buttonPrescriptionRegister";
+            buttonPrescriptionRegister.Size = new Size(119, 29);
+            buttonPrescriptionRegister.TabIndex = 6;
+            buttonPrescriptionRegister.Text = "Register";
+            buttonPrescriptionRegister.Visible = false;
+            buttonPrescriptionRegister.Click += buttonPrescriptionRegister_Click;
+            // 
+            // panelPrescriptionDetails
+            // 
+            panelPrescriptionDetails.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            panelPrescriptionDetails.BorderStyle = BorderStyle.FixedSingle;
+            panelPrescriptionDetails.Controls.Add(dataPrescriptionMedicines);
+            panelPrescriptionDetails.Controls.Add(dateTimePickerPrescriptionValidity);
+            panelPrescriptionDetails.Controls.Add(comboBoxPrescriptionPatient);
+            panelPrescriptionDetails.Controls.Add(comboBoxPrescriptionMedicine);
+            panelPrescriptionDetails.Controls.Add(textBoxPrescriptionPatient);
+            panelPrescriptionDetails.Controls.Add(labelPrescriptionPatient);
+            panelPrescriptionDetails.Controls.Add(textBoxPrescriptionDoctor);
+            panelPrescriptionDetails.Controls.Add(textBoxPrescriptionValidity);
+            panelPrescriptionDetails.Controls.Add(labelPrescriptionValidity);
+            panelPrescriptionDetails.Controls.Add(labelPrescriptionMedicines);
+            panelPrescriptionDetails.Controls.Add(labelPrescriptionDoctor);
+            panelPrescriptionDetails.Controls.Add(labelPrescription);
+            panelPrescriptionDetails.Location = new Point(10, 12);
+            panelPrescriptionDetails.Margin = new Padding(3, 4, 3, 4);
+            panelPrescriptionDetails.Name = "panelPrescriptionDetails";
+            panelPrescriptionDetails.Size = new Size(450, 474);
+            panelPrescriptionDetails.TabIndex = 0;
+            // 
+            // dataPrescriptionMedicines
+            // 
+            dataPrescriptionMedicines.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataPrescriptionMedicines.Location = new Point(27, 68);
+            dataPrescriptionMedicines.Name = "dataPrescriptionMedicines";
+            dataPrescriptionMedicines.RowHeadersWidth = 51;
+            dataPrescriptionMedicines.Size = new Size(400, 157);
+            dataPrescriptionMedicines.TabIndex = 16;
+            dataPrescriptionMedicines.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataPrescriptionMedicines.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dataPrescriptionMedicines.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            // 
+            // dateTimePickerPrescriptionValidity
+            // 
+            dateTimePickerPrescriptionValidity.Location = new Point(27, 285);
+            dateTimePickerPrescriptionValidity.Name = "dateTimePickerPrescriptionValidity";
+            dateTimePickerPrescriptionValidity.Size = new Size(250, 27);
+            dateTimePickerPrescriptionValidity.TabIndex = 14;
+            dateTimePickerPrescriptionValidity.Visible = false;
+            // 
+            // comboBoxPrescriptionPatient
+            // 
+            comboBoxPrescriptionPatient.FormattingEnabled = true;
+            comboBoxPrescriptionPatient.Location = new Point(27, 430);
+            comboBoxPrescriptionPatient.Name = "comboBoxPrescriptionPatient";
+            comboBoxPrescriptionPatient.Size = new Size(211, 28);
+            comboBoxPrescriptionPatient.TabIndex = 13;
+            comboBoxPrescriptionPatient.Visible = false;
+            // 
+            // comboBoxPrescriptionMedicine
+            // 
+            comboBoxPrescriptionMedicine.FormattingEnabled = true;
+            comboBoxPrescriptionMedicine.Location = new Point(27, 231);
+            comboBoxPrescriptionMedicine.Name = "comboBoxPrescriptionMedicine";
+            comboBoxPrescriptionMedicine.Size = new Size(250, 28);
+            comboBoxPrescriptionMedicine.TabIndex = 11;
+            comboBoxPrescriptionMedicine.Visible = false;
+            comboBoxPrescriptionMedicine.SelectedIndexChanged += comboBoxPrescriptionMedicine_SelectedIndexChanged;
+            // 
+            // textBoxPrescriptionPatient
+            // 
+            textBoxPrescriptionPatient.Location = new Point(27, 430);
+            textBoxPrescriptionPatient.Name = "textBoxPrescriptionPatient";
+            textBoxPrescriptionPatient.ReadOnly = true;
+            textBoxPrescriptionPatient.Size = new Size(211, 27);
+            textBoxPrescriptionPatient.TabIndex = 10;
+            // 
+            // labelPrescriptionPatient
+            // 
+            labelPrescriptionPatient.AutoSize = true;
+            labelPrescriptionPatient.Location = new Point(27, 407);
+            labelPrescriptionPatient.Name = "labelPrescriptionPatient";
+            labelPrescriptionPatient.Size = new Size(61, 20);
+            labelPrescriptionPatient.TabIndex = 9;
+            labelPrescriptionPatient.Text = "Patient :";
+            // 
+            // textBoxPrescriptionDoctor
+            // 
+            textBoxPrescriptionDoctor.Location = new Point(27, 356);
+            textBoxPrescriptionDoctor.Name = "textBoxPrescriptionDoctor";
+            textBoxPrescriptionDoctor.ReadOnly = true;
+            textBoxPrescriptionDoctor.Size = new Size(211, 27);
+            textBoxPrescriptionDoctor.TabIndex = 8;
+            // 
+            // textBoxPrescriptionValidity
+            // 
+            textBoxPrescriptionValidity.Location = new Point(27, 285);
+            textBoxPrescriptionValidity.Name = "textBoxPrescriptionValidity";
+            textBoxPrescriptionValidity.ReadOnly = true;
+            textBoxPrescriptionValidity.Size = new Size(211, 27);
+            textBoxPrescriptionValidity.TabIndex = 7;
+            // 
+            // labelPrescriptionValidity
+            // 
+            labelPrescriptionValidity.AutoSize = true;
+            labelPrescriptionValidity.Location = new Point(27, 262);
+            labelPrescriptionValidity.Name = "labelPrescriptionValidity";
+            labelPrescriptionValidity.Size = new Size(65, 20);
+            labelPrescriptionValidity.TabIndex = 4;
+            labelPrescriptionValidity.Text = "Validity :";
+            // 
+            // labelPrescriptionMedicines
+            // 
+            labelPrescriptionMedicines.AutoSize = true;
+            labelPrescriptionMedicines.Location = new Point(27, 46);
+            labelPrescriptionMedicines.Name = "labelPrescriptionMedicines";
+            labelPrescriptionMedicines.Size = new Size(83, 20);
+            labelPrescriptionMedicines.TabIndex = 2;
+            labelPrescriptionMedicines.Text = "Medicines :";
+            // 
+            // labelPrescriptionDoctor
+            // 
+            labelPrescriptionDoctor.AutoSize = true;
+            labelPrescriptionDoctor.Location = new Point(27, 333);
+            labelPrescriptionDoctor.Name = "labelPrescriptionDoctor";
+            labelPrescriptionDoctor.Size = new Size(62, 20);
+            labelPrescriptionDoctor.TabIndex = 1;
+            labelPrescriptionDoctor.Text = "Doctor :";
+            // 
+            // labelPrescription
+            // 
+            labelPrescription.AutoSize = true;
+            labelPrescription.Location = new Point(180, 14);
+            labelPrescription.Name = "labelPrescription";
+            labelPrescription.Size = new Size(87, 20);
+            labelPrescription.TabIndex = 0;
+            labelPrescription.Text = "Prescription";
+            // 
+            // listPrescriptions
+            // 
+            listPrescriptions.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            listPrescriptions.HorizontalScrollbar = true;
+            listPrescriptions.Location = new Point(480, 12);
+            listPrescriptions.Margin = new Padding(3, 4, 3, 4);
+            listPrescriptions.Name = "listPrescriptions";
+            listPrescriptions.Size = new Size(300, 384);
+            listPrescriptions.TabIndex = 1;
+            listPrescriptions.SelectedIndexChanged += listPrescriptions_SelectedIndexChanged;
+            // 
+            // btnAddPrescription
+            // 
+            btnAddPrescription.Location = new Point(480, 425);
+            btnAddPrescription.Margin = new Padding(3, 4, 3, 4);
+            btnAddPrescription.Name = "btnAddPrescription";
+            btnAddPrescription.Size = new Size(75, 29);
+            btnAddPrescription.TabIndex = 2;
+            btnAddPrescription.Text = "Add";
+            btnAddPrescription.Click += btnAddPrescription_Click;
+            // 
+            // btnEditPrescription
+            // 
+            btnEditPrescription.Location = new Point(560, 425);
+            btnEditPrescription.Margin = new Padding(3, 4, 3, 4);
+            btnEditPrescription.Name = "btnEditPrescription";
+            btnEditPrescription.Size = new Size(75, 29);
+            btnEditPrescription.TabIndex = 3;
+            btnEditPrescription.Text = "Edit";
+            btnEditPrescription.Click += btnEditPrescription_Click;
+            // 
+            // btnDeletePrescription
+            // 
+            btnDeletePrescription.Location = new Point(640, 425);
+            btnDeletePrescription.Margin = new Padding(3, 4, 3, 4);
+            btnDeletePrescription.Name = "btnDeletePrescription";
+            btnDeletePrescription.Size = new Size(75, 29);
+            btnDeletePrescription.TabIndex = 4;
+            btnDeletePrescription.Text = "Delete";
+            btnDeletePrescription.Click += btnDeletePrescription_Click;
+            // 
+            // tabPatients
+            // 
+            tabPatients.Controls.Add(buttonPatientModify);
+            tabPatients.Controls.Add(buttonPatientCancel);
+            tabPatients.Controls.Add(buttonPatientRegister);
+            tabPatients.Controls.Add(panelPatientDetails);
+            tabPatients.Controls.Add(listPatients);
+            tabPatients.Controls.Add(btnAddPatient);
+            tabPatients.Controls.Add(btnEditPatient);
+            tabPatients.Controls.Add(btnDeletePatient);
+            tabPatients.Location = new Point(4, 29);
+            tabPatients.Margin = new Padding(3, 4, 3, 4);
+            tabPatients.Name = "tabPatients";
+            tabPatients.Size = new Size(792, 529);
+            tabPatients.TabIndex = 2;
+            tabPatients.Text = "Patients";
+            tabPatients.UseVisualStyleBackColor = true;
+            // 
+            // buttonPatientModify
+            // 
+            buttonPatientModify.Location = new Point(480, 457);
+            buttonPatientModify.Margin = new Padding(3, 4, 3, 4);
+            buttonPatientModify.Name = "buttonPatientModify";
+            buttonPatientModify.Size = new Size(119, 29);
+            buttonPatientModify.TabIndex = 13;
+            buttonPatientModify.Text = "Modify";
+            buttonPatientModify.Visible = false;
+            buttonPatientModify.Click += buttonPatientModify_Click;
+            // 
+            // buttonPatientCancel
+            // 
+            buttonPatientCancel.Location = new Point(605, 457);
+            buttonPatientCancel.Margin = new Padding(3, 4, 3, 4);
+            buttonPatientCancel.Name = "buttonPatientCancel";
+            buttonPatientCancel.Size = new Size(110, 29);
+            buttonPatientCancel.TabIndex = 7;
+            buttonPatientCancel.Text = "Cancel";
+            buttonPatientCancel.Visible = false;
+            buttonPatientCancel.Click += buttonPatientCancel_Click;
+            // 
+            // buttonPatientRegister
+            // 
+            buttonPatientRegister.Location = new Point(480, 457);
+            buttonPatientRegister.Margin = new Padding(3, 4, 3, 4);
+            buttonPatientRegister.Name = "buttonPatientRegister";
+            buttonPatientRegister.Size = new Size(119, 29);
+            buttonPatientRegister.TabIndex = 6;
+            buttonPatientRegister.Text = "Register";
+            buttonPatientRegister.Visible = false;
+            buttonPatientRegister.Click += buttonPatientRegister_Click;
+            // 
+            // panelPatientDetails
+            // 
+            panelPatientDetails.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            panelPatientDetails.BorderStyle = BorderStyle.FixedSingle;
+            panelPatientDetails.Controls.Add(labelPatientFirstname);
+            panelPatientDetails.Controls.Add(textBoxPatientFirstname);
+            panelPatientDetails.Controls.Add(textBoxPatientName);
+            panelPatientDetails.Controls.Add(labelPatientName);
+            panelPatientDetails.Controls.Add(comboBoxPatientGender);
+            panelPatientDetails.Controls.Add(textBoxPatientAge);
+            panelPatientDetails.Controls.Add(textBoxPatientDoctor);
+            panelPatientDetails.Controls.Add(textBoxPatientGender);
+            panelPatientDetails.Controls.Add(labelPatientGender);
+            panelPatientDetails.Controls.Add(labelPatientAge);
+            panelPatientDetails.Controls.Add(label2);
+            panelPatientDetails.Controls.Add(labelPatientDoctor);
+            panelPatientDetails.Controls.Add(labelPatient);
+            panelPatientDetails.Location = new Point(10, 12);
+            panelPatientDetails.Margin = new Padding(3, 4, 3, 4);
+            panelPatientDetails.Name = "panelPatientDetails";
+            panelPatientDetails.Size = new Size(450, 474);
+            panelPatientDetails.TabIndex = 0;
+            // 
+            // labelPatientFirstname
+            // 
+            labelPatientFirstname.AutoSize = true;
+            labelPatientFirstname.Location = new Point(31, 315);
+            labelPatientFirstname.Name = "labelPatientFirstname";
+            labelPatientFirstname.Size = new Size(72, 20);
+            labelPatientFirstname.TabIndex = 12;
+            labelPatientFirstname.Text = "Firstame :";
+            labelPatientFirstname.Visible = false;
+            // 
+            // textBoxPatientFirstname
+            // 
+            textBoxPatientFirstname.Location = new Point(27, 338);
+            textBoxPatientFirstname.Name = "textBoxPatientFirstname";
+            textBoxPatientFirstname.Size = new Size(175, 27);
+            textBoxPatientFirstname.TabIndex = 11;
+            textBoxPatientFirstname.Visible = false;
+            // 
+            // textBoxPatientName
+            // 
+            textBoxPatientName.Location = new Point(27, 246);
+            textBoxPatientName.Name = "textBoxPatientName";
+            textBoxPatientName.Size = new Size(175, 27);
+            textBoxPatientName.TabIndex = 10;
+            textBoxPatientName.Visible = false;
+            // 
+            // labelPatientName
+            // 
+            labelPatientName.AutoSize = true;
+            labelPatientName.Location = new Point(31, 223);
+            labelPatientName.Name = "labelPatientName";
+            labelPatientName.Size = new Size(56, 20);
+            labelPatientName.TabIndex = 9;
+            labelPatientName.Text = "Name :";
+            labelPatientName.Visible = false;
+            // 
+            // comboBoxPatientGender
+            // 
+            comboBoxPatientGender.FormattingEnabled = true;
+            comboBoxPatientGender.Location = new Point(27, 90);
+            comboBoxPatientGender.Name = "comboBoxPatientGender";
+            comboBoxPatientGender.Size = new Size(151, 28);
+            comboBoxPatientGender.TabIndex = 8;
+            comboBoxPatientGender.Visible = false;
+            // 
+            // textBoxPatientAge
+            // 
+            textBoxPatientAge.Location = new Point(25, 171);
+            textBoxPatientAge.Name = "textBoxPatientAge";
+            textBoxPatientAge.ReadOnly = true;
+            textBoxPatientAge.Size = new Size(153, 27);
+            textBoxPatientAge.TabIndex = 7;
+            // 
+            // textBoxPatientDoctor
+            // 
+            textBoxPatientDoctor.Location = new Point(25, 246);
+            textBoxPatientDoctor.Name = "textBoxPatientDoctor";
+            textBoxPatientDoctor.ReadOnly = true;
+            textBoxPatientDoctor.Size = new Size(153, 27);
+            textBoxPatientDoctor.TabIndex = 6;
+            // 
+            // textBoxPatientGender
+            // 
+            textBoxPatientGender.Location = new Point(25, 90);
+            textBoxPatientGender.Name = "textBoxPatientGender";
+            textBoxPatientGender.ReadOnly = true;
+            textBoxPatientGender.Size = new Size(153, 27);
+            textBoxPatientGender.TabIndex = 5;
+            // 
+            // labelPatientGender
+            // 
+            labelPatientGender.AutoSize = true;
+            labelPatientGender.Location = new Point(25, 67);
+            labelPatientGender.Name = "labelPatientGender";
+            labelPatientGender.Size = new Size(64, 20);
+            labelPatientGender.TabIndex = 4;
+            labelPatientGender.Text = "Gender :";
+            // 
+            // labelPatientAge
+            // 
+            labelPatientAge.AutoSize = true;
+            labelPatientAge.Location = new Point(25, 148);
+            labelPatientAge.Name = "labelPatientAge";
+            labelPatientAge.Size = new Size(43, 20);
+            labelPatientAge.TabIndex = 3;
+            labelPatientAge.Text = "Age :";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(178, 289);
+            label2.Name = "label2";
+            label2.Size = new Size(0, 20);
+            label2.TabIndex = 2;
+            // 
+            // labelPatientDoctor
+            // 
+            labelPatientDoctor.AutoSize = true;
+            labelPatientDoctor.Location = new Point(25, 223);
+            labelPatientDoctor.Name = "labelPatientDoctor";
+            labelPatientDoctor.Size = new Size(62, 20);
+            labelPatientDoctor.TabIndex = 1;
+            labelPatientDoctor.Text = "Doctor :";
+            // 
+            // labelPatient
+            // 
+            labelPatient.AutoSize = true;
+            labelPatient.Location = new Point(194, 18);
+            labelPatient.Name = "labelPatient";
+            labelPatient.Size = new Size(54, 20);
+            labelPatient.TabIndex = 0;
+            labelPatient.Text = "Patient";
+            // 
+            // listPatients
+            // 
+            listPatients.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            listPatients.HorizontalScrollbar = true;
+            listPatients.Location = new Point(480, 12);
+            listPatients.Margin = new Padding(3, 4, 3, 4);
+            listPatients.Name = "listPatients";
+            listPatients.Size = new Size(300, 384);
+            listPatients.TabIndex = 1;
+            listPatients.SelectedIndexChanged += listPatients_SelectedIndexChanged;
+            // 
+            // btnAddPatient
+            // 
+            btnAddPatient.Location = new Point(480, 425);
+            btnAddPatient.Margin = new Padding(3, 4, 3, 4);
+            btnAddPatient.Name = "btnAddPatient";
+            btnAddPatient.Size = new Size(75, 29);
+            btnAddPatient.TabIndex = 2;
+            btnAddPatient.Text = "Add";
+            btnAddPatient.Click += btnAddPatient_Click;
+            // 
+            // btnEditPatient
+            // 
+            btnEditPatient.Location = new Point(560, 425);
+            btnEditPatient.Margin = new Padding(3, 4, 3, 4);
+            btnEditPatient.Name = "btnEditPatient";
+            btnEditPatient.Size = new Size(75, 29);
+            btnEditPatient.TabIndex = 3;
+            btnEditPatient.Text = "Edit";
+            btnEditPatient.Click += btnEditPatient_Click;
+            // 
+            // btnDeletePatient
+            // 
+            btnDeletePatient.Location = new Point(640, 425);
+            btnDeletePatient.Margin = new Padding(3, 4, 3, 4);
+            btnDeletePatient.Name = "btnDeletePatient";
+            btnDeletePatient.Size = new Size(75, 29);
+            btnDeletePatient.TabIndex = 4;
+            btnDeletePatient.Text = "Delete";
+            btnDeletePatient.Click += btnDeletePatient_Click;
+            // 
+            // tabPageManager
+            // 
+            tabPageManager.Controls.Add(buttonUserDelete);
+            tabPageManager.Controls.Add(buttonUserModify);
+            tabPageManager.Controls.Add(buttonUserCancel);
+            tabPageManager.Controls.Add(buttonUserRegister);
+            tabPageManager.Controls.Add(panel1);
+            tabPageManager.Controls.Add(listUsers);
+            tabPageManager.Controls.Add(buttonUserAdd);
+            tabPageManager.Controls.Add(buttonUserEdit);
+            tabPageManager.Location = new Point(4, 29);
+            tabPageManager.Name = "tabPageManager";
+            tabPageManager.Padding = new Padding(3);
+            tabPageManager.Size = new Size(792, 529);
+            tabPageManager.TabIndex = 3;
+            tabPageManager.Text = "Manager";
+            tabPageManager.UseVisualStyleBackColor = true;
+            // 
+            // buttonUserDelete
+            // 
+            buttonUserDelete.Location = new Point(641, 440);
+            buttonUserDelete.Margin = new Padding(3, 4, 3, 4);
+            buttonUserDelete.Name = "buttonUserDelete";
+            buttonUserDelete.Size = new Size(75, 29);
+            buttonUserDelete.TabIndex = 22;
+            buttonUserDelete.Text = "Delete";
+            buttonUserDelete.Click += buttonUserDelete_Click;
+            // 
+            // buttonUserModify
+            // 
+            buttonUserModify.Location = new Point(481, 472);
+            buttonUserModify.Margin = new Padding(3, 4, 3, 4);
+            buttonUserModify.Name = "buttonUserModify";
+            buttonUserModify.Size = new Size(119, 29);
+            buttonUserModify.TabIndex = 21;
+            buttonUserModify.Text = "Modify";
+            buttonUserModify.Visible = false;
+            buttonUserModify.Click += buttonUserModify_Click;
+            // 
+            // buttonUserCancel
+            // 
+            buttonUserCancel.Location = new Point(606, 472);
+            buttonUserCancel.Margin = new Padding(3, 4, 3, 4);
+            buttonUserCancel.Name = "buttonUserCancel";
+            buttonUserCancel.Size = new Size(110, 29);
+            buttonUserCancel.TabIndex = 20;
+            buttonUserCancel.Text = "Cancel";
+            buttonUserCancel.Visible = false;
+            buttonUserCancel.Click += buttonUserCancel_Click;
+            // 
+            // buttonUserRegister
+            // 
+            buttonUserRegister.Location = new Point(481, 472);
+            buttonUserRegister.Margin = new Padding(3, 4, 3, 4);
+            buttonUserRegister.Name = "buttonUserRegister";
+            buttonUserRegister.Size = new Size(119, 29);
+            buttonUserRegister.TabIndex = 19;
+            buttonUserRegister.Text = "Register";
+            buttonUserRegister.Visible = false;
+            buttonUserRegister.Click += buttonUserRegister_Click;
+            // 
+            // panel1
+            // 
+            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            panel1.BorderStyle = BorderStyle.FixedSingle;
+            panel1.Controls.Add(labelUserPassword);
+            panel1.Controls.Add(textBoxUserPassword);
+            panel1.Controls.Add(labelUserFirstname);
+            panel1.Controls.Add(textBoxUserFirstname);
+            panel1.Controls.Add(textBoxUserName);
+            panel1.Controls.Add(labelUserName);
+            panel1.Controls.Add(comboBoxUserRole);
+            panel1.Controls.Add(textBoxUserEmail);
+            panel1.Controls.Add(textBoxUserRole);
+            panel1.Controls.Add(labelUserRole);
+            panel1.Controls.Add(labelUserEmail);
+            panel1.Controls.Add(label7);
+            panel1.Controls.Add(label6);
+            panel1.Controls.Add(labelUser);
+            panel1.Location = new Point(11, 27);
+            panel1.Margin = new Padding(3, 4, 3, 4);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(450, 474);
+            panel1.TabIndex = 14;
+            // 
+            // labelUserPassword
+            // 
+            labelUserPassword.AutoSize = true;
+            labelUserPassword.Location = new Point(44, 373);
+            labelUserPassword.Name = "labelUserPassword";
+            labelUserPassword.Size = new Size(77, 20);
+            labelUserPassword.TabIndex = 26;
+            labelUserPassword.Text = "Password :";
+            labelUserPassword.Visible = false;
+            // 
+            // textBoxUserPassword
+            // 
+            textBoxUserPassword.Location = new Point(40, 396);
+            textBoxUserPassword.Name = "textBoxUserPassword";
+            textBoxUserPassword.Size = new Size(175, 27);
+            textBoxUserPassword.TabIndex = 25;
+            textBoxUserPassword.Visible = false;
+            // 
+            // labelUserFirstname
+            // 
+            labelUserFirstname.AutoSize = true;
+            labelUserFirstname.Location = new Point(46, 304);
+            labelUserFirstname.Name = "labelUserFirstname";
+            labelUserFirstname.Size = new Size(72, 20);
+            labelUserFirstname.TabIndex = 24;
+            labelUserFirstname.Text = "Firstame :";
+            labelUserFirstname.Visible = false;
+            // 
+            // textBoxUserFirstname
+            // 
+            textBoxUserFirstname.Location = new Point(42, 327);
+            textBoxUserFirstname.Name = "textBoxUserFirstname";
+            textBoxUserFirstname.Size = new Size(175, 27);
+            textBoxUserFirstname.TabIndex = 23;
+            textBoxUserFirstname.Visible = false;
+            // 
+            // textBoxUserName
+            // 
+            textBoxUserName.Location = new Point(44, 249);
+            textBoxUserName.Name = "textBoxUserName";
+            textBoxUserName.Size = new Size(175, 27);
+            textBoxUserName.TabIndex = 22;
+            textBoxUserName.Visible = false;
+            // 
+            // labelUserName
+            // 
+            labelUserName.AutoSize = true;
+            labelUserName.Location = new Point(42, 226);
+            labelUserName.Name = "labelUserName";
+            labelUserName.Size = new Size(56, 20);
+            labelUserName.TabIndex = 21;
+            labelUserName.Text = "Name :";
+            labelUserName.Visible = false;
+            // 
+            // comboBoxUserRole
+            // 
+            comboBoxUserRole.FormattingEnabled = true;
+            comboBoxUserRole.Location = new Point(44, 94);
+            comboBoxUserRole.Name = "comboBoxUserRole";
+            comboBoxUserRole.Size = new Size(151, 28);
+            comboBoxUserRole.TabIndex = 20;
+            comboBoxUserRole.Visible = false;
+            // 
+            // textBoxUserEmail
+            // 
+            textBoxUserEmail.Location = new Point(44, 176);
+            textBoxUserEmail.Name = "textBoxUserEmail";
+            textBoxUserEmail.ReadOnly = true;
+            textBoxUserEmail.Size = new Size(153, 27);
+            textBoxUserEmail.TabIndex = 19;
+            // 
+            // textBoxUserRole
+            // 
+            textBoxUserRole.Location = new Point(44, 95);
+            textBoxUserRole.Name = "textBoxUserRole";
+            textBoxUserRole.ReadOnly = true;
+            textBoxUserRole.Size = new Size(153, 27);
+            textBoxUserRole.TabIndex = 17;
+            // 
+            // labelUserRole
+            // 
+            labelUserRole.AutoSize = true;
+            labelUserRole.Location = new Point(44, 72);
+            labelUserRole.Name = "labelUserRole";
+            labelUserRole.Size = new Size(46, 20);
+            labelUserRole.TabIndex = 16;
+            labelUserRole.Text = "Role :";
+            // 
+            // labelUserEmail
+            // 
+            labelUserEmail.AutoSize = true;
+            labelUserEmail.Location = new Point(44, 153);
+            labelUserEmail.Name = "labelUserEmail";
+            labelUserEmail.Size = new Size(53, 20);
+            labelUserEmail.TabIndex = 15;
+            labelUserEmail.Text = "Email :";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(193, 278);
+            label7.Name = "label7";
+            label7.Size = new Size(0, 20);
+            label7.TabIndex = 14;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(80, 272);
+            label6.Name = "label6";
+            label6.Size = new Size(0, 20);
+            label6.TabIndex = 2;
+            // 
+            // labelUser
+            // 
+            labelUser.AutoSize = true;
+            labelUser.Location = new Point(194, 18);
+            labelUser.Name = "labelUser";
+            labelUser.Size = new Size(38, 20);
+            labelUser.TabIndex = 0;
+            labelUser.Text = "User";
+            // 
+            // listUsers
+            // 
+            listUsers.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            listUsers.HorizontalScrollbar = true;
+            listUsers.Location = new Point(481, 27);
+            listUsers.Margin = new Padding(3, 4, 3, 4);
+            listUsers.Name = "listUsers";
+            listUsers.Size = new Size(300, 384);
+            listUsers.TabIndex = 15;
+            listUsers.SelectedIndexChanged += listUsers_SelectedIndexChanged;
+            // 
+            // buttonUserAdd
+            // 
+            buttonUserAdd.Location = new Point(481, 440);
+            buttonUserAdd.Margin = new Padding(3, 4, 3, 4);
+            buttonUserAdd.Name = "buttonUserAdd";
+            buttonUserAdd.Size = new Size(75, 29);
+            buttonUserAdd.TabIndex = 16;
+            buttonUserAdd.Text = "Add";
+            buttonUserAdd.Click += buttonUserAdd_Click;
+            // 
+            // buttonUserEdit
+            // 
+            buttonUserEdit.Location = new Point(561, 440);
+            buttonUserEdit.Margin = new Padding(3, 4, 3, 4);
+            buttonUserEdit.Name = "buttonUserEdit";
+            buttonUserEdit.Size = new Size(75, 29);
+            buttonUserEdit.TabIndex = 17;
+            buttonUserEdit.Text = "Edit";
+            buttonUserEdit.Click += buttonUserEdit_Click;
+            // 
+            // UserForm
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 562);
+            Controls.Add(tabControl);
+            Margin = new Padding(3, 4, 3, 4);
+            Name = "UserForm";
+            Text = "UserForm";
+            MinimumSize = new Size(600, 400);
 
-            // Appliquer le style dark à tous les onglets
-            ApplyDarkThemeToTab(tabMedicines, "Medicines");
-            ApplyDarkThemeToTab(tabPrescriptions, "Prescriptions");
-            ApplyDarkThemeToTab(tabPatients, "Patients");
-            ApplyDarkThemeToTab(tabPageManager, "Manager");
-
-            // MEDICINES TAB
-            SetupMedicinesTab();
-
-            // PRESCRIPTIONS TAB
-            SetupPrescriptionsTab();
-
-            // PATIENTS TAB
-            SetupPatientsTab();
-
-            // MANAGER TAB
-            SetupManagerTab();
+            // Gérer le redimensionnement
+            Resize += UserForm_Resize;
 
             tabControl.ResumeLayout(false);
             tabMedicines.ResumeLayout(false);
@@ -217,1039 +1101,18 @@
             ResumeLayout(false);
         }
 
-        private void ApplyDarkThemeToTab(TabPage tab, string title)
-        {
-            tab.BackColor = Color.FromArgb(15, 23, 42);
-            tab.ForeColor = Color.FromArgb(226, 232, 240);
-            tab.Text = title;
-            tab.UseVisualStyleBackColor = true;
-        }
-
-        private void SetupMedicinesTab()
-        {
-            tabMedicines.Controls.Add(buttonMedicineModify);
-            tabMedicines.Controls.Add(buttonMedicineCancel);
-            tabMedicines.Controls.Add(buttonMedicineRegister);
-            tabMedicines.Controls.Add(panelMedicineDetails);
-            tabMedicines.Controls.Add(listMedicines);
-            tabMedicines.Controls.Add(btnAddMedicine);
-            tabMedicines.Controls.Add(btnEditMedicine);
-            tabMedicines.Controls.Add(btnDeleteMedicine);
-
-            // panelMedicineDetails
-            panelMedicineDetails.BackColor = Color.FromArgb(30, 41, 59);
-            panelMedicineDetails.BorderStyle = BorderStyle.None;
-            panelMedicineDetails.Location = new Point(20, 20);
-            panelMedicineDetails.Size = new Size(500, 550);
-            panelMedicineDetails.Paint += panel_Paint;
-
-            // labelMedicine (titre)
-            labelMedicine.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point);
-            labelMedicine.ForeColor = Color.FromArgb(226, 232, 240);
-            labelMedicine.Location = new Point(20, 20);
-            labelMedicine.AutoSize = true;
-            labelMedicine.Text = "Medicine Details";
-
-            // Labels et TextBox dans le panel
-            SetupMedicineControls();
-
-            // listMedicines
-            listMedicines.BackColor = Color.FromArgb(30, 41, 59);
-            listMedicines.ForeColor = Color.FromArgb(226, 232, 240);
-            listMedicines.BorderStyle = BorderStyle.None;
-            listMedicines.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            listMedicines.Location = new Point(550, 20);
-            listMedicines.Size = new Size(600, 480);
-            listMedicines.SelectedIndexChanged += listMedicines_SelectedIndexChanged;
-
-            // Boutons
-            SetupMedicineButtons();
-        }
-
-        private void SetupMedicineControls()
-        {
-            // labelMedicineDosage
-            labelMedicineDosage.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            labelMedicineDosage.ForeColor = Color.FromArgb(148, 163, 184);
-            labelMedicineDosage.Location = new Point(25, 70);
-            labelMedicineDosage.AutoSize = true;
-            labelMedicineDosage.Text = "Dosage :";
-
-            textBoxMedicineDosage.BackColor = Color.FromArgb(51, 65, 85);
-            textBoxMedicineDosage.ForeColor = Color.FromArgb(226, 232, 240);
-            textBoxMedicineDosage.BorderStyle = BorderStyle.FixedSingle;
-            textBoxMedicineDosage.Font = new Font("Segoe UI", 10F);
-            textBoxMedicineDosage.Location = new Point(25, 95);
-            textBoxMedicineDosage.Size = new Size(200, 27);
-            textBoxMedicineDosage.ReadOnly = true;
-
-            // labelMedicineDescription
-            labelMedicineDescription.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            labelMedicineDescription.ForeColor = Color.FromArgb(148, 163, 184);
-            labelMedicineDescription.Location = new Point(25, 140);
-            labelMedicineDescription.AutoSize = true;
-            labelMedicineDescription.Text = "Description :";
-
-            textBoxMedicineDescription.BackColor = Color.FromArgb(51, 65, 85);
-            textBoxMedicineDescription.ForeColor = Color.FromArgb(226, 232, 240);
-            textBoxMedicineDescription.BorderStyle = BorderStyle.FixedSingle;
-            textBoxMedicineDescription.Font = new Font("Segoe UI", 10F);
-            textBoxMedicineDescription.Location = new Point(25, 165);
-            textBoxMedicineDescription.Size = new Size(450, 100);
-            textBoxMedicineDescription.Multiline = true;
-            textBoxMedicineDescription.ReadOnly = true;
-
-            // labelMedicineMolecule
-            labelMedicineMolecule.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            labelMedicineMolecule.ForeColor = Color.FromArgb(148, 163, 184);
-            labelMedicineMolecule.Location = new Point(25, 285);
-            labelMedicineMolecule.AutoSize = true;
-            labelMedicineMolecule.Text = "Molecule :";
-
-            textBoxMedicineMolecule.BackColor = Color.FromArgb(51, 65, 85);
-            textBoxMedicineMolecule.ForeColor = Color.FromArgb(226, 232, 240);
-            textBoxMedicineMolecule.BorderStyle = BorderStyle.FixedSingle;
-            textBoxMedicineMolecule.Font = new Font("Segoe UI", 10F);
-            textBoxMedicineMolecule.Location = new Point(25, 310);
-            textBoxMedicineMolecule.Size = new Size(300, 27);
-            textBoxMedicineMolecule.ReadOnly = true;
-
-            // labelMedicineName
-            labelMedicineName.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            labelMedicineName.ForeColor = Color.FromArgb(148, 163, 184);
-            labelMedicineName.Location = new Point(25, 355);
-            labelMedicineName.AutoSize = true;
-            labelMedicineName.Text = "Name :";
-            labelMedicineName.Visible = false;
-
-            textBoxMedicineName.BackColor = Color.FromArgb(51, 65, 85);
-            textBoxMedicineName.ForeColor = Color.FromArgb(226, 232, 240);
-            textBoxMedicineName.BorderStyle = BorderStyle.FixedSingle;
-            textBoxMedicineName.Font = new Font("Segoe UI", 10F);
-            textBoxMedicineName.Location = new Point(25, 380);
-            textBoxMedicineName.Size = new Size(300, 27);
-            textBoxMedicineName.Visible = false;
-
-            labelMedicineDoctor.AutoSize = true;
-            labelMedicineDoctor.Location = new Point(25, 420);
-            labelMedicineDoctor.Text = "";
-
-            panelMedicineDetails.Controls.Add(labelMedicine);
-            panelMedicineDetails.Controls.Add(labelMedicineDosage);
-            panelMedicineDetails.Controls.Add(textBoxMedicineDosage);
-            panelMedicineDetails.Controls.Add(labelMedicineDescription);
-            panelMedicineDetails.Controls.Add(textBoxMedicineDescription);
-            panelMedicineDetails.Controls.Add(labelMedicineMolecule);
-            panelMedicineDetails.Controls.Add(textBoxMedicineMolecule);
-            panelMedicineDetails.Controls.Add(labelMedicineName);
-            panelMedicineDetails.Controls.Add(textBoxMedicineName);
-            panelMedicineDetails.Controls.Add(labelMedicineDoctor);
-        }
-
-        private void SetupMedicineButtons()
-        {
-            // Style pour tous les boutons
-            btnAddMedicine.FlatStyle = FlatStyle.Flat;
-            btnAddMedicine.FlatAppearance.BorderSize = 0;
-            btnAddMedicine.BackColor = Color.FromArgb(16, 185, 129);
-            btnAddMedicine.ForeColor = Color.White;
-            btnAddMedicine.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            btnAddMedicine.Location = new Point(550, 520);
-            btnAddMedicine.Size = new Size(100, 40);
-            btnAddMedicine.Text = "Add";
-            btnAddMedicine.Cursor = Cursors.Hand;
-            btnAddMedicine.Click += btnAddMedicine_Click;
-            StyleButton(btnAddMedicine);
-
-            btnEditMedicine.FlatStyle = FlatStyle.Flat;
-            btnEditMedicine.FlatAppearance.BorderSize = 0;
-            btnEditMedicine.BackColor = Color.FromArgb(59, 130, 246);
-            btnEditMedicine.ForeColor = Color.White;
-            btnEditMedicine.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            btnEditMedicine.Location = new Point(660, 520);
-            btnEditMedicine.Size = new Size(100, 40);
-            btnEditMedicine.Text = "Edit";
-            btnEditMedicine.Cursor = Cursors.Hand;
-            btnEditMedicine.Click += btnEditMedicine_Click;
-            StyleButton(btnEditMedicine);
-
-            btnDeleteMedicine.FlatStyle = FlatStyle.Flat;
-            btnDeleteMedicine.FlatAppearance.BorderSize = 0;
-            btnDeleteMedicine.BackColor = Color.FromArgb(239, 68, 68);
-            btnDeleteMedicine.ForeColor = Color.White;
-            btnDeleteMedicine.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            btnDeleteMedicine.Location = new Point(770, 520);
-            btnDeleteMedicine.Size = new Size(100, 40);
-            btnDeleteMedicine.Text = "Delete";
-            btnDeleteMedicine.Cursor = Cursors.Hand;
-            btnDeleteMedicine.Click += btnDeleteMedicine_Click;
-            StyleButton(btnDeleteMedicine);
-
-            // Boutons d'action spéciaux
-            buttonMedicineRegister.FlatStyle = FlatStyle.Flat;
-            buttonMedicineRegister.FlatAppearance.BorderSize = 0;
-            buttonMedicineRegister.BackColor = Color.FromArgb(16, 185, 129);
-            buttonMedicineRegister.ForeColor = Color.White;
-            buttonMedicineRegister.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            buttonMedicineRegister.Location = new Point(30, 590);
-            buttonMedicineRegister.Size = new Size(130, 40);
-            buttonMedicineRegister.Text = "Register";
-            buttonMedicineRegister.Cursor = Cursors.Hand;
-            buttonMedicineRegister.Visible = false;
-            buttonMedicineRegister.Click += buttonMedicineRegister_Click;
-            StyleButton(buttonMedicineRegister);
-
-            buttonMedicineModify.FlatStyle = FlatStyle.Flat;
-            buttonMedicineModify.FlatAppearance.BorderSize = 0;
-            buttonMedicineModify.BackColor = Color.FromArgb(16, 185, 129);
-            buttonMedicineModify.ForeColor = Color.White;
-            buttonMedicineModify.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            buttonMedicineModify.Location = new Point(30, 590);
-            buttonMedicineModify.Size = new Size(130, 40);
-            buttonMedicineModify.Text = "Modify";
-            buttonMedicineModify.Cursor = Cursors.Hand;
-            buttonMedicineModify.Visible = false;
-            buttonMedicineModify.Click += buttonMedicineModify_Click;
-            StyleButton(buttonMedicineModify);
-
-            buttonMedicineCancel.FlatStyle = FlatStyle.Flat;
-            buttonMedicineCancel.FlatAppearance.BorderSize = 0;
-            buttonMedicineCancel.BackColor = Color.FromArgb(100, 116, 139);
-            buttonMedicineCancel.ForeColor = Color.White;
-            buttonMedicineCancel.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            buttonMedicineCancel.Location = new Point(170, 590);
-            buttonMedicineCancel.Size = new Size(130, 40);
-            buttonMedicineCancel.Text = "Cancel";
-            buttonMedicineCancel.Cursor = Cursors.Hand;
-            buttonMedicineCancel.Visible = false;
-            buttonMedicineCancel.Click += buttonMedicineCancel_Click;
-            StyleButton(buttonMedicineCancel);
-        }
-
-        private void SetupPrescriptionsTab()
-        {
-            // Configuration similaire aux Medicines mais adaptée aux Prescriptions
-            tabPrescriptions.Controls.Add(buttonPrescriptionGenerate);
-            tabPrescriptions.Controls.Add(buttonPrescriptionModify);
-            tabPrescriptions.Controls.Add(buttonPrescriptionCancel);
-            tabPrescriptions.Controls.Add(buttonPrescriptionRegister);
-            tabPrescriptions.Controls.Add(panelPrescriptionDetails);
-            tabPrescriptions.Controls.Add(listPrescriptions);
-            tabPrescriptions.Controls.Add(btnAddPrescription);
-            tabPrescriptions.Controls.Add(btnEditPrescription);
-            tabPrescriptions.Controls.Add(btnDeletePrescription);
-
-            // Panel
-            panelPrescriptionDetails.BackColor = Color.FromArgb(30, 41, 59);
-            panelPrescriptionDetails.BorderStyle = BorderStyle.None;
-            panelPrescriptionDetails.Location = new Point(20, 20);
-            panelPrescriptionDetails.Size = new Size(500, 550);
-            panelPrescriptionDetails.Paint += panel_Paint;
-
-            // Setup controls (similaire à Medicines)
-            SetupPrescriptionControls();
-
-            // ListBox
-            listPrescriptions.BackColor = Color.FromArgb(30, 41, 59);
-            listPrescriptions.ForeColor = Color.FromArgb(226, 232, 240);
-            listPrescriptions.BorderStyle = BorderStyle.None;
-            listPrescriptions.Font = new Font("Segoe UI", 10F);
-            listPrescriptions.Location = new Point(550, 20);
-            listPrescriptions.Size = new Size(600, 480);
-            listPrescriptions.SelectedIndexChanged += listPrescriptions_SelectedIndexChanged;
-
-            SetupPrescriptionButtons();
-        }
-
-        private void SetupPrescriptionControls()
-        {
-            labelPrescription.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            labelPrescription.ForeColor = Color.FromArgb(226, 232, 240);
-            labelPrescription.Location = new Point(20, 20);
-            labelPrescription.AutoSize = true;
-            labelPrescription.Text = "Prescription Details";
-
-            labelPrescriptionMedicines.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            labelPrescriptionMedicines.ForeColor = Color.FromArgb(148, 163, 184);
-            labelPrescriptionMedicines.Location = new Point(25, 70);
-            labelPrescriptionMedicines.AutoSize = true;
-            labelPrescriptionMedicines.Text = "Medicines :";
-
-            dataPrescriptionMedicines.BackgroundColor = Color.FromArgb(51, 65, 85);
-            dataPrescriptionMedicines.ForeColor = Color.FromArgb(226, 232, 240);
-            dataPrescriptionMedicines.GridColor = Color.FromArgb(71, 85, 105);
-            dataPrescriptionMedicines.BorderStyle = BorderStyle.None;
-            dataPrescriptionMedicines.Location = new Point(25, 95);
-            dataPrescriptionMedicines.Size = new Size(450, 150);
-            dataPrescriptionMedicines.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataPrescriptionMedicines.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            dataPrescriptionMedicines.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            dataPrescriptionMedicines.EnableHeadersVisualStyles = false;
-            dataPrescriptionMedicines.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(30, 41, 59);
-            dataPrescriptionMedicines.ColumnHeadersDefaultCellStyle.ForeColor = Color.FromArgb(226, 232, 240);
-            dataPrescriptionMedicines.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            dataPrescriptionMedicines.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(30, 41, 59);
-            dataPrescriptionMedicines.DefaultCellStyle.BackColor = Color.FromArgb(51, 65, 85);
-            dataPrescriptionMedicines.DefaultCellStyle.ForeColor = Color.FromArgb(226, 232, 240);
-            dataPrescriptionMedicines.DefaultCellStyle.SelectionBackColor = Color.FromArgb(16, 185, 129);
-            dataPrescriptionMedicines.DefaultCellStyle.SelectionForeColor = Color.White;
-            dataPrescriptionMedicines.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(45, 59, 79);
-            dataPrescriptionMedicines.RowHeadersDefaultCellStyle.BackColor = Color.FromArgb(30, 41, 59);
-            dataPrescriptionMedicines.RowHeadersDefaultCellStyle.ForeColor = Color.FromArgb(226, 232, 240);
-            dataPrescriptionMedicines.RowHeadersVisible = false;
-            dataPrescriptionMedicines.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-
-            // ComboBox pour sélectionner un médicament
-            comboBoxPrescriptionMedicine.BackColor = Color.FromArgb(51, 65, 85);
-            comboBoxPrescriptionMedicine.ForeColor = Color.FromArgb(226, 232, 240);
-            comboBoxPrescriptionMedicine.FlatStyle = FlatStyle.Flat;
-            comboBoxPrescriptionMedicine.Font = new Font("Segoe UI", 10F);
-            comboBoxPrescriptionMedicine.Location = new Point(25, 255);
-            comboBoxPrescriptionMedicine.Size = new Size(300, 28);
-            comboBoxPrescriptionMedicine.Visible = false;
-            comboBoxPrescriptionMedicine.SelectedIndexChanged += comboBoxPrescriptionMedicine_SelectedIndexChanged;
-
-            // Validity
-            labelPrescriptionValidity.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            labelPrescriptionValidity.ForeColor = Color.FromArgb(148, 163, 184);
-            labelPrescriptionValidity.Location = new Point(25, 295);
-            labelPrescriptionValidity.AutoSize = true;
-            labelPrescriptionValidity.Text = "Validity :";
-
-            textBoxPrescriptionValidity.BackColor = Color.FromArgb(51, 65, 85);
-            textBoxPrescriptionValidity.ForeColor = Color.FromArgb(226, 232, 240);
-            textBoxPrescriptionValidity.BorderStyle = BorderStyle.FixedSingle;
-            textBoxPrescriptionValidity.Font = new Font("Segoe UI", 10F);
-            textBoxPrescriptionValidity.Location = new Point(25, 320);
-            textBoxPrescriptionValidity.Size = new Size(250, 27);
-            textBoxPrescriptionValidity.ReadOnly = true;
-
-            dateTimePickerPrescriptionValidity.CalendarMonthBackground = Color.FromArgb(51, 65, 85);
-            dateTimePickerPrescriptionValidity.CalendarForeColor = Color.FromArgb(226, 232, 240);
-            dateTimePickerPrescriptionValidity.Font = new Font("Segoe UI", 10F);
-            dateTimePickerPrescriptionValidity.Location = new Point(25, 320);
-            dateTimePickerPrescriptionValidity.Size = new Size(250, 27);
-            dateTimePickerPrescriptionValidity.Visible = false;
-
-            // Doctor
-            labelPrescriptionDoctor.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            labelPrescriptionDoctor.ForeColor = Color.FromArgb(148, 163, 184);
-            labelPrescriptionDoctor.Location = new Point(25, 360);
-            labelPrescriptionDoctor.AutoSize = true;
-            labelPrescriptionDoctor.Text = "Doctor :";
-
-            textBoxPrescriptionDoctor.BackColor = Color.FromArgb(51, 65, 85);
-            textBoxPrescriptionDoctor.ForeColor = Color.FromArgb(226, 232, 240);
-            textBoxPrescriptionDoctor.BorderStyle = BorderStyle.FixedSingle;
-            textBoxPrescriptionDoctor.Font = new Font("Segoe UI", 10F);
-            textBoxPrescriptionDoctor.Location = new Point(25, 385);
-            textBoxPrescriptionDoctor.Size = new Size(250, 27);
-            textBoxPrescriptionDoctor.ReadOnly = true;
-
-            // Patient
-            labelPrescriptionPatient.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            labelPrescriptionPatient.ForeColor = Color.FromArgb(148, 163, 184);
-            labelPrescriptionPatient.Location = new Point(25, 425);
-            labelPrescriptionPatient.AutoSize = true;
-            labelPrescriptionPatient.Text = "Patient :";
-
-            textBoxPrescriptionPatient.BackColor = Color.FromArgb(51, 65, 85);
-            textBoxPrescriptionPatient.ForeColor = Color.FromArgb(226, 232, 240);
-            textBoxPrescriptionPatient.BorderStyle = BorderStyle.FixedSingle;
-            textBoxPrescriptionPatient.Font = new Font("Segoe UI", 10F);
-            textBoxPrescriptionPatient.Location = new Point(25, 450);
-            textBoxPrescriptionPatient.Size = new Size(250, 27);
-            textBoxPrescriptionPatient.ReadOnly = true;
-
-            comboBoxPrescriptionPatient.BackColor = Color.FromArgb(51, 65, 85);
-            comboBoxPrescriptionPatient.ForeColor = Color.FromArgb(226, 232, 240);
-            comboBoxPrescriptionPatient.FlatStyle = FlatStyle.Flat;
-            comboBoxPrescriptionPatient.Font = new Font("Segoe UI", 10F);
-            comboBoxPrescriptionPatient.Location = new Point(25, 450);
-            comboBoxPrescriptionPatient.Size = new Size(250, 28);
-            comboBoxPrescriptionPatient.Visible = false;
-
-            panelPrescriptionDetails.Controls.Add(labelPrescription);
-            panelPrescriptionDetails.Controls.Add(labelPrescriptionMedicines);
-            panelPrescriptionDetails.Controls.Add(dataPrescriptionMedicines);
-            panelPrescriptionDetails.Controls.Add(comboBoxPrescriptionMedicine);
-            panelPrescriptionDetails.Controls.Add(labelPrescriptionValidity);
-            panelPrescriptionDetails.Controls.Add(textBoxPrescriptionValidity);
-            panelPrescriptionDetails.Controls.Add(dateTimePickerPrescriptionValidity);
-            panelPrescriptionDetails.Controls.Add(labelPrescriptionDoctor);
-            panelPrescriptionDetails.Controls.Add(textBoxPrescriptionDoctor);
-            panelPrescriptionDetails.Controls.Add(labelPrescriptionPatient);
-            panelPrescriptionDetails.Controls.Add(textBoxPrescriptionPatient);
-            panelPrescriptionDetails.Controls.Add(comboBoxPrescriptionPatient);
-        }
-
-        private void SetupPrescriptionButtons()
-        {
-            btnAddPrescription.FlatStyle = FlatStyle.Flat;
-            btnAddPrescription.FlatAppearance.BorderSize = 0;
-            btnAddPrescription.BackColor = Color.FromArgb(16, 185, 129);
-            btnAddPrescription.ForeColor = Color.White;
-            btnAddPrescription.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            btnAddPrescription.Location = new Point(550, 520);
-            btnAddPrescription.Size = new Size(100, 40);
-            btnAddPrescription.Text = "Add";
-            btnAddPrescription.Cursor = Cursors.Hand;
-            btnAddPrescription.Click += btnAddPrescription_Click;
-            StyleButton(btnAddPrescription);
-
-            btnEditPrescription.FlatStyle = FlatStyle.Flat;
-            btnEditPrescription.FlatAppearance.BorderSize = 0;
-            btnEditPrescription.BackColor = Color.FromArgb(59, 130, 246);
-            btnEditPrescription.ForeColor = Color.White;
-            btnEditPrescription.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            btnEditPrescription.Location = new Point(660, 520);
-            btnEditPrescription.Size = new Size(100, 40);
-            btnEditPrescription.Text = "Edit";
-            btnEditPrescription.Cursor = Cursors.Hand;
-            btnEditPrescription.Click += btnEditPrescription_Click;
-            StyleButton(btnEditPrescription);
-
-            btnDeletePrescription.FlatStyle = FlatStyle.Flat;
-            btnDeletePrescription.FlatAppearance.BorderSize = 0;
-            btnDeletePrescription.BackColor = Color.FromArgb(239, 68, 68);
-            btnDeletePrescription.ForeColor = Color.White;
-            btnDeletePrescription.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            btnDeletePrescription.Location = new Point(770, 520);
-            btnDeletePrescription.Size = new Size(100, 40);
-            btnDeletePrescription.Text = "Delete";
-            btnDeletePrescription.Cursor = Cursors.Hand;
-            btnDeletePrescription.Click += btnDeletePrescription_Click;
-            StyleButton(btnDeletePrescription);
-
-            buttonPrescriptionGenerate.FlatStyle = FlatStyle.Flat;
-            buttonPrescriptionGenerate.FlatAppearance.BorderSize = 0;
-            buttonPrescriptionGenerate.BackColor = Color.FromArgb(168, 85, 247);
-            buttonPrescriptionGenerate.ForeColor = Color.White;
-            buttonPrescriptionGenerate.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            buttonPrescriptionGenerate.Location = new Point(890, 520);
-            buttonPrescriptionGenerate.Size = new Size(150, 40);
-            buttonPrescriptionGenerate.Text = "Generate PDF";
-            buttonPrescriptionGenerate.Cursor = Cursors.Hand;
-            buttonPrescriptionGenerate.Click += buttonPrescriptionGenerate_Click;
-            StyleButton(buttonPrescriptionGenerate);
-
-            buttonPrescriptionRegister.FlatStyle = FlatStyle.Flat;
-            buttonPrescriptionRegister.FlatAppearance.BorderSize = 0;
-            buttonPrescriptionRegister.BackColor = Color.FromArgb(16, 185, 129);
-            buttonPrescriptionRegister.ForeColor = Color.White;
-            buttonPrescriptionRegister.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            buttonPrescriptionRegister.Location = new Point(30, 590);
-            buttonPrescriptionRegister.Size = new Size(130, 40);
-            buttonPrescriptionRegister.Text = "Register";
-            buttonPrescriptionRegister.Cursor = Cursors.Hand;
-            buttonPrescriptionRegister.Visible = false;
-            buttonPrescriptionRegister.Click += buttonPrescriptionRegister_Click;
-            StyleButton(buttonPrescriptionRegister);
-
-            buttonPrescriptionModify.FlatStyle = FlatStyle.Flat;
-            buttonPrescriptionModify.FlatAppearance.BorderSize = 0;
-            buttonPrescriptionModify.BackColor = Color.FromArgb(16, 185, 129);
-            buttonPrescriptionModify.ForeColor = Color.White;
-            buttonPrescriptionModify.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            buttonPrescriptionModify.Location = new Point(30, 590);
-            buttonPrescriptionModify.Size = new Size(130, 40);
-            buttonPrescriptionModify.Text = "Modify";
-            buttonPrescriptionModify.Cursor = Cursors.Hand;
-            buttonPrescriptionModify.Visible = false;
-            buttonPrescriptionModify.Click += buttonPrescriptionModify_Click;
-            StyleButton(buttonPrescriptionModify);
-
-            buttonPrescriptionCancel.FlatStyle = FlatStyle.Flat;
-            buttonPrescriptionCancel.FlatAppearance.BorderSize = 0;
-            buttonPrescriptionCancel.BackColor = Color.FromArgb(100, 116, 139);
-            buttonPrescriptionCancel.ForeColor = Color.White;
-            buttonPrescriptionCancel.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            buttonPrescriptionCancel.Location = new Point(170, 590);
-            buttonPrescriptionCancel.Size = new Size(130, 40);
-            buttonPrescriptionCancel.Text = "Cancel";
-            buttonPrescriptionCancel.Cursor = Cursors.Hand;
-            buttonPrescriptionCancel.Visible = false;
-            buttonPrescriptionCancel.Click += buttonPrescriptionCancel_Click;
-            StyleButton(buttonPrescriptionCancel);
-        }
-
-        private void SetupPatientsTab()
-        {
-            // Configuration similaire
-            tabPatients.Controls.Add(buttonPatientModify);
-            tabPatients.Controls.Add(buttonPatientCancel);
-            tabPatients.Controls.Add(buttonPatientRegister);
-            tabPatients.Controls.Add(panelPatientDetails);
-            tabPatients.Controls.Add(listPatients);
-            tabPatients.Controls.Add(btnAddPatient);
-            tabPatients.Controls.Add(btnEditPatient);
-            tabPatients.Controls.Add(btnDeletePatient);
-
-            panelPatientDetails.BackColor = Color.FromArgb(30, 41, 59);
-            panelPatientDetails.BorderStyle = BorderStyle.None;
-            panelPatientDetails.Location = new Point(20, 20);
-            panelPatientDetails.Size = new Size(500, 550);
-            panelPatientDetails.Paint += panel_Paint;
-
-            SetupPatientControls();
-
-            listPatients.BackColor = Color.FromArgb(30, 41, 59);
-            listPatients.ForeColor = Color.FromArgb(226, 232, 240);
-            listPatients.BorderStyle = BorderStyle.None;
-            listPatients.Font = new Font("Segoe UI", 10F);
-            listPatients.Location = new Point(550, 20);
-            listPatients.Size = new Size(600, 480);
-            listPatients.SelectedIndexChanged += listPatients_SelectedIndexChanged;
-
-            SetupPatientButtons();
-        }
-
-        private void SetupPatientControls()
-        {
-            labelPatient.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            labelPatient.ForeColor = Color.FromArgb(226, 232, 240);
-            labelPatient.Location = new Point(20, 20);
-            labelPatient.AutoSize = true;
-            labelPatient.Text = "Patient Details";
-
-            // Gender
-            labelPatientGender.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            labelPatientGender.ForeColor = Color.FromArgb(148, 163, 184);
-            labelPatientGender.Location = new Point(25, 70);
-            labelPatientGender.AutoSize = true;
-            labelPatientGender.Text = "Gender :";
-
-            textBoxPatientGender.BackColor = Color.FromArgb(51, 65, 85);
-            textBoxPatientGender.ForeColor = Color.FromArgb(226, 232, 240);
-            textBoxPatientGender.BorderStyle = BorderStyle.FixedSingle;
-            textBoxPatientGender.Font = new Font("Segoe UI", 10F);
-            textBoxPatientGender.Location = new Point(25, 95);
-            textBoxPatientGender.Size = new Size(200, 27);
-            textBoxPatientGender.ReadOnly = true;
-
-            comboBoxPatientGender.BackColor = Color.FromArgb(51, 65, 85);
-            comboBoxPatientGender.ForeColor = Color.FromArgb(226, 232, 240);
-            comboBoxPatientGender.FlatStyle = FlatStyle.Flat;
-            comboBoxPatientGender.Font = new Font("Segoe UI", 10F);
-            comboBoxPatientGender.Location = new Point(25, 95);
-            comboBoxPatientGender.Size = new Size(200, 28);
-            comboBoxPatientGender.Visible = false;
-
-            // Age
-            labelPatientAge.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            labelPatientAge.ForeColor = Color.FromArgb(148, 163, 184);
-            labelPatientAge.Location = new Point(25, 140);
-            labelPatientAge.AutoSize = true;
-            labelPatientAge.Text = "Age :";
-
-            textBoxPatientAge.BackColor = Color.FromArgb(51, 65, 85);
-            textBoxPatientAge.ForeColor = Color.FromArgb(226, 232, 240);
-            textBoxPatientAge.BorderStyle = BorderStyle.FixedSingle;
-            textBoxPatientAge.Font = new Font("Segoe UI", 10F);
-            textBoxPatientAge.Location = new Point(25, 165);
-            textBoxPatientAge.Size = new Size(150, 27);
-            textBoxPatientAge.ReadOnly = true;
-
-            // Doctor
-            labelPatientDoctor.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            labelPatientDoctor.ForeColor = Color.FromArgb(148, 163, 184);
-            labelPatientDoctor.Location = new Point(25, 210);
-            labelPatientDoctor.AutoSize = true;
-            labelPatientDoctor.Text = "Doctor :";
-
-            textBoxPatientDoctor.BackColor = Color.FromArgb(51, 65, 85);
-            textBoxPatientDoctor.ForeColor = Color.FromArgb(226, 232, 240);
-            textBoxPatientDoctor.BorderStyle = BorderStyle.FixedSingle;
-            textBoxPatientDoctor.Font = new Font("Segoe UI", 10F);
-            textBoxPatientDoctor.Location = new Point(25, 235);
-            textBoxPatientDoctor.Size = new Size(250, 27);
-            textBoxPatientDoctor.ReadOnly = true;
-
-            // Name
-            labelPatientName.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            labelPatientName.ForeColor = Color.FromArgb(148, 163, 184);
-            labelPatientName.Location = new Point(25, 280);
-            labelPatientName.AutoSize = true;
-            labelPatientName.Text = "Name :";
-            labelPatientName.Visible = false;
-
-            textBoxPatientName.BackColor = Color.FromArgb(51, 65, 85);
-            textBoxPatientName.ForeColor = Color.FromArgb(226, 232, 240);
-            textBoxPatientName.BorderStyle = BorderStyle.FixedSingle;
-            textBoxPatientName.Font = new Font("Segoe UI", 10F);
-            textBoxPatientName.Location = new Point(25, 305);
-            textBoxPatientName.Size = new Size(250, 27);
-            textBoxPatientName.Visible = false;
-
-            // Firstname
-            labelPatientFirstname.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            labelPatientFirstname.ForeColor = Color.FromArgb(148, 163, 184);
-            labelPatientFirstname.Location = new Point(25, 350);
-            labelPatientFirstname.AutoSize = true;
-            labelPatientFirstname.Text = "Firstname :";
-            labelPatientFirstname.Visible = false;
-
-            textBoxPatientFirstname.BackColor = Color.FromArgb(51, 65, 85);
-            textBoxPatientFirstname.ForeColor = Color.FromArgb(226, 232, 240);
-            textBoxPatientFirstname.BorderStyle = BorderStyle.FixedSingle;
-            textBoxPatientFirstname.Font = new Font("Segoe UI", 10F);
-            textBoxPatientFirstname.Location = new Point(25, 375);
-            textBoxPatientFirstname.Size = new Size(250, 27);
-            textBoxPatientFirstname.Visible = false;
-
-            label2.AutoSize = true;
-            label2.Location = new Point(25, 420);
-            label2.Text = "";
-
-            panelPatientDetails.Controls.Add(labelPatient);
-            panelPatientDetails.Controls.Add(labelPatientGender);
-            panelPatientDetails.Controls.Add(textBoxPatientGender);
-            panelPatientDetails.Controls.Add(comboBoxPatientGender);
-            panelPatientDetails.Controls.Add(labelPatientAge);
-            panelPatientDetails.Controls.Add(textBoxPatientAge);
-            panelPatientDetails.Controls.Add(labelPatientDoctor);
-            panelPatientDetails.Controls.Add(textBoxPatientDoctor);
-            panelPatientDetails.Controls.Add(labelPatientName);
-            panelPatientDetails.Controls.Add(textBoxPatientName);
-            panelPatientDetails.Controls.Add(labelPatientFirstname);
-            panelPatientDetails.Controls.Add(textBoxPatientFirstname);
-            panelPatientDetails.Controls.Add(label2);
-        }
-
-        private void SetupPatientButtons()
-        {
-            btnAddPatient.FlatStyle = FlatStyle.Flat;
-            btnAddPatient.FlatAppearance.BorderSize = 0;
-            btnAddPatient.BackColor = Color.FromArgb(16, 185, 129);
-            btnAddPatient.ForeColor = Color.White;
-            btnAddPatient.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            btnAddPatient.Location = new Point(550, 520);
-            btnAddPatient.Size = new Size(100, 40);
-            btnAddPatient.Text = "Add";
-            btnAddPatient.Cursor = Cursors.Hand;
-            btnAddPatient.Click += btnAddPatient_Click;
-            StyleButton(btnAddPatient);
-
-            btnEditPatient.FlatStyle = FlatStyle.Flat;
-            btnEditPatient.FlatAppearance.BorderSize = 0;
-            btnEditPatient.BackColor = Color.FromArgb(59, 130, 246);
-            btnEditPatient.ForeColor = Color.White;
-            btnEditPatient.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            btnEditPatient.Location = new Point(660, 520);
-            btnEditPatient.Size = new Size(100, 40);
-            btnEditPatient.Text = "Edit";
-            btnEditPatient.Cursor = Cursors.Hand;
-            btnEditPatient.Click += btnEditPatient_Click;
-            StyleButton(btnEditPatient);
-
-            btnDeletePatient.FlatStyle = FlatStyle.Flat;
-            btnDeletePatient.FlatAppearance.BorderSize = 0;
-            btnDeletePatient.BackColor = Color.FromArgb(239, 68, 68);
-            btnDeletePatient.ForeColor = Color.White;
-            btnDeletePatient.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            btnDeletePatient.Location = new Point(770, 520);
-            btnDeletePatient.Size = new Size(100, 40);
-            btnDeletePatient.Text = "Delete";
-            btnDeletePatient.Cursor = Cursors.Hand;
-            btnDeletePatient.Click += btnDeletePatient_Click;
-            StyleButton(btnDeletePatient);
-
-            buttonPatientRegister.FlatStyle = FlatStyle.Flat;
-            buttonPatientRegister.FlatAppearance.BorderSize = 0;
-            buttonPatientRegister.BackColor = Color.FromArgb(16, 185, 129);
-            buttonPatientRegister.ForeColor = Color.White;
-            buttonPatientRegister.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            buttonPatientRegister.Location = new Point(30, 590);
-            buttonPatientRegister.Size = new Size(130, 40);
-            buttonPatientRegister.Text = "Register";
-            buttonPatientRegister.Cursor = Cursors.Hand;
-            buttonPatientRegister.Visible = false;
-            buttonPatientRegister.Click += buttonPatientRegister_Click;
-            StyleButton(buttonPatientRegister);
-
-            buttonPatientModify.FlatStyle = FlatStyle.Flat;
-            buttonPatientModify.FlatAppearance.BorderSize = 0;
-            buttonPatientModify.BackColor = Color.FromArgb(16, 185, 129);
-            buttonPatientModify.ForeColor = Color.White;
-            buttonPatientModify.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            buttonPatientModify.Location = new Point(30, 590);
-            buttonPatientModify.Size = new Size(130, 40);
-            buttonPatientModify.Text = "Modify";
-            buttonPatientModify.Cursor = Cursors.Hand;
-            buttonPatientModify.Visible = false;
-            buttonPatientModify.Click += buttonPatientModify_Click;
-            StyleButton(buttonPatientModify);
-
-            buttonPatientCancel.FlatStyle = FlatStyle.Flat;
-            buttonPatientCancel.FlatAppearance.BorderSize = 0;
-            buttonPatientCancel.BackColor = Color.FromArgb(100, 116, 139);
-            buttonPatientCancel.ForeColor = Color.White;
-            buttonPatientCancel.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            buttonPatientCancel.Location = new Point(170, 590);
-            buttonPatientCancel.Size = new Size(130, 40);
-            buttonPatientCancel.Text = "Cancel";
-            buttonPatientCancel.Cursor = Cursors.Hand;
-            buttonPatientCancel.Visible = false;
-            buttonPatientCancel.Click += buttonPatientCancel_Click;
-            StyleButton(buttonPatientCancel);
-        }
-
-        private void SetupManagerTab()
-        {
-            tabPageManager.Controls.Add(buttonUserDelete);
-            tabPageManager.Controls.Add(buttonUserModify);
-            tabPageManager.Controls.Add(buttonUserCancel);
-            tabPageManager.Controls.Add(buttonUserRegister);
-            tabPageManager.Controls.Add(panel1);
-            tabPageManager.Controls.Add(listUsers);
-            tabPageManager.Controls.Add(buttonUserAdd);
-            tabPageManager.Controls.Add(buttonUserEdit);
-
-            panel1.BackColor = Color.FromArgb(30, 41, 59);
-            panel1.BorderStyle = BorderStyle.None;
-            panel1.Location = new Point(20, 20);
-            panel1.Size = new Size(500, 550);
-            panel1.Paint += panel_Paint;
-
-            SetupManagerControls();
-
-            listUsers.BackColor = Color.FromArgb(30, 41, 59);
-            listUsers.ForeColor = Color.FromArgb(226, 232, 240);
-            listUsers.BorderStyle = BorderStyle.None;
-            listUsers.Font = new Font("Segoe UI", 10F);
-            listUsers.Location = new Point(550, 20);
-            listUsers.Size = new Size(600, 480);
-            listUsers.SelectedIndexChanged += listUsers_SelectedIndexChanged;
-
-            SetupManagerButtons();
-        }
-
-        private void SetupManagerControls()
-        {
-            labelUser.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            labelUser.ForeColor = Color.FromArgb(226, 232, 240);
-            labelUser.Location = new Point(20, 20);
-            labelUser.AutoSize = true;
-            labelUser.Text = "User Details";
-
-            // Role
-            labelUserRole.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            labelUserRole.ForeColor = Color.FromArgb(148, 163, 184);
-            labelUserRole.Location = new Point(25, 70);
-            labelUserRole.AutoSize = true;
-            labelUserRole.Text = "Role :";
-
-            textBoxUserRole.BackColor = Color.FromArgb(51, 65, 85);
-            textBoxUserRole.ForeColor = Color.FromArgb(226, 232, 240);
-            textBoxUserRole.BorderStyle = BorderStyle.FixedSingle;
-            textBoxUserRole.Font = new Font("Segoe UI", 10F);
-            textBoxUserRole.Location = new Point(25, 95);
-            textBoxUserRole.Size = new Size(200, 27);
-            textBoxUserRole.ReadOnly = true;
-
-            comboBoxUserRole.BackColor = Color.FromArgb(51, 65, 85);
-            comboBoxUserRole.ForeColor = Color.FromArgb(226, 232, 240);
-            comboBoxUserRole.FlatStyle = FlatStyle.Flat;
-            comboBoxUserRole.Font = new Font("Segoe UI", 10F);
-            comboBoxUserRole.Location = new Point(25, 95);
-            comboBoxUserRole.Size = new Size(200, 28);
-            comboBoxUserRole.Visible = false;
-
-            // Email
-            labelUserEmail.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            labelUserEmail.ForeColor = Color.FromArgb(148, 163, 184);
-            labelUserEmail.Location = new Point(25, 140);
-            labelUserEmail.AutoSize = true;
-            labelUserEmail.Text = "Email :";
-
-            textBoxUserEmail.BackColor = Color.FromArgb(51, 65, 85);
-            textBoxUserEmail.ForeColor = Color.FromArgb(226, 232, 240);
-            textBoxUserEmail.BorderStyle = BorderStyle.FixedSingle;
-            textBoxUserEmail.Font = new Font("Segoe UI", 10F);
-            textBoxUserEmail.Location = new Point(25, 165);
-            textBoxUserEmail.Size = new Size(300, 27);
-            textBoxUserEmail.ReadOnly = true;
-
-            // Name
-            labelUserName.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            labelUserName.ForeColor = Color.FromArgb(148, 163, 184);
-            labelUserName.Location = new Point(25, 210);
-            labelUserName.AutoSize = true;
-            labelUserName.Text = "Name :";
-            labelUserName.Visible = false;
-
-            textBoxUserName.BackColor = Color.FromArgb(51, 65, 85);
-            textBoxUserName.ForeColor = Color.FromArgb(226, 232, 240);
-            textBoxUserName.BorderStyle = BorderStyle.FixedSingle;
-            textBoxUserName.Font = new Font("Segoe UI", 10F);
-            textBoxUserName.Location = new Point(25, 235);
-            textBoxUserName.Size = new Size(250, 27);
-            textBoxUserName.Visible = false;
-
-            // Firstname
-            labelUserFirstname.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            labelUserFirstname.ForeColor = Color.FromArgb(148, 163, 184);
-            labelUserFirstname.Location = new Point(25, 280);
-            labelUserFirstname.AutoSize = true;
-            labelUserFirstname.Text = "Firstname :";
-            labelUserFirstname.Visible = false;
-
-            textBoxUserFirstname.BackColor = Color.FromArgb(51, 65, 85);
-            textBoxUserFirstname.ForeColor = Color.FromArgb(226, 232, 240);
-            textBoxUserFirstname.BorderStyle = BorderStyle.FixedSingle;
-            textBoxUserFirstname.Font = new Font("Segoe UI", 10F);
-            textBoxUserFirstname.Location = new Point(25, 305);
-            textBoxUserFirstname.Size = new Size(250, 27);
-            textBoxUserFirstname.Visible = false;
-
-            // Password
-            labelUserPassword.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            labelUserPassword.ForeColor = Color.FromArgb(148, 163, 184);
-            labelUserPassword.Location = new Point(25, 350);
-            labelUserPassword.AutoSize = true;
-            labelUserPassword.Text = "Password :";
-            labelUserPassword.Visible = false;
-
-            textBoxUserPassword.BackColor = Color.FromArgb(51, 65, 85);
-            textBoxUserPassword.ForeColor = Color.FromArgb(226, 232, 240);
-            textBoxUserPassword.BorderStyle = BorderStyle.FixedSingle;
-            textBoxUserPassword.Font = new Font("Segoe UI", 10F);
-            textBoxUserPassword.Location = new Point(25, 375);
-            textBoxUserPassword.Size = new Size(250, 27);
-            textBoxUserPassword.Visible = false;
-
-            label6.AutoSize = true;
-            label6.Location = new Point(25, 420);
-            label6.Text = "";
-
-            label7.AutoSize = true;
-            label7.Location = new Point(25, 440);
-            label7.Text = "";
-
-            panel1.Controls.Add(labelUser);
-            panel1.Controls.Add(labelUserRole);
-            panel1.Controls.Add(textBoxUserRole);
-            panel1.Controls.Add(comboBoxUserRole);
-            panel1.Controls.Add(labelUserEmail);
-            panel1.Controls.Add(textBoxUserEmail);
-            panel1.Controls.Add(labelUserName);
-            panel1.Controls.Add(textBoxUserName);
-            panel1.Controls.Add(labelUserFirstname);
-            panel1.Controls.Add(textBoxUserFirstname);
-            panel1.Controls.Add(labelUserPassword);
-            panel1.Controls.Add(textBoxUserPassword);
-            panel1.Controls.Add(label6);
-            panel1.Controls.Add(label7);
-        }
-
-        private void SetupManagerButtons()
-        {
-            buttonUserAdd.FlatStyle = FlatStyle.Flat;
-            buttonUserAdd.FlatAppearance.BorderSize = 0;
-            buttonUserAdd.BackColor = Color.FromArgb(16, 185, 129);
-            buttonUserAdd.ForeColor = Color.White;
-            buttonUserAdd.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            buttonUserAdd.Location = new Point(550, 520);
-            buttonUserAdd.Size = new Size(100, 40);
-            buttonUserAdd.Text = "Add";
-            buttonUserAdd.Cursor = Cursors.Hand;
-            buttonUserAdd.Click += buttonUserAdd_Click;
-            StyleButton(buttonUserAdd);
-
-            buttonUserEdit.FlatStyle = FlatStyle.Flat;
-            buttonUserEdit.FlatAppearance.BorderSize = 0;
-            buttonUserEdit.BackColor = Color.FromArgb(59, 130, 246);
-            buttonUserEdit.ForeColor = Color.White;
-            buttonUserEdit.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            buttonUserEdit.Location = new Point(660, 520);
-            buttonUserEdit.Size = new Size(100, 40);
-            buttonUserEdit.Text = "Edit";
-            buttonUserEdit.Cursor = Cursors.Hand;
-            buttonUserEdit.Click += buttonUserEdit_Click;
-            StyleButton(buttonUserEdit);
-
-            buttonUserDelete.FlatStyle = FlatStyle.Flat;
-            buttonUserDelete.FlatAppearance.BorderSize = 0;
-            buttonUserDelete.BackColor = Color.FromArgb(239, 68, 68);
-            buttonUserDelete.ForeColor = Color.White;
-            buttonUserDelete.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            buttonUserDelete.Location = new Point(770, 520);
-            buttonUserDelete.Size = new Size(100, 40);
-            buttonUserDelete.Text = "Delete";
-            buttonUserDelete.Cursor = Cursors.Hand;
-            buttonUserDelete.Click += buttonUserDelete_Click;
-            StyleButton(buttonUserDelete);
-
-            buttonUserRegister.FlatStyle = FlatStyle.Flat;
-            buttonUserRegister.FlatAppearance.BorderSize = 0;
-            buttonUserRegister.BackColor = Color.FromArgb(16, 185, 129);
-            buttonUserRegister.ForeColor = Color.White;
-            buttonUserRegister.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            buttonUserRegister.Location = new Point(30, 590);
-            buttonUserRegister.Size = new Size(130, 40);
-            buttonUserRegister.Text = "Register";
-            buttonUserRegister.Cursor = Cursors.Hand;
-            buttonUserRegister.Visible = false;
-            buttonUserRegister.Click += buttonUserRegister_Click;
-            StyleButton(buttonUserRegister);
-
-            buttonUserModify.FlatStyle = FlatStyle.Flat;
-            buttonUserModify.FlatAppearance.BorderSize = 0;
-            buttonUserModify.BackColor = Color.FromArgb(16, 185, 129);
-            buttonUserModify.ForeColor = Color.White;
-            buttonUserModify.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            buttonUserModify.Location = new Point(30, 590);
-            buttonUserModify.Size = new Size(130, 40);
-            buttonUserModify.Text = "Modify";
-            buttonUserModify.Cursor = Cursors.Hand;
-            buttonUserModify.Visible = false;
-            buttonUserModify.Click += buttonUserModify_Click;
-            StyleButton(buttonUserModify);
-
-            buttonUserCancel.FlatStyle = FlatStyle.Flat;
-            buttonUserCancel.FlatAppearance.BorderSize = 0;
-            buttonUserCancel.BackColor = Color.FromArgb(100, 116, 139);
-            buttonUserCancel.ForeColor = Color.White;
-            buttonUserCancel.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
-            buttonUserCancel.Location = new Point(170, 590);
-            buttonUserCancel.Size = new Size(130, 40);
-            buttonUserCancel.Text = "Cancel";
-            buttonUserCancel.Cursor = Cursors.Hand;
-            buttonUserCancel.Visible = false;
-            buttonUserCancel.Click += buttonUserCancel_Click;
-            StyleButton(buttonUserCancel);
-        }
-
         #endregion
-
-        // Méthode pour dessiner les panneaux avec coins arrondis
-        private void panel_Paint(object sender, PaintEventArgs e)
-        {
-            Panel panel = sender as Panel;
-            if (panel == null) return;
-
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-            using (var path = new System.Drawing.Drawing2D.GraphicsPath())
-            {
-                int radius = 12;
-                Rectangle rect = new Rectangle(0, 0, panel.Width, panel.Height);
-
-                path.AddArc(rect.X, rect.Y, radius, radius, 180, 90);
-                path.AddArc(rect.Right - radius, rect.Y, radius, radius, 270, 90);
-                path.AddArc(rect.Right - radius, rect.Bottom - radius, radius, radius, 0, 90);
-                path.AddArc(rect.X, rect.Bottom - radius, radius, radius, 90, 90);
-                path.CloseFigure();
-
-                panel.Region = new Region(path);
-
-                using (var brush = new SolidBrush(Color.FromArgb(30, 41, 59)))
-                {
-                    e.Graphics.FillPath(brush, path);
-                }
-
-                using (var borderPen = new Pen(Color.FromArgb(71, 85, 105), 1))
-                {
-                    e.Graphics.DrawPath(borderPen, path);
-                }
-            }
-        }
-
-        // Dessiner les onglets personnalisés
-        private void tabControl_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            TabPage page = tabControl.TabPages[e.Index];
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-            Rectangle tabRect = tabControl.GetTabRect(e.Index);
-            bool selected = (e.Index == tabControl.SelectedIndex);
-
-            // Remplir tout le fond de la zone des onglets
-            using (var bgBrush = new SolidBrush(Color.FromArgb(15, 23, 42)))
-            {
-                e.Graphics.FillRectangle(bgBrush, e.Bounds);
-            }
-
-            // Couleur de fond de l'onglet
-            Color backColor = selected ? Color.FromArgb(16, 185, 129) : Color.FromArgb(30, 41, 59);
-            using (var brush = new SolidBrush(backColor))
-            {
-                e.Graphics.FillRectangle(brush, tabRect);
-            }
-
-            // Texte
-            Color textColor = selected ? Color.White : Color.FromArgb(148, 163, 184);
-            TextRenderer.DrawText(e.Graphics, page.Text, tabControl.Font, tabRect,
-                textColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-
-            // Bordure inférieure pour l'onglet sélectionné
-            if (selected)
-            {
-                using (var pen = new Pen(Color.FromArgb(16, 185, 129), 3))
-                {
-                    e.Graphics.DrawLine(pen, tabRect.Left, tabRect.Bottom - 1,
-                        tabRect.Right, tabRect.Bottom - 1);
-                }
-            }
-        }
-
-        // Peindre le fond du TabControl en sombre
-        private void tabControl_Paint(object sender, PaintEventArgs e)
-        {
-            // Peindre tout le fond du TabControl en sombre
-            using (var brush = new SolidBrush(Color.FromArgb(15, 23, 42)))
-            {
-                e.Graphics.FillRectangle(brush, tabControl.ClientRectangle);
-            }
-
-            // Peindre la zone des onglets
-            Rectangle tabAreaRect = new Rectangle(0, 0, tabControl.Width, tabControl.ItemSize.Height + 4);
-            using (var brush = new SolidBrush(Color.FromArgb(15, 23, 42)))
-            {
-                e.Graphics.FillRectangle(brush, tabAreaRect);
-            }
-        }
-
-        // Style pour les boutons avec coins arrondis
-        private void StyleButton(Button btn)
-        {
-            btn.FlatStyle = FlatStyle.Flat;
-            btn.FlatAppearance.BorderSize = 0;
-            btn.Paint += (s, e) =>
-            {
-                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                using (var path = new System.Drawing.Drawing2D.GraphicsPath())
-                {
-                    int radius = 6;
-                    Rectangle rect = new Rectangle(0, 0, btn.Width, btn.Height);
-
-                    path.AddArc(rect.X, rect.Y, radius, radius, 180, 90);
-                    path.AddArc(rect.Right - radius, rect.Y, radius, radius, 270, 90);
-                    path.AddArc(rect.Right - radius, rect.Bottom - radius, radius, radius, 0, 90);
-                    path.AddArc(rect.X, rect.Bottom - radius, radius, radius, 90, 90);
-                    path.CloseFigure();
-
-                    btn.Region = new Region(path);
-                    using (var brush = new SolidBrush(btn.BackColor))
-                    {
-                        e.Graphics.FillPath(brush, path);
-                    }
-                }
-                TextRenderer.DrawText(e.Graphics, btn.Text, btn.Font, btn.ClientRectangle,
-                    btn.ForeColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-            };
-        }
 
         private void UserForm_Resize(object sender, EventArgs e)
         {
+            // Calculer les facteurs d'échelle
             float scaleX = (float)ClientSize.Width / referenceSize.Width;
             float scaleY = (float)ClientSize.Height / referenceSize.Height;
             float scale = Math.Min(scaleX, scaleY);
 
-            tabControl.ItemSize = new Size((int)(120 * scaleX), (int)(40 * scaleY));
-            tabControl.Font = new Font("Segoe UI Semibold", 11F * scale, FontStyle.Bold);
+            tabControl.ItemSize = new Size((int)(100 * scaleX), (int)(30 * scaleY));
 
-            // Appliquer le scaling sur tous les onglets
+            // Mise à l'échelle pour chaque onglet
             ScaleMedicinesTab(scaleX, scaleY, scale);
             ScalePrescriptionsTab(scaleX, scaleY, scale);
             ScalePatientsTab(scaleX, scaleY, scale);
@@ -1258,247 +1121,324 @@
 
         private void ScaleMedicinesTab(float scaleX, float scaleY, float scale)
         {
-            panelMedicineDetails.Location = new Point((int)(20 * scaleX), (int)(20 * scaleY));
-            panelMedicineDetails.Size = new Size((int)(500 * scaleX), (int)(550 * scaleY));
+            // Panel Medicine Details
+            panelMedicineDetails.Location = new Point((int)(10 * scaleX), (int)(12 * scaleY));
+            panelMedicineDetails.Size = new Size((int)(450 * scaleX), (int)(474 * scaleY));
 
-            // Scaling des contrôles dans le panel
-            labelMedicine.Font = new Font("Segoe UI", 18F * scale, FontStyle.Bold);
-            labelMedicine.Location = new Point((int)(20 * scaleX), (int)(20 * scaleY));
+            // Éléments dans le panel
+            labelMedicine.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelMedicine.Location = new Point((int)(180 * scaleX), (int)(19 * scaleY));
 
-            labelMedicineDosage.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-            labelMedicineDosage.Location = new Point((int)(25 * scaleX), (int)(70 * scaleY));
+            labelMedicineDosage.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelMedicineDosage.Location = new Point((int)(25 * scaleX), (int)(58 * scaleY));
 
-            textBoxMedicineDosage.Font = new Font("Segoe UI", 10F * scale);
-            textBoxMedicineDosage.Location = new Point((int)(25 * scaleX), (int)(95 * scaleY));
-            textBoxMedicineDosage.Size = new Size((int)(200 * scaleX), (int)(27 * scaleY));
+            textBoxMedicineDosage.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxMedicineDosage.Location = new Point((int)(25 * scaleX), (int)(81 * scaleY));
+            textBoxMedicineDosage.Size = new Size((int)(125 * scaleX), (int)(27 * scaleY));
 
-            labelMedicineDescription.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
+            labelMedicineDescription.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
             labelMedicineDescription.Location = new Point((int)(25 * scaleX), (int)(140 * scaleY));
 
-            textBoxMedicineDescription.Font = new Font("Segoe UI", 10F * scale);
-            textBoxMedicineDescription.Location = new Point((int)(25 * scaleX), (int)(165 * scaleY));
-            textBoxMedicineDescription.Size = new Size((int)(450 * scaleX), (int)(100 * scaleY));
+            textBoxMedicineDescription.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxMedicineDescription.Location = new Point((int)(25 * scaleX), (int)(178 * scaleY));
+            textBoxMedicineDescription.Size = new Size((int)(369 * scaleX), (int)(103 * scaleY));
 
-            labelMedicineMolecule.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-            labelMedicineMolecule.Location = new Point((int)(25 * scaleX), (int)(285 * scaleY));
+            labelMedicineMolecule.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelMedicineMolecule.Location = new Point((int)(25 * scaleX), (int)(311 * scaleY));
 
-            textBoxMedicineMolecule.Font = new Font("Segoe UI", 10F * scale);
-            textBoxMedicineMolecule.Location = new Point((int)(25 * scaleX), (int)(310 * scaleY));
-            textBoxMedicineMolecule.Size = new Size((int)(300 * scaleX), (int)(27 * scaleY));
+            textBoxMedicineMolecule.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxMedicineMolecule.Location = new Point((int)(25 * scaleX), (int)(334 * scaleY));
+            textBoxMedicineMolecule.Size = new Size((int)(252 * scaleX), (int)(27 * scaleY));
 
-            labelMedicineName.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-            labelMedicineName.Location = new Point((int)(25 * scaleX), (int)(355 * scaleY));
+            labelMedicineName.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelMedicineName.Location = new Point((int)(25 * scaleX), (int)(391 * scaleY));
 
-            textBoxMedicineName.Font = new Font("Segoe UI", 10F * scale);
-            textBoxMedicineName.Location = new Point((int)(25 * scaleX), (int)(380 * scaleY));
-            textBoxMedicineName.Size = new Size((int)(300 * scaleX), (int)(27 * scaleY));
+            textBoxMedicineName.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxMedicineName.Location = new Point((int)(25 * scaleX), (int)(414 * scaleY));
+            textBoxMedicineName.Size = new Size((int)(252 * scaleX), (int)(27 * scaleY));
 
-            listMedicines.Location = new Point((int)(550 * scaleX), (int)(20 * scaleY));
-            listMedicines.Size = new Size((int)(600 * scaleX), (int)(480 * scaleY));
-            listMedicines.Font = new Font("Segoe UI", 10F * scale);
+            // Liste et boutons
+            listMedicines.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            listMedicines.Location = new Point((int)(480 * scaleX), (int)(12 * scaleY));
+            listMedicines.Size = new Size((int)(300 * scaleX), (int)(384 * scaleY));
 
-            ScaleButton(btnAddMedicine, 550, 520, 100, 40, scaleX, scaleY, scale);
-            ScaleButton(btnEditMedicine, 660, 520, 100, 40, scaleX, scaleY, scale);
-            ScaleButton(btnDeleteMedicine, 770, 520, 100, 40, scaleX, scaleY, scale);
-            ScaleButton(buttonMedicineRegister, 30, 590, 130, 40, scaleX, scaleY, scale);
-            ScaleButton(buttonMedicineModify, 30, 590, 130, 40, scaleX, scaleY, scale);
-            ScaleButton(buttonMedicineCancel, 170, 590, 130, 40, scaleX, scaleY, scale);
+            btnAddMedicine.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnAddMedicine.Location = new Point((int)(480 * scaleX), (int)(425 * scaleY));
+            btnAddMedicine.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            btnEditMedicine.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnEditMedicine.Location = new Point((int)(560 * scaleX), (int)(425 * scaleY));
+            btnEditMedicine.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            btnDeleteMedicine.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnDeleteMedicine.Location = new Point((int)(640 * scaleX), (int)(425 * scaleY));
+            btnDeleteMedicine.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            buttonMedicineRegister.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonMedicineRegister.Location = new Point((int)(480 * scaleX), (int)(457 * scaleY));
+            buttonMedicineRegister.Size = new Size((int)(119 * scaleX), (int)(29 * scaleY));
+
+            buttonMedicineModify.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonMedicineModify.Location = new Point((int)(480 * scaleX), (int)(457 * scaleY));
+            buttonMedicineModify.Size = new Size((int)(119 * scaleX), (int)(29 * scaleY));
+
+            buttonMedicineCancel.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonMedicineCancel.Location = new Point((int)(605 * scaleX), (int)(457 * scaleY));
+            buttonMedicineCancel.Size = new Size((int)(110 * scaleX), (int)(29 * scaleY));
         }
 
         private void ScalePrescriptionsTab(float scaleX, float scaleY, float scale)
         {
-            panelPrescriptionDetails.Location = new Point((int)(20 * scaleX), (int)(20 * scaleY));
-            panelPrescriptionDetails.Size = new Size((int)(500 * scaleX), (int)(550 * scaleY));
+            // Panel Prescription Details
+            panelPrescriptionDetails.Location = new Point((int)(10 * scaleX), (int)(12 * scaleY));
+            panelPrescriptionDetails.Size = new Size((int)(450 * scaleX), (int)(474 * scaleY));
 
-            // Scaling des contrôles dans le panel
-            labelPrescription.Font = new Font("Segoe UI", 18F * scale, FontStyle.Bold);
-            labelPrescription.Location = new Point((int)(20 * scaleX), (int)(20 * scaleY));
+            // Éléments dans le panel
+            labelPrescription.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPrescription.Location = new Point((int)(180 * scaleX), (int)(14 * scaleY));
 
-            labelPrescriptionMedicines.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-            labelPrescriptionMedicines.Location = new Point((int)(25 * scaleX), (int)(70 * scaleY));
+            labelPrescriptionMedicines.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPrescriptionMedicines.Location = new Point((int)(27 * scaleX), (int)(46 * scaleY));
 
-            dataPrescriptionMedicines.Font = new Font("Segoe UI", 9F * scale);
-            dataPrescriptionMedicines.Location = new Point((int)(25 * scaleX), (int)(95 * scaleY));
-            dataPrescriptionMedicines.Size = new Size((int)(450 * scaleX), (int)(150 * scaleY));
+            dataPrescriptionMedicines.Location = new Point((int)(27 * scaleX), (int)(68 * scaleY));
+            dataPrescriptionMedicines.Size = new Size((int)(400 * scaleX), (int)(157 * scaleY));
+
             dataPrescriptionMedicines.ColumnHeadersHeight = (int)(30 * scaleY);
             dataPrescriptionMedicines.RowTemplate.Height = (int)(25 * scaleY);
-            dataPrescriptionMedicines.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 9F * scale, FontStyle.Bold);
-            dataPrescriptionMedicines.DefaultCellStyle.Font = new Font("Segoe UI", 9F * scale);
+            dataPrescriptionMedicines.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
 
-            comboBoxPrescriptionMedicine.Font = new Font("Segoe UI", 10F * scale);
-            comboBoxPrescriptionMedicine.Location = new Point((int)(25 * scaleX), (int)(255 * scaleY));
-            comboBoxPrescriptionMedicine.Size = new Size((int)(300 * scaleX), (int)(28 * scaleY));
+            dataPrescriptionMedicines.ColumnHeadersHeight = (int)(60 * scaleY);
+            dataPrescriptionMedicines.RowTemplate.Height = (int)(50 * scaleY);
+            foreach (DataGridViewColumn col in dataPrescriptionMedicines.Columns)
+            {
+                col.Width = (int)(col.Width * scaleX);
+            }
 
-            labelPrescriptionValidity.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-            labelPrescriptionValidity.Location = new Point((int)(25 * scaleX), (int)(295 * scaleY));
+            comboBoxPrescriptionMedicine.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            comboBoxPrescriptionMedicine.Location = new Point((int)(27 * scaleX), (int)(231 * scaleY));
+            comboBoxPrescriptionMedicine.Size = new Size((int)(250 * scaleX), (int)(28 * scaleY));
 
-            textBoxPrescriptionValidity.Font = new Font("Segoe UI", 10F * scale);
-            textBoxPrescriptionValidity.Location = new Point((int)(25 * scaleX), (int)(320 * scaleY));
-            textBoxPrescriptionValidity.Size = new Size((int)(250 * scaleX), (int)(27 * scaleY));
+            labelPrescriptionValidity.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPrescriptionValidity.Location = new Point((int)(27 * scaleX), (int)(262 * scaleY));
 
-            dateTimePickerPrescriptionValidity.Font = new Font("Segoe UI", 10F * scale);
-            dateTimePickerPrescriptionValidity.Location = new Point((int)(25 * scaleX), (int)(320 * scaleY));
+            textBoxPrescriptionValidity.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxPrescriptionValidity.Location = new Point((int)(27 * scaleX), (int)(285 * scaleY));
+            textBoxPrescriptionValidity.Size = new Size((int)(211 * scaleX), (int)(27 * scaleY));
+
+            dateTimePickerPrescriptionValidity.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            dateTimePickerPrescriptionValidity.Location = new Point((int)(27 * scaleX), (int)(285 * scaleY));
             dateTimePickerPrescriptionValidity.Size = new Size((int)(250 * scaleX), (int)(27 * scaleY));
 
-            labelPrescriptionDoctor.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-            labelPrescriptionDoctor.Location = new Point((int)(25 * scaleX), (int)(360 * scaleY));
+            labelPrescriptionDoctor.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPrescriptionDoctor.Location = new Point((int)(27 * scaleX), (int)(333 * scaleY));
 
-            textBoxPrescriptionDoctor.Font = new Font("Segoe UI", 10F * scale);
-            textBoxPrescriptionDoctor.Location = new Point((int)(25 * scaleX), (int)(385 * scaleY));
-            textBoxPrescriptionDoctor.Size = new Size((int)(250 * scaleX), (int)(27 * scaleY));
+            textBoxPrescriptionDoctor.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxPrescriptionDoctor.Location = new Point((int)(27 * scaleX), (int)(356 * scaleY));
+            textBoxPrescriptionDoctor.Size = new Size((int)(211 * scaleX), (int)(27 * scaleY));
 
-            labelPrescriptionPatient.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-            labelPrescriptionPatient.Location = new Point((int)(25 * scaleX), (int)(425 * scaleY));
+            labelPrescriptionPatient.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPrescriptionPatient.Location = new Point((int)(27 * scaleX), (int)(407 * scaleY));
 
-            textBoxPrescriptionPatient.Font = new Font("Segoe UI", 10F * scale);
-            textBoxPrescriptionPatient.Location = new Point((int)(25 * scaleX), (int)(450 * scaleY));
-            textBoxPrescriptionPatient.Size = new Size((int)(250 * scaleX), (int)(27 * scaleY));
+            textBoxPrescriptionPatient.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxPrescriptionPatient.Location = new Point((int)(27 * scaleX), (int)(430 * scaleY));
+            textBoxPrescriptionPatient.Size = new Size((int)(211 * scaleX), (int)(27 * scaleY));
 
-            comboBoxPrescriptionPatient.Font = new Font("Segoe UI", 10F * scale);
-            comboBoxPrescriptionPatient.Location = new Point((int)(25 * scaleX), (int)(450 * scaleY));
-            comboBoxPrescriptionPatient.Size = new Size((int)(250 * scaleX), (int)(28 * scaleY));
+            comboBoxPrescriptionPatient.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            comboBoxPrescriptionPatient.Location = new Point((int)(27 * scaleX), (int)(430 * scaleY));
+            comboBoxPrescriptionPatient.Size = new Size((int)(211 * scaleX), (int)(28 * scaleY));
 
-            listPrescriptions.Location = new Point((int)(550 * scaleX), (int)(20 * scaleY));
-            listPrescriptions.Size = new Size((int)(600 * scaleX), (int)(480 * scaleY));
-            listPrescriptions.Font = new Font("Segoe UI", 10F * scale);
+            // Liste et boutons
+            listPrescriptions.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            listPrescriptions.Location = new Point((int)(480 * scaleX), (int)(12 * scaleY));
+            listPrescriptions.Size = new Size((int)(300 * scaleX), (int)(384 * scaleY));
 
-            ScaleButton(btnAddPrescription, 550, 520, 100, 40, scaleX, scaleY, scale);
-            ScaleButton(btnEditPrescription, 660, 520, 100, 40, scaleX, scaleY, scale);
-            ScaleButton(btnDeletePrescription, 770, 520, 100, 40, scaleX, scaleY, scale);
-            ScaleButton(buttonPrescriptionGenerate, 890, 520, 150, 40, scaleX, scaleY, scale);
-            ScaleButton(buttonPrescriptionRegister, 30, 590, 130, 40, scaleX, scaleY, scale);
-            ScaleButton(buttonPrescriptionModify, 30, 590, 130, 40, scaleX, scaleY, scale);
-            ScaleButton(buttonPrescriptionCancel, 170, 590, 130, 40, scaleX, scaleY, scale);
+            btnAddPrescription.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnAddPrescription.Location = new Point((int)(480 * scaleX), (int)(425 * scaleY));
+            btnAddPrescription.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            btnEditPrescription.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnEditPrescription.Location = new Point((int)(560 * scaleX), (int)(425 * scaleY));
+            btnEditPrescription.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            btnDeletePrescription.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnDeletePrescription.Location = new Point((int)(640 * scaleX), (int)(425 * scaleY));
+            btnDeletePrescription.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            buttonPrescriptionRegister.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonPrescriptionRegister.Location = new Point((int)(480 * scaleX), (int)(457 * scaleY));
+            buttonPrescriptionRegister.Size = new Size((int)(119 * scaleX), (int)(29 * scaleY));
+
+            buttonPrescriptionModify.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonPrescriptionModify.Location = new Point((int)(480 * scaleX), (int)(457 * scaleY));
+            buttonPrescriptionModify.Size = new Size((int)(119 * scaleX), (int)(29 * scaleY));
+
+            buttonPrescriptionCancel.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonPrescriptionCancel.Location = new Point((int)(605 * scaleX), (int)(457 * scaleY));
+            buttonPrescriptionCancel.Size = new Size((int)(110 * scaleX), (int)(29 * scaleY));
+
+            buttonPrescriptionGenerate.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonPrescriptionGenerate.Location = new Point((int)(480 * scaleX), (int)(492 * scaleY));
+            buttonPrescriptionGenerate.Size = new Size((int)(235 * scaleX), (int)(29 * scaleY));
         }
 
         private void ScalePatientsTab(float scaleX, float scaleY, float scale)
         {
-            panelPatientDetails.Location = new Point((int)(20 * scaleX), (int)(20 * scaleY));
-            panelPatientDetails.Size = new Size((int)(500 * scaleX), (int)(550 * scaleY));
+            // Panel Patient Details
+            panelPatientDetails.Location = new Point((int)(10 * scaleX), (int)(12 * scaleY));
+            panelPatientDetails.Size = new Size((int)(450 * scaleX), (int)(474 * scaleY));
 
-            // Scaling des contrôles dans le panel
-            labelPatient.Font = new Font("Segoe UI", 18F * scale, FontStyle.Bold);
-            labelPatient.Location = new Point((int)(20 * scaleX), (int)(20 * scaleY));
+            // Éléments dans le panel
+            labelPatient.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPatient.Location = new Point((int)(194 * scaleX), (int)(18 * scaleY));
 
-            labelPatientGender.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-            labelPatientGender.Location = new Point((int)(25 * scaleX), (int)(70 * scaleY));
+            labelPatientGender.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPatientGender.Location = new Point((int)(25 * scaleX), (int)(67 * scaleY));
 
-            textBoxPatientGender.Font = new Font("Segoe UI", 10F * scale);
-            textBoxPatientGender.Location = new Point((int)(25 * scaleX), (int)(95 * scaleY));
-            textBoxPatientGender.Size = new Size((int)(200 * scaleX), (int)(27 * scaleY));
+            textBoxPatientGender.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxPatientGender.Location = new Point((int)(25 * scaleX), (int)(90 * scaleY));
+            textBoxPatientGender.Size = new Size((int)(153 * scaleX), (int)(27 * scaleY));
 
-            comboBoxPatientGender.Font = new Font("Segoe UI", 10F * scale);
-            comboBoxPatientGender.Location = new Point((int)(25 * scaleX), (int)(95 * scaleY));
-            comboBoxPatientGender.Size = new Size((int)(200 * scaleX), (int)(28 * scaleY));
+            comboBoxPatientGender.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            comboBoxPatientGender.Location = new Point((int)(27 * scaleX), (int)(90 * scaleY));
+            comboBoxPatientGender.Size = new Size((int)(151 * scaleX), (int)(28 * scaleY));
 
-            labelPatientAge.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-            labelPatientAge.Location = new Point((int)(25 * scaleX), (int)(140 * scaleY));
+            labelPatientAge.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPatientAge.Location = new Point((int)(25 * scaleX), (int)(148 * scaleY));
 
-            textBoxPatientAge.Font = new Font("Segoe UI", 10F * scale);
-            textBoxPatientAge.Location = new Point((int)(25 * scaleX), (int)(165 * scaleY));
-            textBoxPatientAge.Size = new Size((int)(150 * scaleX), (int)(27 * scaleY));
+            textBoxPatientAge.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxPatientAge.Location = new Point((int)(25 * scaleX), (int)(171 * scaleY));
+            textBoxPatientAge.Size = new Size((int)(153 * scaleX), (int)(27 * scaleY));
 
-            labelPatientDoctor.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-            labelPatientDoctor.Location = new Point((int)(25 * scaleX), (int)(210 * scaleY));
+            labelPatientDoctor.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPatientDoctor.Location = new Point((int)(25 * scaleX), (int)(223 * scaleY));
 
-            textBoxPatientDoctor.Font = new Font("Segoe UI", 10F * scale);
-            textBoxPatientDoctor.Location = new Point((int)(25 * scaleX), (int)(235 * scaleY));
-            textBoxPatientDoctor.Size = new Size((int)(250 * scaleX), (int)(27 * scaleY));
+            textBoxPatientDoctor.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxPatientDoctor.Location = new Point((int)(25 * scaleX), (int)(246 * scaleY));
+            textBoxPatientDoctor.Size = new Size((int)(153 * scaleX), (int)(27 * scaleY));
 
-            labelPatientName.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-            labelPatientName.Location = new Point((int)(25 * scaleX), (int)(280 * scaleY));
+            labelPatientName.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPatientName.Location = new Point((int)(31 * scaleX), (int)(223 * scaleY));
 
-            textBoxPatientName.Font = new Font("Segoe UI", 10F * scale);
-            textBoxPatientName.Location = new Point((int)(25 * scaleX), (int)(305 * scaleY));
-            textBoxPatientName.Size = new Size((int)(250 * scaleX), (int)(27 * scaleY));
+            textBoxPatientName.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxPatientName.Location = new Point((int)(27 * scaleX), (int)(246 * scaleY));
+            textBoxPatientName.Size = new Size((int)(175 * scaleX), (int)(27 * scaleY));
 
-            labelPatientFirstname.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-            labelPatientFirstname.Location = new Point((int)(25 * scaleX), (int)(350 * scaleY));
+            labelPatientFirstname.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelPatientFirstname.Location = new Point((int)(31 * scaleX), (int)(315 * scaleY));
 
-            textBoxPatientFirstname.Font = new Font("Segoe UI", 10F * scale);
-            textBoxPatientFirstname.Location = new Point((int)(25 * scaleX), (int)(375 * scaleY));
-            textBoxPatientFirstname.Size = new Size((int)(250 * scaleX), (int)(27 * scaleY));
+            textBoxPatientFirstname.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxPatientFirstname.Location = new Point((int)(27 * scaleX), (int)(338 * scaleY));
+            textBoxPatientFirstname.Size = new Size((int)(175 * scaleX), (int)(27 * scaleY));
 
-            listPatients.Location = new Point((int)(550 * scaleX), (int)(20 * scaleY));
-            listPatients.Size = new Size((int)(600 * scaleX), (int)(480 * scaleY));
-            listPatients.Font = new Font("Segoe UI", 10F * scale);
+            // Liste et boutons
+            listPatients.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            listPatients.Location = new Point((int)(480 * scaleX), (int)(12 * scaleY));
+            listPatients.Size = new Size((int)(300 * scaleX), (int)(384 * scaleY));
 
-            ScaleButton(btnAddPatient, 550, 520, 100, 40, scaleX, scaleY, scale);
-            ScaleButton(btnEditPatient, 660, 520, 100, 40, scaleX, scaleY, scale);
-            ScaleButton(btnDeletePatient, 770, 520, 100, 40, scaleX, scaleY, scale);
-            ScaleButton(buttonPatientRegister, 30, 590, 130, 40, scaleX, scaleY, scale);
-            ScaleButton(buttonPatientModify, 30, 590, 130, 40, scaleX, scaleY, scale);
-            ScaleButton(buttonPatientCancel, 170, 590, 130, 40, scaleX, scaleY, scale);
+            btnAddPatient.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnAddPatient.Location = new Point((int)(480 * scaleX), (int)(425 * scaleY));
+            btnAddPatient.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            btnEditPatient.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnEditPatient.Location = new Point((int)(560 * scaleX), (int)(425 * scaleY));
+            btnEditPatient.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            btnDeletePatient.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            btnDeletePatient.Location = new Point((int)(640 * scaleX), (int)(425 * scaleY));
+            btnDeletePatient.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            buttonPatientRegister.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonPatientRegister.Location = new Point((int)(480 * scaleX), (int)(457 * scaleY));
+            buttonPatientRegister.Size = new Size((int)(119 * scaleX), (int)(29 * scaleY));
+
+            buttonPatientModify.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonPatientModify.Location = new Point((int)(480 * scaleX), (int)(457 * scaleY));
+            buttonPatientModify.Size = new Size((int)(119 * scaleX), (int)(29 * scaleY));
+
+            buttonPatientCancel.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonPatientCancel.Location = new Point((int)(605 * scaleX), (int)(457 * scaleY));
+            buttonPatientCancel.Size = new Size((int)(110 * scaleX), (int)(29 * scaleY));
         }
 
         private void ScaleManagerTab(float scaleX, float scaleY, float scale)
         {
-            panel1.Location = new Point((int)(20 * scaleX), (int)(20 * scaleY));
-            panel1.Size = new Size((int)(500 * scaleX), (int)(550 * scaleY));
+            // Panel User Details
+            panel1.Location = new Point((int)(11 * scaleX), (int)(27 * scaleY));
+            panel1.Size = new Size((int)(450 * scaleX), (int)(474 * scaleY));
 
-            // Scaling des contrôles dans le panel
-            labelUser.Font = new Font("Segoe UI", 18F * scale, FontStyle.Bold);
-            labelUser.Location = new Point((int)(20 * scaleX), (int)(20 * scaleY));
+            // Éléments dans le panel
+            labelUser.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelUser.Location = new Point((int)(194 * scaleX), (int)(18 * scaleY));
 
-            labelUserRole.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-            labelUserRole.Location = new Point((int)(25 * scaleX), (int)(70 * scaleY));
+            labelUserRole.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelUserRole.Location = new Point((int)(44 * scaleX), (int)(72 * scaleY));
 
-            textBoxUserRole.Font = new Font("Segoe UI", 10F * scale);
-            textBoxUserRole.Location = new Point((int)(25 * scaleX), (int)(95 * scaleY));
-            textBoxUserRole.Size = new Size((int)(200 * scaleX), (int)(27 * scaleY));
+            textBoxUserRole.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxUserRole.Location = new Point((int)(44 * scaleX), (int)(95 * scaleY));
+            textBoxUserRole.Size = new Size((int)(153 * scaleX), (int)(27 * scaleY));
 
-            comboBoxUserRole.Font = new Font("Segoe UI", 10F * scale);
-            comboBoxUserRole.Location = new Point((int)(25 * scaleX), (int)(95 * scaleY));
-            comboBoxUserRole.Size = new Size((int)(200 * scaleX), (int)(28 * scaleY));
+            comboBoxUserRole.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            comboBoxUserRole.Location = new Point((int)(44 * scaleX), (int)(94 * scaleY));
+            comboBoxUserRole.Size = new Size((int)(151 * scaleX), (int)(28 * scaleY));
 
-            labelUserEmail.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-            labelUserEmail.Location = new Point((int)(25 * scaleX), (int)(140 * scaleY));
+            labelUserEmail.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelUserEmail.Location = new Point((int)(44 * scaleX), (int)(153 * scaleY));
 
-            textBoxUserEmail.Font = new Font("Segoe UI", 10F * scale);
-            textBoxUserEmail.Location = new Point((int)(25 * scaleX), (int)(165 * scaleY));
-            textBoxUserEmail.Size = new Size((int)(300 * scaleX), (int)(27 * scaleY));
+            textBoxUserEmail.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxUserEmail.Location = new Point((int)(44 * scaleX), (int)(176 * scaleY));
+            textBoxUserEmail.Size = new Size((int)(153 * scaleX), (int)(27 * scaleY));
 
-            labelUserName.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-            labelUserName.Location = new Point((int)(25 * scaleX), (int)(210 * scaleY));
+            labelUserName.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelUserName.Location = new Point((int)(42 * scaleX), (int)(226 * scaleY));
 
-            textBoxUserName.Font = new Font("Segoe UI", 10F * scale);
-            textBoxUserName.Location = new Point((int)(25 * scaleX), (int)(235 * scaleY));
-            textBoxUserName.Size = new Size((int)(250 * scaleX), (int)(27 * scaleY));
+            textBoxUserName.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxUserName.Location = new Point((int)(44 * scaleX), (int)(249 * scaleY));
+            textBoxUserName.Size = new Size((int)(175 * scaleX), (int)(27 * scaleY));
 
-            labelUserFirstname.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-            labelUserFirstname.Location = new Point((int)(25 * scaleX), (int)(280 * scaleY));
+            labelUserFirstname.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelUserFirstname.Location = new Point((int)(46 * scaleX), (int)(304 * scaleY));
 
-            textBoxUserFirstname.Font = new Font("Segoe UI", 10F * scale);
-            textBoxUserFirstname.Location = new Point((int)(25 * scaleX), (int)(305 * scaleY));
-            textBoxUserFirstname.Size = new Size((int)(250 * scaleX), (int)(27 * scaleY));
+            textBoxUserFirstname.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxUserFirstname.Location = new Point((int)(42 * scaleX), (int)(327 * scaleY));
+            textBoxUserFirstname.Size = new Size((int)(175 * scaleX), (int)(27 * scaleY));
 
-            labelUserPassword.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-            labelUserPassword.Location = new Point((int)(25 * scaleX), (int)(350 * scaleY));
+            labelUserPassword.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelUserPassword.Location = new Point((int)(44 * scaleX), (int)(373 * scaleY));
 
-            textBoxUserPassword.Font = new Font("Segoe UI", 10F * scale);
-            textBoxUserPassword.Location = new Point((int)(25 * scaleX), (int)(375 * scaleY));
-            textBoxUserPassword.Size = new Size((int)(250 * scaleX), (int)(27 * scaleY));
+            textBoxUserPassword.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxUserPassword.Location = new Point((int)(40 * scaleX), (int)(396 * scaleY));
+            textBoxUserPassword.Size = new Size((int)(175 * scaleX), (int)(27 * scaleY));
 
-            listUsers.Location = new Point((int)(550 * scaleX), (int)(20 * scaleY));
-            listUsers.Size = new Size((int)(600 * scaleX), (int)(480 * scaleY));
-            listUsers.Font = new Font("Segoe UI", 10F * scale);
+            // Liste et boutons
+            listUsers.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            listUsers.Location = new Point((int)(481 * scaleX), (int)(27 * scaleY));
+            listUsers.Size = new Size((int)(300 * scaleX), (int)(384 * scaleY));
 
-            ScaleButton(buttonUserAdd, 550, 520, 100, 40, scaleX, scaleY, scale);
-            ScaleButton(buttonUserEdit, 660, 520, 100, 40, scaleX, scaleY, scale);
-            ScaleButton(buttonUserDelete, 770, 520, 100, 40, scaleX, scaleY, scale);
-            ScaleButton(buttonUserRegister, 30, 590, 130, 40, scaleX, scaleY, scale);
-            ScaleButton(buttonUserModify, 30, 590, 130, 40, scaleX, scaleY, scale);
-            ScaleButton(buttonUserCancel, 170, 590, 130, 40, scaleX, scaleY, scale);
+            buttonUserAdd.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonUserAdd.Location = new Point((int)(481 * scaleX), (int)(440 * scaleY));
+            buttonUserAdd.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            buttonUserEdit.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonUserEdit.Location = new Point((int)(561 * scaleX), (int)(440 * scaleY));
+            buttonUserEdit.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            buttonUserDelete.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonUserDelete.Location = new Point((int)(641 * scaleX), (int)(440 * scaleY));
+            buttonUserDelete.Size = new Size((int)(75 * scaleX), (int)(29 * scaleY));
+
+            buttonUserRegister.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonUserRegister.Location = new Point((int)(481 * scaleX), (int)(472 * scaleY));
+            buttonUserRegister.Size = new Size((int)(119 * scaleX), (int)(29 * scaleY));
+
+            buttonUserModify.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonUserModify.Location = new Point((int)(481 * scaleX), (int)(472 * scaleY));
+            buttonUserModify.Size = new Size((int)(119 * scaleX), (int)(29 * scaleY));
+
+            buttonUserCancel.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            buttonUserCancel.Location = new Point((int)(606 * scaleX), (int)(472 * scaleY));
+            buttonUserCancel.Size = new Size((int)(110 * scaleX), (int)(29 * scaleY));
         }
 
-        private void ScaleButton(Button btn, int x, int y, int w, int h, float scaleX, float scaleY, float scale)
-        {
-            btn.Location = new Point((int)(x * scaleX), (int)(y * scaleY));
-            btn.Size = new Size((int)(w * scaleX), (int)(h * scaleY));
-            btn.Font = new Font("Segoe UI Semibold", 10F * scale, FontStyle.Bold);
-        }
-
-        // Déclaration des autres contrôles
         private Label labelMedicine;
         private Label labelMedicineMolecule;
         private Label labelMedicineDescription;
