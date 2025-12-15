@@ -1207,12 +1207,7 @@
             dataPrescriptionMedicines.RowTemplate.Height = (int)(25 * scaleY);
             dataPrescriptionMedicines.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
 
-            dataPrescriptionMedicines.ColumnHeadersHeight = (int)(60 * scaleY);
-            dataPrescriptionMedicines.RowTemplate.Height = (int)(50 * scaleY);
-            foreach (DataGridViewColumn col in dataPrescriptionMedicines.Columns)
-            {
-                col.Width = (int)(col.Width * scaleX);
-            }
+           
 
             comboBoxPrescriptionMedicine.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
             comboBoxPrescriptionMedicine.Location = new Point((int)(27 * scaleX), (int)(231 * scaleY));

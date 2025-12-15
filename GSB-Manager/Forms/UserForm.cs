@@ -922,6 +922,7 @@ namespace GSB_Manager.Forms
         {
             buttonUserAdd.Visible = true;
             buttonUserEdit.Visible = true;
+            buttonUserDelete.Visible = true;
             buttonUserModify.Visible = false;
             buttonUserCancel.Visible = false;
             buttonUserRegister.Visible = false;
