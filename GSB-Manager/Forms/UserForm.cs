@@ -28,6 +28,7 @@ namespace GSB_Manager.Forms
             {
                 tabControl.TabPages.Clear();
                 tabControl.TabPages.Add(tabPageManager);
+                tabControl.TabPages.Add(tabLog);
             }
             else
             {
@@ -141,6 +142,98 @@ namespace GSB_Manager.Forms
                 }
                 else { textBoxUserRole.Text = "Admin"; }
             }
+
+            if (_connectedUser.Role == true)
+            {
+                comboBoxLogFilter.Items.Clear();
+                comboBoxLogFilter.Items.Add("All");
+                comboBoxLogFilter.Items.Add("User ID");
+                comboBoxLogFilter.Items.Add("Date");
+                comboBoxLogFilter.Items.Add("Action type");
+                comboBoxLogFilter.Items.Add("Field");
+                comboBoxLogFilter.Items.Add("Element ID");
+
+                var logDAO = new LogDAO();
+                var logs = logDAO.GetAllLogs();
+
+                // Configurer le DataGridView
+                dataLog.Columns.Clear();
+                dataLog.AutoGenerateColumns = false;
+                dataLog.ReadOnly = true;
+
+                // Colonne Log ID
+                var colLogId = new DataGridViewTextBoxColumn();
+                colLogId.HeaderText = "Log ID";
+                colLogId.Name = "LogId";
+                colLogId.ReadOnly = true;
+                colLogId.Width = 60;
+                dataLog.Columns.Add(colLogId);
+
+                // Colonne User ID
+                var colUserId = new DataGridViewTextBoxColumn();
+                colUserId.HeaderText = "User ID";
+                colUserId.Name = "UserId";
+                colUserId.ReadOnly = true;
+                colUserId.Width = 60;
+                dataLog.Columns.Add(colUserId);
+
+                // Colonne Date
+                var colDate = new DataGridViewTextBoxColumn();
+                colDate.HeaderText = "Date";
+                colDate.Name = "Date";
+                colDate.ReadOnly = true;
+                colDate.Width = 130;
+                dataLog.Columns.Add(colDate);
+
+                // Colonne Field
+                var colField = new DataGridViewTextBoxColumn();
+                colField.HeaderText = "Field";
+                colField.Name = "Field";
+                colField.ReadOnly = true;
+                colField.Width = 80;
+                dataLog.Columns.Add(colField);
+
+                // Colonne Action Type 👈 AJOUTÉE ICI
+                var colActionType = new DataGridViewTextBoxColumn();
+                colActionType.HeaderText = "Action";
+                colActionType.Name = "ActionType";
+                colActionType.ReadOnly = true;
+                colActionType.Width = 80;
+                dataLog.Columns.Add(colActionType);
+
+                // Colonne Element ID
+                var colElementId = new DataGridViewTextBoxColumn();
+                colElementId.HeaderText = "Element ID";
+                colElementId.Name = "ElementId";
+                colElementId.ReadOnly = true;
+                colElementId.Width = 70;
+                dataLog.Columns.Add(colElementId);
+
+                // Colonne Description
+                var colDescription = new DataGridViewTextBoxColumn();
+                colDescription.HeaderText = "Description";
+                colDescription.Name = "Description";
+                colDescription.ReadOnly = true;
+                colDescription.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dataLog.Columns.Add(colDescription);
+
+                // Remplir le DataGridView avec les logs
+                if (logs != null)
+                {
+                    foreach (var log in logs)
+                    {
+                        dataLog.Rows.Add(
+                            log.log_id,
+                            log.origin_user_id,
+                            log.date.ToString("yyyy-MM-dd HH:mm:ss"),
+                            log.field,
+                            log.action_type,  // 👈 AJOUTÉ ICI
+                            log.element_id,
+                            log.description
+                        );
+                    }
+                }
+            }
         }
         private void btnAddMedicine_Click(object sender, EventArgs e)
         {
@@ -223,14 +316,14 @@ namespace GSB_Manager.Forms
 
             if (comboBoxPrescriptionPatient.SelectedIndex != null)
             {
-               
+
                 try
                 {
-                   int prescriptionId = prescriptionDAO.CreatePrescription(_connectedUser.user_id, patientId, dateTimePickerPrescriptionValidity.Value);
+                    int prescriptionId = prescriptionDAO.CreatePrescription(_connectedUser.user_id, patientId, dateTimePickerPrescriptionValidity.Value);
 
                     foreach (DataGridViewRow row in dataPrescriptionMedicines.Rows)
                     {
-                        if (!row.IsNewRow) 
+                        if (!row.IsNewRow)
                         {
                             string medicine = row.Cells["Medicine"].Value?.ToString();
                             int quantity = Convert.ToInt32(row.Cells["Quantity"].Value);
@@ -329,7 +422,8 @@ namespace GSB_Manager.Forms
                 }
             }
 
-            if (dataPrescriptionMedicines.Columns.Count == 0) {
+            if (dataPrescriptionMedicines.Columns.Count == 0)
+            {
                 var colMedicine = new DataGridViewTextBoxColumn();
                 colMedicine.HeaderText = "Medicine";
                 colMedicine.Name = "Medicine";
@@ -422,6 +516,7 @@ namespace GSB_Manager.Forms
             if (selectedMedicine != null)
             {
                 int medicineId = selectedMedicine.Medicine_id;
+                string medicineName = selectedMedicine.Name;
                 DialogResult result = MessageBox.Show(
                 "Are you sure you want to delete this item?",
                 "Confirmation",
@@ -431,7 +526,7 @@ namespace GSB_Manager.Forms
 
                 if (result == DialogResult.Yes)
                 {
-                    if (medicineDAO.DeleteMedicine(medicineId))
+                    if (medicineDAO.DeleteMedicine(medicineId, _connectedUser.user_id, medicineName))
                     {
                         MessageBox.Show("Medicine deleted successfully.");
                         Initialise_Listbox();
@@ -461,6 +556,7 @@ namespace GSB_Manager.Forms
             if (selectedPrescription != null)
             {
                 int prescriptionId = selectedPrescription.Prescription_id;
+                string prescriptionInfo = selectedPrescription.Full_line;
                 DialogResult result = MessageBox.Show(
                 "Are you sure you want to delete this item?",
                 "Confirmation",
@@ -470,7 +566,7 @@ namespace GSB_Manager.Forms
 
                 if (result == DialogResult.Yes)
                 {
-                    if (prescriptionDAO.DeletePrescription(prescriptionId))
+                    if (prescriptionDAO.DeletePrescription(prescriptionId, _connectedUser.user_id, prescriptionInfo))
                     {
                         MessageBox.Show("Prescription deleted successfully.");
                         Initialise_Listbox();
@@ -500,6 +596,7 @@ namespace GSB_Manager.Forms
             if (selectedPatient != null)
             {
                 int patientId = selectedPatient.patient_id;
+                string patientName = selectedPatient.Full_name;
                 DialogResult result = MessageBox.Show(
                 "Are you sure you want to delete this item?",
                 "Confirmation",
@@ -509,7 +606,7 @@ namespace GSB_Manager.Forms
 
                 if (result == DialogResult.Yes)
                 {
-                    if (patientDAO.DeletePatient(patientId))
+                    if (patientDAO.DeletePatient(patientId, _connectedUser.user_id, patientName))
                     {
                         MessageBox.Show("Patient deleted successfully.");
                         Initialise_Listbox();
@@ -598,7 +695,7 @@ namespace GSB_Manager.Forms
 
             comboBoxPrescriptionPatient.Visible = true;
 
-           
+
 
             string fullName = textBoxPrescriptionPatient.Text.Trim();
 
@@ -635,7 +732,7 @@ namespace GSB_Manager.Forms
             var prescriptionDAO = new PrescriptionDAO();
             var medicineDAO = new MedicineDAO();
             Prescription selectedPrescription = listPrescriptions.SelectedItem as Prescription;
-            
+
 
             List<Medicine> medicines = medicineDAO.GetAllMedicine();
             medicines.ForEach(m => comboBoxPrescriptionMedicine.Items.Add(m.Name));
@@ -670,7 +767,7 @@ namespace GSB_Manager.Forms
 
                         foreach (DataGridViewRow row in dataPrescriptionMedicines.Rows)
                         {
-                            if (!row.IsNewRow) 
+                            if (!row.IsNewRow)
                             {
                                 string medicine = row.Cells["Medicine"].Value?.ToString();
                                 int quantity = Convert.ToInt32(row.Cells["Quantity"].Value);
@@ -1027,7 +1124,7 @@ namespace GSB_Manager.Forms
                 labelPatient.Text = selectedPatient.Firstname + " " + selectedPatient.Name;
             }
         }
-        
+
 
         private void buttonPrescriptionGenerate_Click(object sender, EventArgs e)
         {
@@ -1036,7 +1133,7 @@ namespace GSB_Manager.Forms
             var prescriptionDAO = new PrescriptionDAO();
             List<(Medicine med, int quantity)> meds = prescriptionDAO.GetPairsMedicineQuantity(selectedPrescription.Prescription_id);
 
-            pdf.ExportPrescription(selectedPrescription, textBoxPrescriptionPatient.Text, textBoxPrescriptionDoctor.Text, meds);
+            pdf.ExportPrescription(selectedPrescription, textBoxPrescriptionPatient.Text, textBoxPrescriptionDoctor.Text, meds, _connectedUser.user_id);
         }
 
         private void buttonUserDelete_Click(object sender, EventArgs e)
@@ -1074,6 +1171,170 @@ namespace GSB_Manager.Forms
             else
             {
                 MessageBox.Show("Error, user not found !");
+            }
+        }
+
+        private void comboBoxLogFilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Déclencher le filtrage quand on change de critère
+            FilterLogs();
+        }
+
+        private void textBoxLogFilter_TextChanged(object sender, EventArgs e)
+        {
+            // Déclencher le filtrage à chaque modification du texte
+            FilterLogs();
+        }
+
+        private void FilterLogs()
+        {
+            if (_connectedUser.Role != true)
+                return;
+
+            var logDAO = new LogDAO();
+            List<Log> logs = logDAO.GetAllLogs();
+
+            if (logs == null)
+                return;
+
+            // Récupérer le critère de filtrage sélectionné
+            string selectedFilter = comboBoxLogFilter.SelectedItem?.ToString();
+            string filterValue = textBoxLogFilter.Text.Trim();
+
+            // Filtrer les logs selon le critère et la valeur
+            List<Log> filteredLogs = logs;
+
+            if (!string.IsNullOrEmpty(selectedFilter) && !string.IsNullOrEmpty(filterValue) && selectedFilter != "All")
+            {
+                switch (selectedFilter)
+                {
+                    case "User ID":
+                        if (int.TryParse(filterValue, out int userId))
+                        {
+                            filteredLogs = logs.Where(l => l.origin_user_id == userId).ToList();
+                        }
+                        break;
+
+                    case "Date":
+                        // Filtrer par date (recherche partielle - année, mois, jour)
+                        filteredLogs = logs.Where(l => l.date.ToString("yyyy-MM-dd HH:mm:ss").Contains(filterValue)).ToList();
+                        break;
+
+                    case "Action type":
+                        // Extraire le type d'action de la description (ex: "created", "modified", "deleted")
+                        filteredLogs = logs.Where(l =>
+                            l.description.ToLower().Contains(filterValue.ToLower())
+                        ).ToList();
+                        break;
+
+                    case "Field":
+                        // Filtrer par le champ (Medicine, Patient, Prescription, User)
+                        filteredLogs = logs.Where(l =>
+                            l.field.ToLower().Contains(filterValue.ToLower())
+                        ).ToList();
+                        break;
+
+                    case "Element ID":
+                        if (int.TryParse(filterValue, out int elementId))
+                        {
+                            filteredLogs = logs.Where(l => l.element_id == elementId).ToList();
+                        }
+                        break;
+                }
+            }
+
+            // Réinitialiser et remplir le DataGridView avec les logs filtrés
+            RefreshLogDataGridView(filteredLogs);
+        }
+
+        private void RefreshLogDataGridView(List<Log> logs)
+        {
+            // Vider les lignes mais garder les colonnes
+            dataLog.Rows.Clear();
+
+            // Si les colonnes n'existent pas encore, les créer
+            if (dataLog.Columns.Count == 0)
+            {
+                dataLog.AutoGenerateColumns = false;
+                dataLog.ReadOnly = true;
+
+                // Style alterné pour les lignes
+                dataLog.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
+                dataLog.DefaultCellStyle.SelectionBackColor = Color.DarkBlue;
+                dataLog.DefaultCellStyle.SelectionForeColor = Color.White;
+
+                // Colonne Log ID
+                var colLogId = new DataGridViewTextBoxColumn();
+                colLogId.HeaderText = "Log ID";
+                colLogId.Name = "LogId";
+                colLogId.ReadOnly = true;
+                colLogId.Width = 60;
+                dataLog.Columns.Add(colLogId);
+
+                // Colonne User ID
+                var colUserId = new DataGridViewTextBoxColumn();
+                colUserId.HeaderText = "User ID";
+                colUserId.Name = "UserId";
+                colUserId.ReadOnly = true;
+                colUserId.Width = 60;
+                dataLog.Columns.Add(colUserId);
+
+                // Colonne Date
+                var colDate = new DataGridViewTextBoxColumn();
+                colDate.HeaderText = "Date";
+                colDate.Name = "Date";
+                colDate.ReadOnly = true;
+                colDate.Width = 130;
+                dataLog.Columns.Add(colDate);
+
+                // Colonne Field
+                var colField = new DataGridViewTextBoxColumn();
+                colField.HeaderText = "Field";
+                colField.Name = "Field";
+                colField.ReadOnly = true;
+                colField.Width = 80;
+                dataLog.Columns.Add(colField);
+
+                // Colonne Action Type 👈 AJOUTÉE ICI
+                var colActionType = new DataGridViewTextBoxColumn();
+                colActionType.HeaderText = "Action";
+                colActionType.Name = "ActionType";
+                colActionType.ReadOnly = true;
+                colActionType.Width = 80;
+                dataLog.Columns.Add(colActionType);
+
+                // Colonne Element ID
+                var colElementId = new DataGridViewTextBoxColumn();
+                colElementId.HeaderText = "Element ID";
+                colElementId.Name = "ElementId";
+                colElementId.ReadOnly = true;
+                colElementId.Width = 70;
+                dataLog.Columns.Add(colElementId);
+
+                // Colonne Description
+                var colDescription = new DataGridViewTextBoxColumn();
+                colDescription.HeaderText = "Description";
+                colDescription.Name = "Description";
+                colDescription.ReadOnly = true;
+                colDescription.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dataLog.Columns.Add(colDescription);
+            }
+
+            // Remplir le DataGridView avec les logs
+            if (logs != null && logs.Count > 0)
+            {
+                foreach (var log in logs)
+                {
+                    dataLog.Rows.Add(
+                        log.log_id,
+                        log.origin_user_id,
+                        log.date.ToString("yyyy-MM-dd HH:mm:ss"),
+                        log.field,
+                        log.action_type,  // 👈 AJOUTÉ ICI
+                        log.element_id,
+                        log.description
+                    );
+                }
             }
         }
     }

@@ -13,6 +13,7 @@ using iText.Kernel.Colors;
 using iText.Kernel.Font;
 using iText.IO.Font.Constants;
 using GSB_Manager.Models;
+using GSB_Manager.DAO;
 
 //
 // ** This PDF Exporter code was created by RyukSylux : https://github.com/RyukSylux **
@@ -41,7 +42,8 @@ namespace GSB_Manager.Utils
             Prescription presc,
             string patientFullname,
             string doctorFullname,
-            List<(Medicine med, int quantity)> meds)
+            List<(Medicine med, int quantity)> meds,
+            int user_id)
         {
             try
             {
@@ -106,6 +108,29 @@ namespace GSB_Manager.Utils
                     doc.Add(new Paragraph("\n\nSignature du médecin :\n\n"));
 
                     doc.Close();
+                }
+
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
+                {
+                    FileName = filePath,
+                    UseShellExecute = true
+                });
+
+                try
+                {
+                    var logDAO = new LogDAO();
+                    int medicineCount = meds?.Count ?? 0;
+                    logDAO.CreateLog(
+                        origin_user_id: user_id,
+                        field: "Prescription",
+                        element_id: presc.Prescription_id,
+                        description: $"Prescription PDF generated: ID : {presc.Prescription_id}, {medicineCount} medicine(s), File: {Path.GetFileName(filePath)}",
+                        action_type: "EXPORT_PDF"
+                    );
+                }
+                catch (Exception logEx)
+                {
+                    Console.WriteLine($"Erreur lors de la création du log: {logEx.Message}");
                 }
 
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()

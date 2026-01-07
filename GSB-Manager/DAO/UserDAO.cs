@@ -17,6 +17,7 @@ namespace GSB_Manager.DAO
         /// Instance de la classe <see cref="Database"/> permettant d'obtenir une connexion MySQL.
         /// </summary>
         private readonly Database db = new Database();
+        private LogDAO logDAO = new LogDAO();
 
         /// <summary>
         /// Authentifie un utilisateur à partir de son email et mot de passe.
@@ -33,10 +34,8 @@ namespace GSB_Manager.DAO
             string name = string.Empty;
             string firstName = string.Empty;
             bool role = false;
-
             var connection = db.GetConnection();
             connection.Open();
-
             try
             {
                 MySqlCommand myCommand = new MySqlCommand();
@@ -44,7 +43,6 @@ namespace GSB_Manager.DAO
                 myCommand.CommandText = @"SELECT * FROM Users WHERE email = @email AND password = SHA2(@password, 256);";
                 myCommand.Parameters.AddWithValue("@email", email);
                 myCommand.Parameters.AddWithValue("@password", password);
-
                 using var myReader = myCommand.ExecuteReader();
                 while (myReader.Read())
                 {
@@ -52,6 +50,26 @@ namespace GSB_Manager.DAO
                     name = myReader.GetString("name");
                     firstName = myReader.GetString("firstname");
                     role = myReader.GetBoolean("role");
+                }
+
+                connection.Close();
+
+                if (id != 0)
+                {
+                    try
+                    {
+                        logDAO.CreateLog(
+                            origin_user_id: id,
+                            field: "User",
+                            element_id: id,
+                            description: $"User {name} {firstName} logged in successfully",
+                            action_type: "Login"
+                        );
+                    }
+                    catch (Exception logEx)
+                    {
+                        Console.WriteLine($"Erreur lors de la création du log: {logEx.Message}");
+                    }
                 }
 
                 return new User(id, name, firstName, role);
@@ -63,7 +81,10 @@ namespace GSB_Manager.DAO
             }
             finally
             {
-                connection.Close();
+                if (connection.State == System.Data.ConnectionState.Open)
+                {
+                    connection.Close();
+                }
             }
         }
 

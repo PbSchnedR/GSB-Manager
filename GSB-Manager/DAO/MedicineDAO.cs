@@ -20,6 +20,7 @@ namespace GSB_Manager.DAO
         /// Database connection helper.
         /// </summary>
         private readonly Database db = new Database();
+        private LogDAO logDAO = new LogDAO();
         /// <summary>
         /// Retrieves all medicines from the database.
         /// </summary>
@@ -148,7 +149,9 @@ namespace GSB_Manager.DAO
                     // create a MySQL command and set the SQL statement with parameters
                     MySqlCommand myCommand = new MySqlCommand();
                     myCommand.Connection = connection;
-                    myCommand.CommandText = @"INSERT INTO Medicine (user_id, name, description, molecule, dosage) VALUES (@user_id, @name, @description, @molecule, @dosage);";
+                    myCommand.CommandText = @"INSERT INTO Medicine (user_id, name, description, molecule, dosage) 
+                                     VALUES (@user_id, @name, @description, @molecule, @dosage);
+                                     SELECT LAST_INSERT_ID() as medicine_id;";
                     myCommand.Parameters.AddWithValue("@user_id", user_id);
                     myCommand.Parameters.AddWithValue("@name", name);
                     myCommand.Parameters.AddWithValue("@description", description);
@@ -158,25 +161,40 @@ namespace GSB_Manager.DAO
                     // execute the command and read the results
                     using var myReader = myCommand.ExecuteReader();
                     {
-                        while (myReader.Read())
+                        if (myReader.Read())
                         {
                             id = myReader.GetInt32("medicine_id");
-                            user_id = myReader.GetInt32("user_id");
-                            name = myReader.GetString("name");
-                            description = myReader.GetString("description");
-                            molecule = myReader.GetString("molecule");
-                            dosage = myReader.GetInt32("dosage");
                         }
                     }
+
                     Medicine medicine = new Medicine(id, user_id, dosage, name, description, molecule);
-
-
                     connection.Close();
+
+                    // Créer un log pour l'ajout du médicament (sans bloquer si ça échoue)
+                    if (id > 0)
+                    {
+                        try
+                        {
+                            logDAO.CreateLog(
+                                origin_user_id: user_id,
+                                field: "Medicine",
+                                element_id: id,
+                                description: $"Medicine created: {name} - {molecule} {dosage}mg",
+                                action_type: "CREATE"
+                            );
+                        }
+                        catch (Exception logEx)
+                        {
+                            Console.WriteLine($"Erreur lors de la création du log: {logEx.Message}");
+                        }
+                    }
+
                     return medicine;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.ToString());
+                    connection.Close();
                     return null;
                 }
             }
@@ -242,15 +260,14 @@ namespace GSB_Manager.DAO
                     MySqlCommand myCommand = new MySqlCommand();
                     myCommand.Connection = connection;
                     myCommand.CommandText = @"
-                UPDATE Medicine 
-                SET user_id = @user_id, 
-                    name = @name, 
-                    description = @description, 
-                    molecule = @molecule, 
-                    dosage = @dosage
-                WHERE medicine_id = @medicine_id;
-            ";
-
+        UPDATE Medicine 
+        SET user_id = @user_id, 
+            name = @name, 
+            description = @description, 
+            molecule = @molecule, 
+            dosage = @dosage
+        WHERE medicine_id = @medicine_id;
+    ";
                     myCommand.Parameters.AddWithValue("@medicine_id", medicine_id);
                     myCommand.Parameters.AddWithValue("@user_id", user_id);
                     myCommand.Parameters.AddWithValue("@name", name);
@@ -259,6 +276,28 @@ namespace GSB_Manager.DAO
                     myCommand.Parameters.AddWithValue("@dosage", dosage);
 
                     int rowsAffected = myCommand.ExecuteNonQuery();
+
+                    connection.Close();
+
+                    // Créer un log pour la modification du médicament
+                    if (rowsAffected > 0)
+                    {
+                        try
+                        {
+                            logDAO.CreateLog(
+                                origin_user_id: user_id,
+                                field: "Medicine",
+                                element_id: medicine_id,
+                                description: $"Medicine modified: {name} - {molecule} {dosage}mg",
+                                action_type: "UPDATE"
+                            );
+                        }
+                        catch (Exception logEx)
+                        {
+                            Console.WriteLine($"Erreur lors de la création du log: {logEx.Message}");
+                        }
+                    }
+
                     return rowsAffected > 0;
                 }
                 catch (Exception ex)
@@ -268,7 +307,10 @@ namespace GSB_Manager.DAO
                 }
                 finally
                 {
-                    connection.Close();
+                    if (connection.State == System.Data.ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
                 }
             }
         }
@@ -277,8 +319,10 @@ namespace GSB_Manager.DAO
         /// Deletes a medicine from the database, including related records in <see cref="Appartient"/> and <see cref="Prescription"/>.
         /// </summary>
         /// <param name="medicine_id">ID of the medicine to delete.</param>
+        /// <param name="user_id">ID of the user performing the deletion.</param>
+        /// <param name="medicine_name">Name of the medicine being deleted (for logging purposes).</param>
         /// <returns>True if deletion was successful, otherwise false.</returns>
-        public bool DeleteMedicine(int medicine_id)
+        public bool DeleteMedicine(int medicine_id, int user_id, string medicine_name)
         {
             using (var connection = db.GetConnection())
             {
@@ -294,12 +338,11 @@ namespace GSB_Manager.DAO
                     MySqlCommand deleteRelatedPrescriptions = new MySqlCommand();
                     deleteRelatedPrescriptions.Connection = connection;
                     deleteRelatedPrescriptions.CommandText = @"
-                    DELETE p, a
-                    FROM Prescription p
-                    JOIN Appartient a ON a.prescription_id = p.prescription_id
-                    WHERE a.medicine_id = @medicine_id;
-
-                    ";
+            DELETE p, a
+            FROM Prescription p
+            JOIN Appartient a ON a.prescription_id = p.prescription_id
+            WHERE a.medicine_id = @medicine_id;
+            ";
                     deleteRelatedPrescriptions.Parameters.AddWithValue("@medicine_id", medicine_id);
                     deleteRelatedPrescriptions.ExecuteNonQuery();
 
@@ -309,6 +352,28 @@ namespace GSB_Manager.DAO
                     myCommand.Parameters.AddWithValue("@medicine_id", medicine_id);
 
                     int rowsAffected = myCommand.ExecuteNonQuery();
+
+                    connection.Close();
+
+                    // Créer un log pour la suppression du médicament
+                    if (rowsAffected > 0)
+                    {
+                        try
+                        {
+                            logDAO.CreateLog(
+                                origin_user_id: user_id,
+                                field: "Medicine",
+                                element_id: medicine_id,
+                                description: $"Medicine deleted: {medicine_name} (ID: {medicine_id})",
+                                action_type: "DELETE"
+                            );
+                        }
+                        catch (Exception logEx)
+                        {
+                            Console.WriteLine($"Erreur lors de la création du log: {logEx.Message}");
+                        }
+                    }
+
                     return rowsAffected > 0;
                 }
                 catch (Exception ex)
@@ -318,7 +383,10 @@ namespace GSB_Manager.DAO
                 }
                 finally
                 {
-                    connection.Close();
+                    if (connection.State == System.Data.ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
                 }
             }
         }

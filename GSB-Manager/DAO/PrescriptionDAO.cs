@@ -14,6 +14,7 @@ namespace GSB_Manager.DAO
     {
 
         private readonly Database db = new Database();
+        private LogDAO logDAO = new LogDAO();
 
         public List<Prescription> GetAllPrescription()
         {
@@ -135,26 +136,44 @@ namespace GSB_Manager.DAO
             int newId = 0;
             var connection = db.GetConnection();
             connection.Open();
-
             try
             {
                 MySqlCommand myCommand = new MySqlCommand();
                 myCommand.Connection = connection;
                 myCommand.CommandText = @"
-            INSERT INTO Prescription (user_id, patient_id,  validity)
-            VALUES (@user_id, @patient_id,  @validity);
-            SELECT LAST_INSERT_ID();
-        ";
-
+    INSERT INTO Prescription (user_id, patient_id, validity)
+    VALUES (@user_id, @patient_id, @validity);
+    SELECT LAST_INSERT_ID();
+";
                 myCommand.Parameters.AddWithValue("@user_id", user_id);
                 myCommand.Parameters.AddWithValue("@patient_id", patient_id);
                 myCommand.Parameters.AddWithValue("@validity", validity);
 
                 // ExecuteScalar récupère directement la première valeur (ici le nouvel ID)
                 object result = myCommand.ExecuteScalar();
-
                 if (result != null)
                     newId = Convert.ToInt32(result);
+
+                connection.Close();
+
+                // Créer un log pour l'ajout de la prescription
+                if (newId > 0)
+                {
+                    try
+                    {
+                        logDAO.CreateLog(
+                            origin_user_id: user_id,
+                            field: "Prescription",
+                            element_id: newId,
+                            description: $"Prescription created: ID {newId}, Patient ID {patient_id}, Validity: {validity:yyyy-MM-dd}",
+                            action_type: "CREATE"
+                        );
+                    }
+                    catch (Exception logEx)
+                    {
+                        Console.WriteLine($"Erreur lors de la création du log: {logEx.Message}");
+                    }
+                }
 
                 return newId;
             }
@@ -165,7 +184,10 @@ namespace GSB_Manager.DAO
             }
             finally
             {
-                connection.Close();
+                if (connection.State == System.Data.ConnectionState.Open)
+                {
+                    connection.Close();
+                }
             }
         }
 
@@ -256,20 +278,41 @@ namespace GSB_Manager.DAO
                     MySqlCommand myCommand = new MySqlCommand();
                     myCommand.Connection = connection;
                     myCommand.CommandText = @"
-                UPDATE Prescription
-                SET user_id = @user_id,
-                    patient_id = @patient_id,
-                    validity = @validity
-                WHERE prescription_id = @prescription_id;
-            ";
-
+        UPDATE Prescription
+        SET user_id = @user_id,
+            patient_id = @patient_id,
+            validity = @validity
+        WHERE prescription_id = @prescription_id;
+    ";
                     myCommand.Parameters.AddWithValue("@prescription_id", prescription_id);
                     myCommand.Parameters.AddWithValue("@user_id", user_id);
                     myCommand.Parameters.AddWithValue("@patient_id", patient_id);
                     myCommand.Parameters.AddWithValue("@validity", validity);
 
                     int rowsAffected = myCommand.ExecuteNonQuery();
-                    return rowsAffected > 0; // true si au moins une ligne a été mise à jour
+
+                    connection.Close();
+
+                    // Créer un log pour la modification de la prescription
+                    if (rowsAffected > 0)
+                    {
+                        try
+                        {
+                            logDAO.CreateLog(
+                                origin_user_id: user_id,
+                                field: "Prescription",
+                                element_id: prescription_id,
+                                description: $"Prescription modified: ID {prescription_id}, Patient ID {patient_id}, Validity: {validity:yyyy-MM-dd}",
+                                action_type: "UPDATE"
+                            );
+                        }
+                        catch (Exception logEx)
+                        {
+                            Console.WriteLine($"Erreur lors de la création du log: {logEx.Message}");
+                        }
+                    }
+
+                    return rowsAffected > 0;
                 }
                 catch (Exception ex)
                 {
@@ -278,12 +321,15 @@ namespace GSB_Manager.DAO
                 }
                 finally
                 {
-                    connection.Close();
+                    if (connection.State == System.Data.ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
                 }
             }
         }
 
-        public bool DeletePrescription(int prescription_id)
+        public bool DeletePrescription(int prescription_id, int user_id, string prescription_info)
         {
             using (var connection = db.GetConnection())
             {
@@ -302,6 +348,28 @@ namespace GSB_Manager.DAO
                     deletePrescription.Parameters.AddWithValue("@prescription_id", prescription_id);
 
                     int rowsAffected = deletePrescription.ExecuteNonQuery();
+
+                    connection.Close();
+
+                    // Créer un log pour la suppression de la prescription
+                    if (rowsAffected > 0)
+                    {
+                        try
+                        {
+                            logDAO.CreateLog(
+                                origin_user_id: user_id,
+                                field: "Prescription",
+                                element_id: prescription_id,
+                                description: $"Prescription deleted: {prescription_info} (ID: {prescription_id})",
+                                action_type: "DELETE"
+                            );
+                        }
+                        catch (Exception logEx)
+                        {
+                            Console.WriteLine($"Erreur lors de la création du log: {logEx.Message}");
+                        }
+                    }
+
                     return rowsAffected > 0;
                 }
                 catch (Exception ex)
@@ -311,7 +379,10 @@ namespace GSB_Manager.DAO
                 }
                 finally
                 {
-                    connection.Close();
+                    if (connection.State == System.Data.ConnectionState.Open)
+                    {
+                        connection.Close();
+                    }
                 }
             }
         }
