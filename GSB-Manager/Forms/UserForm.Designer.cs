@@ -57,6 +57,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             tabControl = new TabControl();
             tabMedicines = new TabPage();
             buttonMedicineModify = new Button();
@@ -78,6 +79,8 @@
             btnEditMedicine = new Button();
             btnDeleteMedicine = new Button();
             tabPrescriptions = new TabPage();
+            comboBoxPrescriptionFilterPatient = new ComboBox();
+            comboBoxPrescriptionFilters = new ComboBox();
             buttonPrescriptionGenerate = new Button();
             buttonPrescriptionModify = new Button();
             buttonPrescriptionCancel = new Button();
@@ -163,14 +166,14 @@
             tabControl.Controls.Add(tabPatients);
             tabControl.Controls.Add(tabPageManager);
             tabControl.Dock = DockStyle.Fill;
+            tabControl.ItemSize = new Size(100, 30);
             tabControl.Location = new Point(0, 0);
             tabControl.Margin = new Padding(3, 4, 3, 4);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
             tabControl.Size = new Size(800, 562);
-            tabControl.TabIndex = 0;
-            tabControl.ItemSize = new Size(100, 30);  // Largeur et hauteur des onglets
             tabControl.SizeMode = TabSizeMode.Fixed;
+            tabControl.TabIndex = 0;
             // 
             // tabMedicines
             // 
@@ -182,10 +185,10 @@
             tabMedicines.Controls.Add(btnAddMedicine);
             tabMedicines.Controls.Add(btnEditMedicine);
             tabMedicines.Controls.Add(btnDeleteMedicine);
-            tabMedicines.Location = new Point(4, 29);
+            tabMedicines.Location = new Point(4, 34);
             tabMedicines.Margin = new Padding(3, 4, 3, 4);
             tabMedicines.Name = "tabMedicines";
-            tabMedicines.Size = new Size(792, 529);
+            tabMedicines.Size = new Size(792, 524);
             tabMedicines.TabIndex = 0;
             tabMedicines.Text = "Medicines";
             tabMedicines.UseVisualStyleBackColor = true;
@@ -373,6 +376,8 @@
             // 
             // tabPrescriptions
             // 
+            tabPrescriptions.Controls.Add(comboBoxPrescriptionFilterPatient);
+            tabPrescriptions.Controls.Add(comboBoxPrescriptionFilters);
             tabPrescriptions.Controls.Add(buttonPrescriptionGenerate);
             tabPrescriptions.Controls.Add(buttonPrescriptionModify);
             tabPrescriptions.Controls.Add(buttonPrescriptionCancel);
@@ -382,13 +387,31 @@
             tabPrescriptions.Controls.Add(btnAddPrescription);
             tabPrescriptions.Controls.Add(btnEditPrescription);
             tabPrescriptions.Controls.Add(btnDeletePrescription);
-            tabPrescriptions.Location = new Point(4, 29);
+            tabPrescriptions.Location = new Point(4, 34);
             tabPrescriptions.Margin = new Padding(3, 4, 3, 4);
             tabPrescriptions.Name = "tabPrescriptions";
-            tabPrescriptions.Size = new Size(792, 529);
+            tabPrescriptions.Size = new Size(792, 524);
             tabPrescriptions.TabIndex = 1;
             tabPrescriptions.Text = "Prescriptions";
             tabPrescriptions.UseVisualStyleBackColor = true;
+            // 
+            // comboBoxPrescriptionFilterPatient
+            // 
+            comboBoxPrescriptionFilterPatient.FormattingEnabled = true;
+            comboBoxPrescriptionFilterPatient.Location = new Point(480, 46);
+            comboBoxPrescriptionFilterPatient.Name = "comboBoxPrescriptionFilterPatient";
+            comboBoxPrescriptionFilterPatient.Size = new Size(300, 28);
+            comboBoxPrescriptionFilterPatient.TabIndex = 11;
+            comboBoxPrescriptionFilterPatient.SelectedIndexChanged += comboBoxPrescriptionFilterPatient_SelectedIndexChanged;
+            // 
+            // comboBoxPrescriptionFilters
+            // 
+            comboBoxPrescriptionFilters.FormattingEnabled = true;
+            comboBoxPrescriptionFilters.Location = new Point(480, 12);
+            comboBoxPrescriptionFilters.Name = "comboBoxPrescriptionFilters";
+            comboBoxPrescriptionFilters.Size = new Size(300, 28);
+            comboBoxPrescriptionFilters.TabIndex = 10;
+            comboBoxPrescriptionFilters.SelectedIndexChanged += comboBoxPrescriptionFilters_SelectedIndexChanged;
             // 
             // buttonPrescriptionGenerate
             // 
@@ -457,15 +480,22 @@
             // 
             // dataPrescriptionMedicines
             // 
+            dataPrescriptionMedicines.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataPrescriptionMedicines.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dataPrescriptionMedicines.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Window;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataPrescriptionMedicines.DefaultCellStyle = dataGridViewCellStyle1;
             dataPrescriptionMedicines.Location = new Point(27, 68);
             dataPrescriptionMedicines.Name = "dataPrescriptionMedicines";
             dataPrescriptionMedicines.RowHeadersWidth = 51;
             dataPrescriptionMedicines.Size = new Size(400, 157);
             dataPrescriptionMedicines.TabIndex = 16;
-            dataPrescriptionMedicines.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataPrescriptionMedicines.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            dataPrescriptionMedicines.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             // 
             // dateTimePickerPrescriptionValidity
             // 
@@ -567,10 +597,10 @@
             // 
             listPrescriptions.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             listPrescriptions.HorizontalScrollbar = true;
-            listPrescriptions.Location = new Point(480, 12);
+            listPrescriptions.Location = new Point(480, 73);
             listPrescriptions.Margin = new Padding(3, 4, 3, 4);
             listPrescriptions.Name = "listPrescriptions";
-            listPrescriptions.Size = new Size(300, 384);
+            listPrescriptions.Size = new Size(300, 344);
             listPrescriptions.TabIndex = 1;
             listPrescriptions.SelectedIndexChanged += listPrescriptions_SelectedIndexChanged;
             // 
@@ -614,10 +644,10 @@
             tabPatients.Controls.Add(btnAddPatient);
             tabPatients.Controls.Add(btnEditPatient);
             tabPatients.Controls.Add(btnDeletePatient);
-            tabPatients.Location = new Point(4, 29);
+            tabPatients.Location = new Point(4, 34);
             tabPatients.Margin = new Padding(3, 4, 3, 4);
             tabPatients.Name = "tabPatients";
-            tabPatients.Size = new Size(792, 529);
+            tabPatients.Size = new Size(792, 524);
             tabPatients.TabIndex = 2;
             tabPatients.Text = "Patients";
             tabPatients.UseVisualStyleBackColor = true;
@@ -842,10 +872,10 @@
             tabPageManager.Controls.Add(listUsers);
             tabPageManager.Controls.Add(buttonUserAdd);
             tabPageManager.Controls.Add(buttonUserEdit);
-            tabPageManager.Location = new Point(4, 29);
+            tabPageManager.Location = new Point(4, 34);
             tabPageManager.Name = "tabPageManager";
             tabPageManager.Padding = new Padding(3);
-            tabPageManager.Size = new Size(792, 529);
+            tabPageManager.Size = new Size(792, 524);
             tabPageManager.TabIndex = 3;
             tabPageManager.Text = "Manager";
             tabPageManager.UseVisualStyleBackColor = true;
@@ -1077,13 +1107,10 @@
             ClientSize = new Size(800, 562);
             Controls.Add(tabControl);
             Margin = new Padding(3, 4, 3, 4);
+            MinimumSize = new Size(600, 400);
             Name = "UserForm";
             Text = "UserForm";
-            MinimumSize = new Size(600, 400);
-
-            // Gérer le redimensionnement
             Resize += UserForm_Resize;
-
             tabControl.ResumeLayout(false);
             tabMedicines.ResumeLayout(false);
             panelMedicineDetails.ResumeLayout(false);
@@ -1502,5 +1529,7 @@
         private Button buttonPrescriptionGenerate;
         private Button buttonUserDelete;
         private DataGridView dataPrescriptionMedicines;
+        private ComboBox comboBoxPrescriptionFilters;
+        private ComboBox comboBoxPrescriptionFilterPatient;
     }
 }

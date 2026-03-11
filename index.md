@@ -4,7 +4,7 @@
 ![.NET](https://img.shields.io/badge/.NET-6.0-blueviolet?logo=.net)
 ![Windows Forms](https://img.shields.io/badge/Windows_Forms-WinForms-blue)
 ![MySQL](https://img.shields.io/badge/MySQL-8.1-orange?logo=mysql)
-![AWS RDS](https://img.shields.io/badge/AWS-RDS_Aurora-orange?logo=amazon-aws)
+![Docker](https://img.shields.io/badge/Docker-Powered-blue?logo=docker)
 
 ---
 
@@ -22,19 +22,51 @@
 
 ### Prérequis
 - **Windows 10/11** (64 bits)
-- **Connexion Internet** (pour l'accès à la base de données AWS)
+- **Docker Desktop** installé et lancé
+- **.NET 8.0 SDK** ([télécharger](https://dotnet.microsoft.com/download/dotnet/8.0))
+- **Visual Studio 2022** avec le workload "Développement desktop .NET"
 
 ### Procédure d'Installation
 
-1. **Télécharger l'application**
-   - Téléchargez le fichier `GSB-Manager.exe` depuis la section [Releases](#)
-   - Aucune installation n'est requise - l'application est portable
+1. **Cloner le dépôt**
+   ```bash
+   git clone https://github.com/PbSchnedR/GSB-Manager
+   cd GSB-Manager
+   ```
 
-2. **Lancer l'application**
-   - Double-cliquez sur `GSB-Manager.exe`
-   - La fenêtre de connexion s'affiche automatiquement
+2. **Lancer la base de données**
+   ```bash
+   docker-compose up -d
+   ```
+   Cela démarre un conteneur MySQL et un phpMyAdmin. Le dump SQL (`init.sql`) est importé automatiquement au premier lancement.
 
-> ℹ️ **Note** : La base de données est hébergée sur AWS RDS Aurora et est accessible automatiquement. Aucune configuration locale n'est nécessaire.
+3. **Vérifier que tout tourne**
+   ```bash
+   docker ps
+   ```
+   Vous devriez voir `gsb_mysql_db` et `gsb_phpmyadmin`.
+
+4. **Lancer l'application**
+   - Ouvrez `GSB-Manager.sln` dans Visual Studio 2022
+   - Vérifiez que le profil est sur **Debug**
+   - Appuyez sur **F5**
+
+   Ou en ligne de commande :
+   ```bash
+   dotnet restore
+   dotnet run --project GSB-Manager
+   ```
+
+### Accès phpMyAdmin
+- URL : **http://localhost:8080**
+- Utilisateur : `root`
+- Mot de passe : *(vide)*
+
+### Réinitialiser la base de données
+```bash
+docker-compose down -v
+docker-compose up -d
+```
 
 ---
 
@@ -42,14 +74,17 @@
 
 ### Identifiants de Test
 
-Pour vous connecter à l'application, utilisez l'un des comptes suivants :
+Tous les comptes ont le mot de passe : **`password`**
 
-| Rôle            | Email                      | Mot de passe |
-|-----------------|----------------------------|--------------|
-| Administrateur  | paul.martin@example.com    | password     |
-| Médecin/Pharma  | claire.durand@example.com  | password     |
-| Administrateur  | hugo.petit@example.com     | password     |
-| Administrateur  | lucas.benoit@example.com   | password     |
+| Rôle            | Email                      |
+|-----------------|----------------------------|
+| Administrateur  | paul.martin@example.com    |
+| Administrateur  | hugo.petit@example.com     |
+| Administrateur  | lucas.benoit@example.com   |
+| Médecin/Pharma  | claire.durand@example.com  |
+| Médecin/Pharma  | sophie.moreau@example.com  |
+| Médecin/Pharma  | nicolas.leroy@example.com  |
+| Médecin/Pharma  | emma.fontaine@example.com  |
 
 > 🔒 **Sécurité** : Les mots de passe sont hashés en SHA-256 dans la base de données.
 
@@ -66,10 +101,6 @@ Une fois connecté, l'application affiche une interface à onglets avec les modu
 **Fonctionnalités disponibles :**
 - 📋 **Consulter** : Liste de tous les médicaments disponibles
 - ➕ **Ajouter** : Créer un nouveau médicament (pharmaciens)
-  - Nom du médicament
-  - Description
-  - Dosage
-  - Molécule active
 - ✏️ **Modifier** : Mettre à jour les informations d'un médicament
 - 🗑️ **Supprimer** : Retirer un médicament du catalogue
 
@@ -85,24 +116,16 @@ Une fois connecté, l'application affiche une interface à onglets avec les modu
 **Fonctionnalités disponibles :**
 - 📋 **Consulter** : Historique des prescriptions
 - ➕ **Créer** : Nouvelle prescription pour un patient
-  - Sélection du patient
-  - Ajout d'un ou plusieurs médicaments avec quantités
-  - Date de validité
 - ✏️ **Modifier** : Mettre à jour une prescription existante
 - 🗑️ **Supprimer** : Annuler une prescription
 - 📄 **Générer PDF** : Exporter l'ordonnance au format PDF
 
 **Comment créer une prescription :**
-1. Cliquez sur le bouton `Add`
+1. Cliquez sur `Add`
 2. Sélectionnez un patient dans la liste déroulante
-3. Ajoutez des médicaments via le tableau :
-   - Sélectionnez un médicament
-   - Indiquez la quantité
-   - Ajoutez à la liste
+3. Ajoutez des médicaments avec quantités
 4. Définissez la date de validité
-5. Cliquez sur `Register` pour enregistrer
-
-> 💡 **Astuce** : Le bouton `Generate PDF` permet d'imprimer ou d'envoyer l'ordonnance au patient.
+5. Cliquez sur `Register`
 
 ---
 
@@ -111,20 +134,8 @@ Une fois connecté, l'application affiche une interface à onglets avec les modu
 **Fonctionnalités disponibles :**
 - 📋 **Consulter** : Liste de tous vos patients (médecins uniquement)
 - ➕ **Ajouter** : Créer une nouvelle fiche patient
-  - Nom et prénom
-  - Âge
-  - Genre
 - ✏️ **Modifier** : Mettre à jour les informations d'un patient
 - 🗑️ **Supprimer** : Retirer un patient du système
-
-**Comment ajouter un patient :**
-1. Cliquez sur `Add`
-2. Remplissez le formulaire dans le panneau de gauche :
-   - Nom
-   - Prénom
-   - Âge
-   - Genre (liste déroulante)
-3. Cliquez sur `Register`
 
 ---
 
@@ -135,20 +146,8 @@ Une fois connecté, l'application affiche une interface à onglets avec les modu
 **Fonctionnalités disponibles :**
 - 👥 **Consulter** : Liste de tous les utilisateurs du système
 - ➕ **Ajouter** : Créer un nouveau compte utilisateur
-  - Nom, prénom, email
-  - Mot de passe
-  - Rôle (0 = Médecin/Pharmacien, 1 = Administrateur)
 - ✏️ **Modifier** : Mettre à jour les informations d'un utilisateur
 - 🗑️ **Supprimer** : Désactiver un compte utilisateur
-
----
-
-## 🎨 Adaptation de l'Interface
-
-L'application est **responsive** et s'adapte automatiquement à la taille de votre écran :
-- Redimensionnez la fenêtre selon vos besoins
-- Tous les éléments (textes, boutons, tableaux) gardent leurs proportions
-- Taille minimale recommandée : 800x600 pixels
 
 ---
 
@@ -156,37 +155,48 @@ L'application est **responsive** et s'adapte automatiquement à la taille de vot
 
 ### Base de Données
 - **Type** : MySQL 8.1
-- **Hébergement** : AWS RDS Aurora (cloud)
-- **Connexion** : Automatique et sécurisée
+- **Hébergement** : Local via Docker
+- **Administration** : phpMyAdmin sur http://localhost:8080
 
 ### Sécurité
 - ✅ Authentification par email et mot de passe
 - ✅ Hachage SHA-256 des mots de passe
 - ✅ Prévention des injections SQL (requêtes paramétrées)
 - ✅ Gestion des droits d'accès par rôle
+- ✅ Journalisation des actions (table Log)
 
-### Architecture
+### Architecture N-Tier
 - **Couche Présentation** : Windows Forms (.NET 6)
 - **Couche Métier** : Classes modèles (User, Patient, Medicine, Prescription)
 - **Couche Données** : DAO (Data Access Objects)
+
+### Schéma de la Base de Données
+
+| Table | Description |
+|-------|------------|
+| `Users` | Utilisateurs (médecins, pharmaciens, admins) |
+| `Patients` | Fiches patients rattachées à un médecin |
+| `Medicine` | Catalogue des médicaments |
+| `Prescription` | Ordonnances (médecin → patient) |
+| `Appartient` | Liaison prescription ↔ médicament (avec quantité) |
+| `Log` | Journal des actions utilisateurs |
+
+Toutes les clés étrangères sont en **cascade** : la suppression d'un utilisateur entraîne la suppression de ses patients, prescriptions, médicaments et logs associés.
 
 ---
 
 ## ❓ FAQ
 
-**Q : L'application ne se lance pas**  
-R : Vérifiez que vous disposez d'une connexion Internet active et que Windows Defender n'a pas bloqué l'exécutable.
+**Q : L'application ne se connecte pas à la base**  
+R : Vérifiez que Docker tourne (`docker ps`) et que le port 3306 n'est pas utilisé par un autre MySQL.
 
 **Q : Je ne peux pas me connecter**  
-R : Assurez-vous d'utiliser l'un des identifiants de test fournis ci-dessus. Le mot de passe par défaut est `password`.
+R : Le mot de passe par défaut est `password` pour tous les comptes de test.
 
 **Q : Je ne vois pas certains onglets**  
-R : Les onglets visibles dépendent de votre rôle :
+R : Les onglets dépendent de votre rôle :
 - **Médecins/Pharmaciens (role 0)** : Medicines, Prescriptions, Patients
-- **Administrateurs (role 1)** : Tous les onglets + Manager pour gérer les utilisateurs
+- **Administrateurs (role 1)** : Tous les onglets + Manager
 
-**Q : Puis-je utiliser l'application hors ligne ?**  
-R : Non, une connexion Internet est requise pour accéder à la base de données AWS RDS.
-
-**Q : Comment exporter une prescription ?**  
-R : Sélectionnez une prescription dans l'onglet Prescriptions et cliquez sur `Generate PDF`. Le fichier sera enregistré sur votre ordinateur.
+**Q : Les tables sont vides après un redémarrage Docker**  
+R : Les données persistent grâce au volume Docker. Si vous avez fait `docker-compose down -v`, le dump sera réimporté au prochain `up -d`.

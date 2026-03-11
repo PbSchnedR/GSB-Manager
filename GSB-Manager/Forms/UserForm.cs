@@ -21,6 +21,8 @@ namespace GSB_Manager.Forms
         }
 
         string allocatedMedicine = "";
+        Patient filterPatient = null;
+        bool formLoading = true;
 
         private void Initialise_Tab()
         {
@@ -51,6 +53,12 @@ namespace GSB_Manager.Forms
             listPatients.DataSource = patients;
             listPatients.DisplayMember = "Full_name";
 
+            comboBoxPrescriptionFilterPatient.DataSource = null;
+            comboBoxPrescriptionFilterPatient.DataSource = patients;
+            comboBoxPrescriptionFilterPatient.DisplayMember = "Full_name";
+            comboBoxPrescriptionFilterPatient.SelectedIndex = -1;
+            formLoading = false;
+
             var prescriptionDAO = new PrescriptionDAO();
             var prescriptions = prescriptionDAO.GetAllPrescription();
 
@@ -62,6 +70,13 @@ namespace GSB_Manager.Forms
 
             listUsers.DataSource = users;
             listUsers.DisplayMember = "Full_name";
+
+            comboBoxPrescriptionFilters.Items.Clear();
+            comboBoxPrescriptionFilters.Items.Add("All");
+            comboBoxPrescriptionFilters.Items.Add("Valid");
+            comboBoxPrescriptionFilters.Items.Add("Expired");
+            comboBoxPrescriptionFilters.Items.Add("Almost expired");
+            comboBoxPrescriptionFilters.SelectedIndex = 0;
         }
         private void Handle_listbox_change()
         {
@@ -223,14 +238,14 @@ namespace GSB_Manager.Forms
 
             if (comboBoxPrescriptionPatient.SelectedIndex != null)
             {
-               
+
                 try
                 {
-                   int prescriptionId = prescriptionDAO.CreatePrescription(_connectedUser.user_id, patientId, dateTimePickerPrescriptionValidity.Value);
+                    int prescriptionId = prescriptionDAO.CreatePrescription(_connectedUser.user_id, patientId, dateTimePickerPrescriptionValidity.Value);
 
                     foreach (DataGridViewRow row in dataPrescriptionMedicines.Rows)
                     {
-                        if (!row.IsNewRow) 
+                        if (!row.IsNewRow)
                         {
                             string medicine = row.Cells["Medicine"].Value?.ToString();
                             int quantity = Convert.ToInt32(row.Cells["Quantity"].Value);
@@ -329,7 +344,8 @@ namespace GSB_Manager.Forms
                 }
             }
 
-            if (dataPrescriptionMedicines.Columns.Count == 0) {
+            if (dataPrescriptionMedicines.Columns.Count == 0)
+            {
                 var colMedicine = new DataGridViewTextBoxColumn();
                 colMedicine.HeaderText = "Medicine";
                 colMedicine.Name = "Medicine";
@@ -598,7 +614,7 @@ namespace GSB_Manager.Forms
 
             comboBoxPrescriptionPatient.Visible = true;
 
-           
+
 
             string fullName = textBoxPrescriptionPatient.Text.Trim();
 
@@ -635,7 +651,7 @@ namespace GSB_Manager.Forms
             var prescriptionDAO = new PrescriptionDAO();
             var medicineDAO = new MedicineDAO();
             Prescription selectedPrescription = listPrescriptions.SelectedItem as Prescription;
-            
+
 
             List<Medicine> medicines = medicineDAO.GetAllMedicine();
             medicines.ForEach(m => comboBoxPrescriptionMedicine.Items.Add(m.Name));
@@ -670,7 +686,7 @@ namespace GSB_Manager.Forms
 
                         foreach (DataGridViewRow row in dataPrescriptionMedicines.Rows)
                         {
-                            if (!row.IsNewRow) 
+                            if (!row.IsNewRow)
                             {
                                 string medicine = row.Cells["Medicine"].Value?.ToString();
                                 int quantity = Convert.ToInt32(row.Cells["Quantity"].Value);
@@ -1027,7 +1043,7 @@ namespace GSB_Manager.Forms
                 labelPatient.Text = selectedPatient.Firstname + " " + selectedPatient.Name;
             }
         }
-        
+
 
         private void buttonPrescriptionGenerate_Click(object sender, EventArgs e)
         {
@@ -1076,5 +1092,66 @@ namespace GSB_Manager.Forms
                 MessageBox.Show("Error, user not found !");
             }
         }
+
+        private void activate_patient_filter()
+        {
+            if (tabControl.SelectedTab != tabPrescriptions) return;
+            if (comboBoxPrescriptionFilters.SelectedItem == null) return;
+
+            string selectedFilter = comboBoxPrescriptionFilters.SelectedItem.ToString();
+
+            var prescriptionDAO = new PrescriptionDAO();
+            var prescriptions = prescriptionDAO.GetAllPrescription();
+
+            IEnumerable<Prescription> query = prescriptions;
+
+            // 🔹 Filtre par statut
+            DateTime now = DateTime.Now;
+
+            switch (selectedFilter)
+            {
+                case "Valid":
+                    query = query.Where(p => p.Validity > now.AddDays(7));
+                    break;
+
+                case "Almost expired":
+                    query = query.Where(p => p.Validity >= now && p.Validity <= now.AddDays(7));
+                    break;
+
+                case "Expired":
+                    query = query.Where(p => p.Validity < now);
+                    break;
+
+                case "All":
+                default:
+                    break;
+            }
+
+            // 🔹 Filtre par patient
+            if (filterPatient != null)
+            {
+                query = query.Where(p => p.patient_id == filterPatient.patient_id);
+            }
+
+            listPrescriptions.DataSource = query.ToList();
+        }
+
+        private void comboBoxPrescriptionFilters_SelectedIndexChanged(object sender, EventArgs e)
+        {
+           activate_patient_filter();
+        }
+
+
+        private void comboBoxPrescriptionFilterPatient_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(formLoading) return;
+
+            if (comboBoxPrescriptionFilterPatient.SelectedItem != null && comboBoxPrescriptionFilterPatient.SelectedIndex >= 0)
+            {
+                filterPatient = comboBoxPrescriptionFilterPatient.SelectedItem as Patient;
+            }
+            activate_patient_filter();
+        }
+
     }
 }
