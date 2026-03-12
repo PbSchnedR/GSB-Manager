@@ -77,15 +77,18 @@ docker-compose up -d
 
 Tous les comptes ont le mot de passe : **`password`**
 
-| Rôle            | Email                      |
-|-----------------|----------------------------|
-| Administrateur  | paul.martin@example.com    |
-| Administrateur  | hugo.petit@example.com     |
-| Administrateur  | lucas.benoit@example.com   |
-| Médecin/Pharma  | claire.durand@example.com  |
-| Médecin/Pharma  | sophie.moreau@example.com  |
-| Médecin/Pharma  | nicolas.leroy@example.com  |
-| Médecin/Pharma  | emma.fontaine@example.com  |
+| Rôle            | Email                        |
+|-----------------|------------------------------|
+| Administrateur  | paul.martin@example.com      |
+| Administrateur  | hugo.petit@example.com       |
+| Administrateur  | lucas.benoit@example.com     |
+| Médecin/Pharma  | claire.durand@example.com    |
+| Médecin/Pharma  | sophie.moreau@example.com    |
+| Médecin/Pharma  | nicolas.leroy@example.com    |
+| Médecin/Pharma  | emma.fontaine@example.com    |
+| Médecin/Pharma  | thomas.bernard@example.com   |
+| Médecin/Pharma  | julie.rousseau@example.com   |
+| Médecin/Pharma  | antoine.garcia@example.com   |
 
 > 🔒 **Sécurité** : Les mots de passe sont hashés en SHA-256 dans la base de données.
 
