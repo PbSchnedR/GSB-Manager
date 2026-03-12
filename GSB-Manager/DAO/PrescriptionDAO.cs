@@ -34,6 +34,16 @@ namespace GSB_Manager.DAO
             {
                 try
                 {
+                    // Supprimer les prescriptions sans médicaments
+                    MySqlCommand cleanupCommand = new MySqlCommand();
+                    cleanupCommand.Connection = connection;
+                    cleanupCommand.CommandText = @"
+                        DELETE FROM Prescription 
+                        WHERE prescription_id NOT IN (
+                            SELECT DISTINCT prescription_id FROM Appartient
+                        );";
+                    cleanupCommand.ExecuteNonQuery();
+
                     // create a MySQL command and set the SQL statement with parameters
                     MySqlCommand myCommand = new MySqlCommand();
                     myCommand.Connection = connection;

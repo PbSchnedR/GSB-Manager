@@ -30,8 +30,8 @@ namespace GSB_Manager.DAO
                 {
                     MySqlCommand myCommand = new MySqlCommand();
                     myCommand.Connection = connection;
-                    myCommand.CommandText = @"INSERT INTO Log (origin_user_id, date, field, element_id, description) 
-                                             VALUES (@origin_user_id, @date, @field, @element_id, @description);
+                    myCommand.CommandText = @"INSERT INTO Log (origin_user_id, date, field, action_type, element_id, description) 
+                                             VALUES (@origin_user_id, @date, @field, @action_type, @element_id, @description);
                                              SELECT LAST_INSERT_ID() as log_id;";
 
                     myCommand.Parameters.AddWithValue("@origin_user_id", origin_user_id);
