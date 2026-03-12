@@ -38,7 +38,7 @@
    ```bash
    docker-compose up -d
    ```
-   Cela démarre un conteneur MySQL (port `3307`) et un phpMyAdmin. Le dump SQL (`init.sql`) est importé automatiquement au premier lancement.
+   Cela démarre un conteneur MySQL (port `3306`) et un phpMyAdmin. Le dump SQL (`init.sql`) est importé automatiquement au premier lancement.
 
 3. **Vérifier que tout tourne**
    ```bash
@@ -56,7 +56,7 @@
    dotnet run --project GSB-Manager
    ```
 
-> ⚠️ **Important :** Le port configuré dans `GSB-Manager/DAO/Database.cs` doit correspondre à celui exposé dans `docker-compose.yml` (par défaut `3307`).
+> ⚠️ **Important :** Le port configuré dans `GSB-Manager/DAO/Database.cs` doit correspondre à celui exposé dans `docker-compose.yml` (par défaut `3306`).
 
 ### Accès phpMyAdmin
 - URL : **http://localhost:8080**
@@ -189,7 +189,7 @@ Toutes les clés étrangères sont en **cascade** : la suppression d'un utilisat
 ## ❓ FAQ
 
 **Q : L'application ne se connecte pas à la base**  
-R : Vérifiez que Docker tourne (`docker ps`) et que le port dans `Database.cs` correspond à celui du `docker-compose.yml` (par défaut `3307`).
+R : Vérifiez que Docker tourne (`docker ps`) et que le port dans `Database.cs` correspond à celui du `docker-compose.yml` (par défaut `3306`).
 
 **Q : Je ne peux pas me connecter**  
 R : Le mot de passe par défaut est `password` pour tous les comptes de test.
