@@ -286,45 +286,6 @@ INSERT INTO `Appartient` (`prescription_id`, `medicine_id`, `quantity`) VALUES
 (30, 7,  1),   -- Monique Caron - ancienne
 (30, 6,  1);
 
--- --------------------------------------------------------
--- Table `Log`
--- --------------------------------------------------------
-
-CREATE TABLE `Log` (
-  `log_id` int NOT NULL AUTO_INCREMENT,
-  `origin_user_id` int NOT NULL,
-  `date` datetime NOT NULL,
-  `field` varchar(100) NOT NULL,
-  `action_type` varchar(50) NOT NULL DEFAULT 'OTHER',
-  `element_id` int NOT NULL,
-  `description` text,
-  PRIMARY KEY (`log_id`),
-  KEY `idx_date` (`date`),
-  KEY `idx_origin_user` (`origin_user_id`),
-  CONSTRAINT `Log_ibfk_1` FOREIGN KEY (`origin_user_id`) REFERENCES `Users` (`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-INSERT INTO `Log` (`log_id`, `origin_user_id`, `date`, `field`, `action_type`, `element_id`, `description`) VALUES
-(1,  1,  '2026-01-10 08:30:00', 'User',         'OTHER', 1,  'User Martin Paul logged in successfully'),
-(2,  4,  '2026-01-10 09:00:12', 'User',         'OTHER', 4,  'User Durand Claire logged in successfully'),
-(3,  4,  '2026-01-10 09:05:30', 'Patient',      'OTHER', 1,  'Patient created: Jean Dupont, 67 years old, Male'),
-(4,  4,  '2026-01-10 09:10:45', 'Prescription', 'OTHER', 1,  'Prescription created: ID 1, Patient ID 1, Validity: 2026-04-15'),
-(5,  5,  '2026-01-12 10:15:00', 'User',         'OTHER', 5,  'User Moreau Sophie logged in successfully'),
-(6,  5,  '2026-01-12 10:20:22', 'Medicine',     'OTHER', 3,  'Medicine created: Ibuprofène - 400mg'),
-(7,  6,  '2026-01-15 14:00:00', 'User',         'OTHER', 6,  'User Leroy Nicolas logged in successfully'),
-(8,  6,  '2026-01-15 14:12:10', 'Patient',      'OTHER', 11, 'Patient created: Jacques Morel, 62 years old, Male'),
-(9,  7,  '2026-01-20 11:30:00', 'User',         'OTHER', 7,  'User Fontaine Emma logged in successfully'),
-(10, 7,  '2026-01-20 11:45:18', 'Prescription', 'OTHER', 17, 'Prescription created: ID 17, Patient ID 16, Validity: 2026-09-01'),
-(11, 1,  '2026-02-01 09:00:00', 'User',         'OTHER', 1,  'User Martin Paul logged in successfully'),
-(12, 8,  '2026-02-05 08:45:00', 'User',         'OTHER', 8,  'User Bernard Thomas logged in successfully'),
-(13, 8,  '2026-02-05 09:00:33', 'Patient',      'OTHER', 18, 'Patient created: Philippe Marchand, 52 years old, Male'),
-(14, 9,  '2026-02-10 16:20:00', 'User',         'OTHER', 9,  'User Rousseau Julie logged in successfully'),
-(15, 9,  '2026-02-10 16:35:45', 'Prescription', 'OTHER', 22, 'Prescription created: ID 22, Patient ID 21, Validity: 2026-06-01'),
-(16, 10, '2026-02-15 13:10:00', 'User',         'OTHER', 10, 'User Garcia Antoine logged in successfully'),
-(17, 10, '2026-02-15 13:25:12', 'Medicine',     'OTHER', 14, 'Medicine created: Allopurinol - 100mg'),
-(18, 4,  '2026-03-01 10:00:00', 'User',         'OTHER', 4,  'User Durand Claire logged in successfully'),
-(19, 4,  '2026-03-01 10:15:00', 'Prescription', 'OTHER', 6,  'Prescription modified: ID 6, Patient ID 5, Validity: 2026-07-01'),
-(20, 1,  '2026-03-10 08:00:00', 'User',         'OTHER', 1,  'User Martin Paul logged in successfully');
 
 COMMIT;
 
