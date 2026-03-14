@@ -41,6 +41,7 @@ namespace GSB_Manager.Forms
         }
         private void Initialise_Listbox()
         {
+            formLoading = true;
             var medicineDAO = new MedicineDAO();
             var medicines = medicineDAO.GetAllMedicine();
 

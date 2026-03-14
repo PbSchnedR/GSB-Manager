@@ -10,7 +10,7 @@ namespace GSB_Manager.DAO
         public Database()
         {
             const string host = "localhost";
-            const string port = "3306";
+            const string port = "3311";
             const string user = "root";
             const string password = "root";
 
