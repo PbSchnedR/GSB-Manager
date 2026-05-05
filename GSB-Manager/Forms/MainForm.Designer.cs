@@ -175,10 +175,15 @@
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
+            if (WindowState == FormWindowState.Minimized) return;
+            if (ClientSize.Width <= 0 || ClientSize.Height <= 0) return;
+
             // Calculer les facteurs d'échelle
             float scaleX = (float)ClientSize.Width / referenceSize.Width;
             float scaleY = (float)ClientSize.Height / referenceSize.Height;
             float scale = Math.Min(scaleX, scaleY);
+
+            if (scale <= 0) return;
 
             // Centrer la carte de login
             int cardWidth = (int)(380 * scale);

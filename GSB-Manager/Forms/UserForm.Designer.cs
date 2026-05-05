@@ -1105,7 +1105,18 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 562);
+            buttonLogout = new Button();
+            buttonLogout.Text = "Logout";
+            buttonLogout.Size = new Size(85, 28);
+            buttonLogout.Location = new Point(800 - 85 - 5, 2);
+            buttonLogout.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonLogout.Name = "buttonLogout";
+            buttonLogout.TabIndex = 100;
+            buttonLogout.UseVisualStyleBackColor = true;
+            buttonLogout.Click += buttonLogout_Click;
+            Controls.Add(buttonLogout);
             Controls.Add(tabControl);
+            buttonLogout.BringToFront();
             Margin = new Padding(3, 4, 3, 4);
             MinimumSize = new Size(600, 400);
             Name = "UserForm";
@@ -1132,12 +1143,17 @@
 
         private void UserForm_Resize(object sender, EventArgs e)
         {
+            if (WindowState == FormWindowState.Minimized) return;
+            if (ClientSize.Width <= 0 || ClientSize.Height <= 0) return;
+
             // Calculer les facteurs d'échelle
             float scaleX = (float)ClientSize.Width / referenceSize.Width;
             float scaleY = (float)ClientSize.Height / referenceSize.Height;
             float scale = Math.Min(scaleX, scaleY);
 
-            tabControl.ItemSize = new Size((int)(100 * scaleX), (int)(30 * scaleY));
+            if (scale <= 0) return;
+
+            tabControl.ItemSize = new Size(Math.Max(1, (int)(100 * scaleX)), Math.Max(1, (int)(30 * scaleY)));
 
             // Mise à l'échelle pour chaque onglet
             ScaleMedicinesTab(scaleX, scaleY, scale);
@@ -1531,5 +1547,6 @@
         private DataGridView dataPrescriptionMedicines;
         private ComboBox comboBoxPrescriptionFilters;
         private ComboBox comboBoxPrescriptionFilterPatient;
+        private Button buttonLogout;
     }
 }

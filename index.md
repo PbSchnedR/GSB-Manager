@@ -18,15 +18,58 @@
 
 ---
 
-## 🚀 Installation
+## 📑 Sommaire
 
-### Prérequis
+- [📋 À Propos](#-à-propos)
+- [🚀 Méthodes d'Accès au Projet](#-méthodes-daccès-au-projet)
+  - [Méthode 1 : Accès via la VM Azure (recommandé)](#méthode-1--accès-via-la-vm-azure-recommandé)
+  - [Méthode 2 : Installation locale via Docker Compose](#méthode-2--installation-locale-via-docker-compose)
+- [🔐 Première Connexion](#-première-connexion)
+- [📖 Guide d'Utilisation](#-guide-dutilisation)
+- [🔧 Fonctionnalités Techniques](#-fonctionnalités-techniques)
+- [❓ FAQ](#-faq)
+
+---
+
+## 🚀 Méthodes d'Accès au Projet
+
+Il existe deux façons d'accéder à GSB Manager : utiliser la **VM Azure** déjà préparée (rapide, aucune installation), ou installer le projet **localement avec Docker Compose**.
+
+---
+
+### Méthode 1 : Accès via la VM Azure (recommandé)
+
+Cette méthode permet d'utiliser le projet sans rien installer sur votre poste. Une VM Azure est déjà configurée avec la base de données et l'application prêtes à l'emploi.
+
+#### 🔗 Démarrer la VM
+
+- **Lien de démarrage de la VM** : [https://gsbmanager.z28.web.core.windows.net/](https://gsbmanager.z28.web.core.windows.net/)
+- **Identifiant** : `examinateur`
+- **Mot de passe** : `Ea*5z9P-56L`
+
+#### ⚠️ AVERTISSEMENT IMPORTANT — À LIRE ABSOLUMENT
+
+> 🚨 **ATTENTION : DÉLAI DE DÉMARRAGE DE LA VM** 🚨
+>
+> Une fois que vous avez cliqué sur le bouton de démarrage et que la page web indique que **la VM est démarrée**, il faut encore **attendre environ 10 à 20 secondes supplémentaires** avant que la machine soit réellement accessible.
+>
+> ⏳ Pendant ce laps de temps, votre navigateur affichera **« Page introuvable »** ou une erreur similaire. **C'est NORMAL.**
+>
+> ✅ **Ne paniquez pas, ne fermez pas la page, ne cliquez pas plusieurs fois sur le bouton.** Patientez simplement 10 à 20 secondes puis rafraîchissez la page (`F5`). La VM sera alors accessible.
+
+---
+
+### Méthode 2 : Installation locale via Docker Compose
+
+Cette méthode est destinée aux personnes qui veulent exécuter le projet directement sur leur machine.
+
+#### Prérequis
 - **Windows 10/11** (64 bits)
 - **Docker Desktop** installé et lancé
 - **.NET 8.0 SDK** ([télécharger](https://dotnet.microsoft.com/download/dotnet/8.0))
 - **Visual Studio 2022** avec le workload "Développement desktop .NET"
 
-### Procédure d'Installation
+#### Procédure d'Installation
 
 1. **Cloner le dépôt**
    ```bash
@@ -58,12 +101,12 @@
 
 > ⚠️ **Important :** Le port configuré dans `GSB-Manager/DAO/Database.cs` doit correspondre à celui exposé dans `docker-compose.yml` (par défaut `3306`).
 
-### Accès phpMyAdmin
+#### Accès phpMyAdmin
 - URL : **http://localhost:8080**
 - Utilisateur : `root`
 - Mot de passe : `root`
 
-### Réinitialiser la base de données
+#### Réinitialiser la base de données
 ```bash
 docker-compose down -v
 docker-compose up -d

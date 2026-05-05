@@ -1154,5 +1154,19 @@ namespace GSB_Manager.Forms
             activate_patient_filter();
         }
 
+        private void buttonLogout_Click(object sender, EventArgs e)
+        {
+            var mainForm = Application.OpenForms.OfType<MainForm>().FirstOrDefault();
+            if (mainForm != null)
+            {
+                mainForm.Show();
+            }
+            else
+            {
+                new MainForm().Show();
+            }
+            this.Close();
+        }
+
     }
 }
