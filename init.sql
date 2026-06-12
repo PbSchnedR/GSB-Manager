@@ -215,6 +215,8 @@ CREATE TABLE `Appartient` (
   `prescription_id` int DEFAULT NULL,
   `medicine_id` int DEFAULT NULL,
   `quantity` int DEFAULT NULL,
+  `posology_int` int DEFAULT NULL,
+  `posology_string` enum('par_jour','par_semaine') DEFAULT NULL,
   KEY `prescription_id` (`prescription_id`),
   KEY `medicine_id` (`medicine_id`),
   CONSTRAINT `Appartient_ibfk_1` FOREIGN KEY (`prescription_id`) REFERENCES `Prescription` (`prescription_id`) ON DELETE CASCADE ON UPDATE RESTRICT,

@@ -21,6 +21,10 @@ namespace GSB_Manager.Models
         public string Molecule { get; set; }
 
         public int Quantity { get; set; }
+
+        public int Posology_int { get; set; } // quantité de la posologie (ex : 2)
+
+        public string Posology_string { get; set; } // période de la posologie (enum "par_jour" / "par_semaine")
         public Medicine() // c'est le constructeur par défaut qui permettra d'instancier Users et avoir accès à toutes ses propriétés (attributs)
         { }
 

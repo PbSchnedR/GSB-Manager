@@ -194,7 +194,7 @@ namespace GSB_Manager.DAO
                     MySqlCommand myCommand = new MySqlCommand();
                     myCommand.Connection = connection;
                     myCommand.CommandText = @"
-                        SELECT m.name, a.quantity 
+                        SELECT m.name, a.quantity, a.posology_int, a.posology_string
                         FROM `Appartient` as a
                         INNER JOIN Medicine as m on a.medicine_id = m.medicine_id
                         INNER JOIN Prescription as p on a.prescription_id = p.prescription_id
@@ -210,7 +210,15 @@ namespace GSB_Manager.DAO
                             name = myReader.GetString("name");
                             quantity = myReader.GetInt32("quantity");
 
-                            medicines.Add(new Medicine(quantity, name));
+                            var medicine = new Medicine(quantity, name);
+
+                            int posologyIntOrdinal = myReader.GetOrdinal("posology_int");
+                            medicine.Posology_int = myReader.IsDBNull(posologyIntOrdinal) ? 1 : myReader.GetInt32(posologyIntOrdinal);
+
+                            int posologyStringOrdinal = myReader.GetOrdinal("posology_string");
+                            medicine.Posology_string = myReader.IsDBNull(posologyStringOrdinal) ? "par_jour" : myReader.GetString(posologyStringOrdinal);
+
+                            medicines.Add(medicine);
                         }
                     }
 
@@ -226,7 +234,7 @@ namespace GSB_Manager.DAO
             }
         }
 
-        public void AddMedicineToPrescription(int prescription_id, int medicine_id, int quantity)
+        public void AddMedicineToPrescription(int prescription_id, int medicine_id, int quantity, int posologyInt, string posologyString)
         {
             var connection = db.GetConnection();
             connection.Open();
@@ -236,12 +244,14 @@ namespace GSB_Manager.DAO
                 MySqlCommand myCommand = new MySqlCommand();
                 myCommand.Connection = connection;
                 myCommand.CommandText = @"
-            INSERT INTO Appartient (prescription_id, medicine_id, quantity)
-            VALUES (@prescription_id, @medicine_id, @quantity);";
+            INSERT INTO Appartient (prescription_id, medicine_id, quantity, posology_int, posology_string)
+            VALUES (@prescription_id, @medicine_id, @quantity, @posology_int, @posology_string);";
 
                 myCommand.Parameters.AddWithValue("@prescription_id", prescription_id);
                 myCommand.Parameters.AddWithValue("@medicine_id", medicine_id);
                 myCommand.Parameters.AddWithValue("@quantity", quantity);
+                myCommand.Parameters.AddWithValue("@posology_int", posologyInt);
+                myCommand.Parameters.AddWithValue("@posology_string", posologyString);
 
                 myCommand.ExecuteNonQuery();
             }
@@ -325,7 +335,7 @@ namespace GSB_Manager.DAO
             }
         }
 
-        public void EditMedicineToPrescription(int prescription_id, Dictionary<int, int> pairs)
+        public void EditMedicineToPrescription(int prescription_id, List<(int medicineId, int quantity, int posologyInt, string posologyString)> items)
         {
             using (var connection = db.GetConnection())
             {
@@ -340,17 +350,19 @@ namespace GSB_Manager.DAO
                     deleteCmd.ExecuteNonQuery();
 
                     // Réinsérer chaque médicament
-                    foreach (var p in pairs)
+                    foreach (var item in items)
                     {
                         MySqlCommand insertCmd = new MySqlCommand();
                         insertCmd.Connection = connection;
                         insertCmd.CommandText = @"
-                            INSERT INTO Appartient (prescription_id, medicine_id, quantity)
-                            VALUES (@prescription_id, @medicine_id, @quantity);
+                            INSERT INTO Appartient (prescription_id, medicine_id, quantity, posology_int, posology_string)
+                            VALUES (@prescription_id, @medicine_id, @quantity, @posology_int, @posology_string);
                         ";
                         insertCmd.Parameters.AddWithValue("@prescription_id", prescription_id);
-                        insertCmd.Parameters.AddWithValue("@medicine_id", p.Key);
-                        insertCmd.Parameters.AddWithValue("@quantity", p.Value);
+                        insertCmd.Parameters.AddWithValue("@medicine_id", item.medicineId);
+                        insertCmd.Parameters.AddWithValue("@quantity", item.quantity);
+                        insertCmd.Parameters.AddWithValue("@posology_int", item.posologyInt);
+                        insertCmd.Parameters.AddWithValue("@posology_string", item.posologyString);
                         insertCmd.ExecuteNonQuery();
                     }
                 }

@@ -16,6 +16,8 @@ namespace GSB_Manager.Forms
         {
             InitializeComponent();
             _connectedUser = connectedUser;
+            // Évite les popups d'erreur si une valeur de la colonne combobox "Period" n'est pas dans la liste
+            dataPrescriptionMedicines.DataError += (s, ev) => ev.ThrowException = false;
             Initialise_Tab();
             Initialise_Listbox();
         }
@@ -116,30 +118,15 @@ namespace GSB_Manager.Forms
                 comboBoxPrescriptionPatient.DataSource = patients;
                 comboBoxPrescriptionPatient.DisplayMember = "Full_name";
 
-                dataPrescriptionMedicines.Columns.Clear();
-                dataPrescriptionMedicines.AutoGenerateColumns = false;
-
-
                 PrescriptionDAO prescriptionDAO = new PrescriptionDAO();
                 List<Medicine> prescription_medicines = prescriptionDAO.GetPrescriptionMedicines(selectedPrescription.Prescription_id);
 
-                // Colonne Medicine
-                var colMedicine = new DataGridViewTextBoxColumn();
-                colMedicine.HeaderText = "Medicine";
-                colMedicine.Name = "Medicine";
-                colMedicine.ReadOnly = true;
-                dataPrescriptionMedicines.Columns.Add(colMedicine);
-
-                // Colonne Quantity
-                var colQuantity = new DataGridViewTextBoxColumn();
-                colQuantity.HeaderText = "Quantity";
-                colQuantity.Name = "Quantity";
-                dataPrescriptionMedicines.Columns.Add(colQuantity);
+                BuildPrescriptionMedicineColumns(true);
                 dataPrescriptionMedicines.ReadOnly = true;
 
                 foreach (var item in prescription_medicines)
                 {
-                    dataPrescriptionMedicines.Rows.Add(item.Name, item.Quantity);
+                    dataPrescriptionMedicines.Rows.Add(item.Name, item.Quantity, item.Posology_int, item.Posology_string);
                 }
             }
 
@@ -170,6 +157,45 @@ namespace GSB_Manager.Forms
                 else { textBoxUserRole.Text = "Admin"; }
             }
         }
+
+        /// <summary>
+        /// (Re)construit les colonnes du DataGridView des médicaments d'une prescription :
+        /// Medicine, Quantity, Posology (quantité) et Period (par_jour / par_semaine).
+        /// </summary>
+        /// <param name="medicineReadOnly">true pour rendre la colonne Medicine non éditable (mode affichage/édition).</param>
+        private void BuildPrescriptionMedicineColumns(bool medicineReadOnly)
+        {
+            dataPrescriptionMedicines.Columns.Clear();
+            dataPrescriptionMedicines.AutoGenerateColumns = false;
+
+            // Colonne Medicine
+            var colMedicine = new DataGridViewTextBoxColumn();
+            colMedicine.HeaderText = "Medicine";
+            colMedicine.Name = "Medicine";
+            colMedicine.ReadOnly = medicineReadOnly;
+            dataPrescriptionMedicines.Columns.Add(colMedicine);
+
+            // Colonne Quantity
+            var colQuantity = new DataGridViewTextBoxColumn();
+            colQuantity.HeaderText = "Quantity";
+            colQuantity.Name = "Quantity";
+            dataPrescriptionMedicines.Columns.Add(colQuantity);
+
+            // Colonne Posology (quantité de la posologie)
+            var colPosology = new DataGridViewTextBoxColumn();
+            colPosology.HeaderText = "Posology";
+            colPosology.Name = "Posology";
+            dataPrescriptionMedicines.Columns.Add(colPosology);
+
+            // Colonne Period (par_jour / par_semaine)
+            var colPeriod = new DataGridViewComboBoxColumn();
+            colPeriod.HeaderText = "Period";
+            colPeriod.Name = "Period";
+            colPeriod.Items.Add("par_jour");
+            colPeriod.Items.Add("par_semaine");
+            dataPrescriptionMedicines.Columns.Add(colPeriod);
+        }
+
         private void btnAddMedicine_Click(object sender, EventArgs e)
         {
             btnAddMedicine.Visible = false;
@@ -262,9 +288,11 @@ namespace GSB_Manager.Forms
                         {
                             string medicine = row.Cells["Medicine"].Value?.ToString();
                             int quantity = Convert.ToInt32(row.Cells["Quantity"].Value);
+                            int posologyInt = Convert.ToInt32(row.Cells["Posology"].Value);
+                            string posologyString = row.Cells["Period"].Value?.ToString() ?? "par jour";
 
                             int medicine_id = medicineDAO.FindMedicineIdByName(medicine);
-                            prescriptionDAO.AddMedicineToPrescription(prescriptionId, medicine_id, quantity);
+                            prescriptionDAO.AddMedicineToPrescription(prescriptionId, medicine_id, quantity, posologyInt, posologyString);
                         }
                     }
 
@@ -320,7 +348,7 @@ namespace GSB_Manager.Forms
             buttonPrescriptionRegister.Visible = true;
             buttonPrescriptionCancel.Visible = true;
 
-            dataPrescriptionMedicines.Rows.Clear();
+            BuildPrescriptionMedicineColumns(false);
             dataPrescriptionMedicines.ReadOnly = false;
 
 
@@ -359,22 +387,15 @@ namespace GSB_Manager.Forms
 
             if (dataPrescriptionMedicines.Columns.Count == 0)
             {
-                var colMedicine = new DataGridViewTextBoxColumn();
-                colMedicine.HeaderText = "Medicine";
-                colMedicine.Name = "Medicine";
-                dataPrescriptionMedicines.Columns.Add(colMedicine);
-
-                // Colonne Quantity
-                var colQuantity = new DataGridViewTextBoxColumn();
-                colQuantity.HeaderText = "Quantity";
-                colQuantity.Name = "Quantity";
-                dataPrescriptionMedicines.Columns.Add(colQuantity);
+                BuildPrescriptionMedicineColumns(false);
             }
 
             // Ajoute une nouvelle ligne dans le DataGridView
             int rowIndex = dataPrescriptionMedicines.Rows.Add();
             dataPrescriptionMedicines.Rows[rowIndex].Cells["Medicine"].Value = selectedMedicine;
             dataPrescriptionMedicines.Rows[rowIndex].Cells["Quantity"].Value = 1; // quantité par défaut
+            dataPrescriptionMedicines.Rows[rowIndex].Cells["Posology"].Value = 1; // posologie par défaut
+            dataPrescriptionMedicines.Rows[rowIndex].Cells["Period"].Value = "par_jour"; // période par défaut
 
             // Retire la medicine du combo après sélection
             comboBoxPrescriptionMedicine.Items.Remove(selectedMedicine);
@@ -679,7 +700,7 @@ namespace GSB_Manager.Forms
             var prescriptionDAO = new PrescriptionDAO();
             var medicineDAO = new MedicineDAO();
             Prescription selectedPrescription = listPrescriptions.SelectedItem as Prescription;
-            Dictionary<int, int> pairMedicineQuantity = new Dictionary<int, int>();
+            var medicineItems = new List<(int medicineId, int quantity, int posologyInt, string posologyString)>();
 
             if (selectedPrescription != null)
             {
@@ -703,13 +724,15 @@ namespace GSB_Manager.Forms
                             {
                                 string medicine = row.Cells["Medicine"].Value?.ToString();
                                 int quantity = Convert.ToInt32(row.Cells["Quantity"].Value);
+                                int posologyInt = Convert.ToInt32(row.Cells["Posology"].Value);
+                                string posologyString = row.Cells["Period"].Value?.ToString() ?? "par_jour";
 
                                 int medicine_id = medicineDAO.FindMedicineIdByName(medicine);
-                                pairMedicineQuantity.Add(medicine_id, quantity);
+                                medicineItems.Add((medicine_id, quantity, posologyInt, posologyString));
                             }
                         }
 
-                        prescriptionDAO.EditMedicineToPrescription(selectedPrescription.Prescription_id, pairMedicineQuantity);
+                        prescriptionDAO.EditMedicineToPrescription(selectedPrescription.Prescription_id, medicineItems);
 
                         MessageBox.Show("Prescription edited successfully");
 
@@ -726,7 +749,7 @@ namespace GSB_Manager.Forms
                         btnEditPrescription.Visible = true;
                         textBoxPrescriptionValidity.Visible = true;
                         comboBoxPrescriptionMedicine.Items.Clear();
-                        pairMedicineQuantity.Clear();
+                        medicineItems.Clear();
                         Initialise_Listbox();
                     }
                     catch (Exception ex)
