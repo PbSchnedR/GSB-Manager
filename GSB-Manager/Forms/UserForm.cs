@@ -23,6 +23,7 @@ namespace GSB_Manager.Forms
         string allocatedMedicine = "";
         Patient filterPatient = null;
         bool formLoading = true;
+        bool loadingSpecialityFilter = false;
 
         private void Initialise_Tab()
         {
@@ -71,6 +72,16 @@ namespace GSB_Manager.Forms
 
             listUsers.DataSource = users;
             listUsers.DisplayMember = "Full_name";
+
+            // Remplissage du filtre de recherche par spécialité ("All" + spécialités)
+            loadingSpecialityFilter = true;
+            var specialityDAO = new SpecialityDAO();
+            var specialities = specialityDAO.GetAllSpecialities() ?? new List<Speciality>();
+            comboBoxUserSpecialityFilter.Items.Clear();
+            comboBoxUserSpecialityFilter.Items.Add("All");
+            specialities.ForEach(s => comboBoxUserSpecialityFilter.Items.Add(s.Name));
+            comboBoxUserSpecialityFilter.SelectedIndex = 0;
+            loadingSpecialityFilter = false;
 
             comboBoxPrescriptionFilters.Items.Clear();
             comboBoxPrescriptionFilters.Items.Add("All");
@@ -151,6 +162,7 @@ namespace GSB_Manager.Forms
             {
                 labelUser.Text = selectedUser.Full_name;
                 textBoxUserEmail.Text = selectedUser.Email;
+                textBoxUserSpeciality.Text = selectedUser.Speciality ?? "";
                 if (selectedUser.Role == false)
                 {
                     textBoxUserRole.Text = "Doctor";
@@ -781,6 +793,7 @@ namespace GSB_Manager.Forms
                         textBoxPatientGender.Visible = true;
                         labelPatientDoctor.Visible = true;
                         textBoxPatientDoctor.Visible = true;
+                        comboBoxPatientGender.SelectedItem = textBoxPatientGender.Text;
 
                         Initialise_Listbox();
                     }
@@ -802,6 +815,59 @@ namespace GSB_Manager.Forms
             Handle_listbox_change();
         }
 
+        /// <summary>
+        /// Remplit la combobox de spécialité (mode ajout/édition) avec une option vide
+        /// puis toutes les spécialités, et présélectionne celle passée en paramètre.
+        /// </summary>
+        private void PopulateSpecialityCombo(int? selectedSpecialityId)
+        {
+            var specialityDAO = new SpecialityDAO();
+            var specialities = specialityDAO.GetAllSpecialities() ?? new List<Speciality>();
+
+            // Option "aucune spécialité" (id 0) pour les admins ou les médecins sans spécialité
+            var items = new List<Speciality> { new Speciality(0, "— None —") };
+            items.AddRange(specialities);
+
+            comboBoxUserSpeciality.DataSource = items;
+            comboBoxUserSpeciality.DisplayMember = "Name";
+            comboBoxUserSpeciality.ValueMember = "Speciality_id";
+            comboBoxUserSpeciality.SelectedValue = selectedSpecialityId ?? 0;
+        }
+
+        /// <summary>
+        /// Retourne l'id de la spécialité sélectionnée dans la combobox, ou null si "— None —".
+        /// </summary>
+        private int? GetSelectedSpecialityId()
+        {
+            var selected = comboBoxUserSpeciality.SelectedItem as Speciality;
+            if (selected == null || selected.Speciality_id == 0)
+                return null;
+            return selected.Speciality_id;
+        }
+
+        /// <summary>
+        /// Filtre la liste des utilisateurs selon la spécialité choisie dans la combobox de recherche.
+        /// </summary>
+        private void comboBoxUserSpecialityFilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (loadingSpecialityFilter) return;
+            if (comboBoxUserSpecialityFilter.SelectedItem == null) return;
+
+            var userDAO = new UserDAO();
+            var users = userDAO.GetAllUsers() ?? new List<User>();
+
+            string selectedFilter = comboBoxUserSpecialityFilter.SelectedItem.ToString();
+
+            IEnumerable<User> query = users;
+            if (selectedFilter != "All")
+            {
+                query = query.Where(u => u.Speciality == selectedFilter);
+            }
+
+            listUsers.DataSource = query.ToList();
+            listUsers.DisplayMember = "Full_name";
+        }
+
         private void buttonUserModify_Click(object sender, EventArgs e)
         {
             var userDAO = new UserDAO();
@@ -820,7 +886,7 @@ namespace GSB_Manager.Forms
                         {
                             selectedUser.Role = false;
                         }
-                        userDAO.EditUser(selectedUser.user_id, textBoxUserName.Text, textBoxUserFirstname.Text, textBoxUserEmail.Text, selectedUser.Role);
+                        userDAO.EditUser(selectedUser.user_id, textBoxUserName.Text, textBoxUserFirstname.Text, textBoxUserEmail.Text, selectedUser.Role, GetSelectedSpecialityId());
                         MessageBox.Show("User edited successfully");
                         buttonUserAdd.Visible = true;
                         buttonUserEdit.Visible = true;
@@ -834,6 +900,8 @@ namespace GSB_Manager.Forms
                         textBoxUserRole.Visible = true;
                         comboBoxUserRole.Visible = false;
                         comboBoxUserRole.Items.Clear();
+                        comboBoxUserSpeciality.Visible = false;
+                        textBoxUserSpeciality.Visible = true;
                         buttonUserDelete.Visible = true;
 
                         Initialise_Listbox();
@@ -868,6 +936,9 @@ namespace GSB_Manager.Forms
             comboBoxUserRole.Visible = true;
             textBoxUserPassword.Visible = true;
             labelUserPassword.Visible = true;
+            textBoxUserSpeciality.Visible = false;
+            comboBoxUserSpeciality.Visible = true;
+            PopulateSpecialityCombo(null);
 
             comboBoxUserRole.Items.Add("Doctor");
             comboBoxUserRole.Items.Add("Admin");
@@ -883,7 +954,7 @@ namespace GSB_Manager.Forms
                 try
                 {
                     bool role = comboBoxUserRole.SelectedItem.ToString() == "Admin" ? true : false;
-                    userDAO.CreateUser(textBoxUserName.Text, textBoxUserFirstname.Text, textBoxUserEmail.Text, textBoxUserPassword.Text, role);
+                    userDAO.CreateUser(textBoxUserName.Text, textBoxUserFirstname.Text, textBoxUserEmail.Text, textBoxUserPassword.Text, role, GetSelectedSpecialityId());
                     MessageBox.Show("User added successfully");
                     buttonUserAdd.Visible = true;
                     buttonUserEdit.Visible = true;
@@ -898,6 +969,8 @@ namespace GSB_Manager.Forms
                     textBoxUserEmail.ReadOnly = true;
                     textBoxUserRole.Visible = true;
                     comboBoxUserRole.Visible = false;
+                    comboBoxUserSpeciality.Visible = false;
+                    textBoxUserSpeciality.Visible = true;
 
                     Initialise_Listbox();
                 }
@@ -928,8 +1001,15 @@ namespace GSB_Manager.Forms
             labelUserFirstname.Visible = true;
             textBoxUserEmail.ReadOnly = false;
             comboBoxUserRole.Visible = true;
+            comboBoxUserRole.Items.Clear();
             comboBoxUserRole.Items.Add("Doctor");
             comboBoxUserRole.Items.Add("Admin");
+
+            textBoxUserSpeciality.Visible = false;
+            comboBoxUserSpeciality.Visible = true;
+            User selectedUser = listUsers.SelectedItem as User;
+            comboBoxUserRole.SelectedItem = selectedUser != null && selectedUser.Role ? "Admin" : "Doctor";
+            PopulateSpecialityCombo(selectedUser?.Speciality_id);
 
             textBoxUserName.Text = labelUser.Text.Split(' ')[1];
             textBoxUserFirstname.Text = labelUser.Text.Split(' ')[0];
@@ -953,10 +1033,13 @@ namespace GSB_Manager.Forms
             comboBoxUserRole.Visible = false;
             textBoxUserPassword.Visible = false;
             labelUserPassword.Visible = false;
+            comboBoxUserSpeciality.Visible = false;
+            textBoxUserSpeciality.Visible = true;
 
             User selectedUser = listUsers.SelectedItem as User;
             textBoxUserEmail.Text = selectedUser.Email;
             labelUser.Text = selectedUser.Full_name;
+            textBoxUserSpeciality.Text = selectedUser.Speciality ?? "";
         }
 
         private void buttonMedicineCancel_Click(object sender, EventArgs e)

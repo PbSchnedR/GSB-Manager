@@ -24,6 +24,11 @@ namespace GSB_Manager.Models
         public string Password { get; set; }
 
         public bool Role { get; set; }
+
+        public int? Speciality_id { get; set; } // identifiant de la spécialité (null si aucune / admin)
+
+        public string Speciality { get; set; } // nom de la spécialité du médecin (null si aucune)
+
         public User() // c'est le constructeur par défaut qui permettra d'instancier Users et avoir accès à toutes ses propriétés (attributs)
         {      }
 
@@ -48,6 +53,17 @@ namespace GSB_Manager.Models
             this.Firstname = firstname;
             this.Email = email;
             this.Role = role;
+        }
+
+        public User(int user_id, string name, string firstname, string email, bool role, int? speciality_id, string speciality) // surcharge incluant la spécialité du médecin
+        {
+            this.user_id = user_id;
+            this.Name = name;
+            this.Firstname = firstname;
+            this.Email = email;
+            this.Role = role;
+            this.Speciality_id = speciality_id;
+            this.Speciality = speciality;
         }
     }
 }

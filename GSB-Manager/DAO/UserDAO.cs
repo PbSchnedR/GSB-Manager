@@ -125,7 +125,11 @@ namespace GSB_Manager.DAO
             {
                 MySqlCommand myCommand = new MySqlCommand();
                 myCommand.Connection = connection;
-                myCommand.CommandText = @"SELECT * FROM `Users`";
+                myCommand.CommandText = @"
+                    SELECT u.*, s.name AS speciality_name
+                    FROM `Users` u
+                    LEFT JOIN `Speciality` s ON s.speciality_id = u.speciality_id;
+                ";
 
                 using var myReader = myCommand.ExecuteReader();
                 while (myReader.Read())
@@ -136,7 +140,16 @@ namespace GSB_Manager.DAO
                     string email = myReader.GetString("email");
                     bool role = myReader.GetBoolean("role");
 
-                    users.Add(new User(user_id, name, firstName, email, role));
+                    int? specialityId = null;
+                    string specialityName = null;
+                    int specialityOrdinal = myReader.GetOrdinal("speciality_id");
+                    if (!myReader.IsDBNull(specialityOrdinal))
+                    {
+                        specialityId = myReader.GetInt32(specialityOrdinal);
+                        specialityName = myReader.GetString("speciality_name");
+                    }
+
+                    users.Add(new User(user_id, name, firstName, email, role, specialityId, specialityName));
                 }
 
                 return users;
@@ -160,11 +173,12 @@ namespace GSB_Manager.DAO
         /// <param name="email">Email de l'utilisateur.</param>
         /// <param name="password">Mot de passe non-hashé.</param>
         /// <param name="role">Rôle de l'utilisateur (true = admin, false = utilisateur normal).</param>
+        /// <param name="specialityId">Identifiant de la spécialité du médecin, ou <c>null</c> si aucune.</param>
         /// <returns>
         /// L'ID de l'utilisateur nouvellement créé,
         /// ou 0 si l'insertion a échoué.
         /// </returns>
-        public int CreateUser(string name, string firstname, string email, string password, bool role)
+        public int CreateUser(string name, string firstname, string email, string password, bool role, int? specialityId)
         {
             int newId = 0;
             var connection = db.GetConnection();
@@ -175,8 +189,8 @@ namespace GSB_Manager.DAO
                 MySqlCommand myCommand = new MySqlCommand();
                 myCommand.Connection = connection;
                 myCommand.CommandText = @"
-                    INSERT INTO Users (name, firstname, email, password, role)
-                    VALUES (@name, @firstname, @email, SHA2(@password, 256), @role);
+                    INSERT INTO Users (name, firstname, email, password, role, speciality_id)
+                    VALUES (@name, @firstname, @email, SHA2(@password, 256), @role, @speciality_id);
                     SELECT LAST_INSERT_ID();
                 ";
 
@@ -185,6 +199,7 @@ namespace GSB_Manager.DAO
                 myCommand.Parameters.AddWithValue("@email", email);
                 myCommand.Parameters.AddWithValue("@password", password);
                 myCommand.Parameters.AddWithValue("@role", role);
+                myCommand.Parameters.AddWithValue("@speciality_id", (object)specialityId ?? DBNull.Value);
 
                 object result = myCommand.ExecuteScalar();
                 if (result != null)
@@ -210,10 +225,12 @@ namespace GSB_Manager.DAO
         /// <param name="name">Nouveau nom.</param>
         /// <param name="firstname">Nouveau prénom.</param>
         /// <param name="email">Nouvel email.</param>
+        /// <param name="role">Nouveau rôle (true = admin, false = médecin).</param>
+        /// <param name="specialityId">Identifiant de la spécialité du médecin, ou <c>null</c> si aucune.</param>
         /// <returns>
         /// <c>true</c> si la mise à jour a réussi, sinon <c>false</c>.
         /// </returns>
-        public bool EditUser(int user_id, string name, string firstname, string email, bool role)
+        public bool EditUser(int user_id, string name, string firstname, string email, bool role, int? specialityId)
         {
             var connection = db.GetConnection();
             connection.Open();
@@ -228,7 +245,8 @@ namespace GSB_Manager.DAO
                         SET name = @name,
                             firstname = @firstname,
                             email = @email,
-                            role = @role
+                            role = @role,
+                            speciality_id = @speciality_id
                         WHERE user_id = @user_id;
                     ";
 
@@ -237,6 +255,7 @@ namespace GSB_Manager.DAO
                 myCommand.Parameters.AddWithValue("@firstname", firstname);
                 myCommand.Parameters.AddWithValue("@email", email);
                 myCommand.Parameters.AddWithValue("@role", role);
+                myCommand.Parameters.AddWithValue("@speciality_id", (object)specialityId ?? DBNull.Value);
 
                 int rowsAffected = myCommand.ExecuteNonQuery();
                 return rowsAffected > 0;

@@ -14,6 +14,25 @@ CREATE DATABASE IF NOT EXISTS `GSB-Manager` DEFAULT CHARACTER SET utf8mb4 COLLAT
 USE `GSB-Manager`;
 
 -- --------------------------------------------------------
+-- Table `Speciality`
+-- --------------------------------------------------------
+
+CREATE TABLE `Speciality` (
+  `speciality_id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`speciality_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `Speciality` (`speciality_id`, `name`) VALUES
+(1, 'Médecine générale'),
+(2, 'Psychologie'),
+(3, 'Cardiologie'),
+(4, 'Dermatologie'),
+(5, 'Pédiatrie'),
+(6, 'Psychiatrie'),
+(7, 'Neurologie');
+
+-- --------------------------------------------------------
 -- Table `Users`
 -- --------------------------------------------------------
 
@@ -24,21 +43,24 @@ CREATE TABLE `Users` (
   `email` varchar(50) DEFAULT NULL,
   `password` varchar(200) DEFAULT NULL,
   `role` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`user_id`)
+  `speciality_id` int DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  KEY `speciality_id` (`speciality_id`),
+  CONSTRAINT `Users_ibfk_speciality` FOREIGN KEY (`speciality_id`) REFERENCES `Speciality` (`speciality_id`) ON DELETE SET NULL ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Mot de passe : password (SHA-256)
-INSERT INTO `Users` (`user_id`, `name`, `firstname`, `email`, `password`, `role`) VALUES
-(1,  'Martin',    'Paul',      'paul.martin@example.com',      '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1),
-(2,  'Petit',     'Hugo',      'hugo.petit@example.com',       '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1),
-(3,  'Benoit',    'Lucas',     'lucas.benoit@example.com',     '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1),
-(4,  'Durand',    'Claire',    'claire.durand@example.com',    '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 0),
-(5,  'Moreau',    'Sophie',    'sophie.moreau@example.com',    '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 0),
-(6,  'Leroy',     'Nicolas',   'nicolas.leroy@example.com',    '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 0),
-(7,  'Fontaine',  'Emma',      'emma.fontaine@example.com',    '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 0),
-(8,  'Bernard',   'Thomas',    'thomas.bernard@example.com',   '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 0),
-(9,  'Rousseau',  'Julie',     'julie.rousseau@example.com',   '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 0),
-(10, 'Garcia',    'Antoine',   'antoine.garcia@example.com',   '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 0);
+INSERT INTO `Users` (`user_id`, `name`, `firstname`, `email`, `password`, `role`, `speciality_id`) VALUES
+(1,  'Martin',    'Paul',      'paul.martin@example.com',      '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, NULL),
+(2,  'Petit',     'Hugo',      'hugo.petit@example.com',       '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, NULL),
+(3,  'Benoit',    'Lucas',     'lucas.benoit@example.com',     '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, NULL),
+(4,  'Durand',    'Claire',    'claire.durand@example.com',    '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 0, 1),
+(5,  'Moreau',    'Sophie',    'sophie.moreau@example.com',    '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 0, 3),
+(6,  'Leroy',     'Nicolas',   'nicolas.leroy@example.com',    '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 0, 2),
+(7,  'Fontaine',  'Emma',      'emma.fontaine@example.com',    '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 0, 5),
+(8,  'Bernard',   'Thomas',    'thomas.bernard@example.com',   '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 0, 6),
+(9,  'Rousseau',  'Julie',     'julie.rousseau@example.com',   '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 0, 4),
+(10, 'Garcia',    'Antoine',   'antoine.garcia@example.com',   '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 0, 7);
 
 -- --------------------------------------------------------
 -- Table `Patients`

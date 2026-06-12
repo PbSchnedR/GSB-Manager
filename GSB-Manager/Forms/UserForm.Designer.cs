@@ -147,6 +147,10 @@
             listUsers = new ListBox();
             buttonUserAdd = new Button();
             buttonUserEdit = new Button();
+            comboBoxUserSpecialityFilter = new ComboBox();
+            labelUserSpeciality = new Label();
+            textBoxUserSpeciality = new TextBox();
+            comboBoxUserSpeciality = new ComboBox();
             tabControl.SuspendLayout();
             tabMedicines.SuspendLayout();
             panelMedicineDetails.SuspendLayout();
@@ -869,6 +873,7 @@
             tabPageManager.Controls.Add(buttonUserCancel);
             tabPageManager.Controls.Add(buttonUserRegister);
             tabPageManager.Controls.Add(panel1);
+            tabPageManager.Controls.Add(comboBoxUserSpecialityFilter);
             tabPageManager.Controls.Add(listUsers);
             tabPageManager.Controls.Add(buttonUserAdd);
             tabPageManager.Controls.Add(buttonUserEdit);
@@ -929,6 +934,9 @@
             panel1.BorderStyle = BorderStyle.FixedSingle;
             panel1.Controls.Add(labelUserPassword);
             panel1.Controls.Add(textBoxUserPassword);
+            panel1.Controls.Add(labelUserSpeciality);
+            panel1.Controls.Add(textBoxUserSpeciality);
+            panel1.Controls.Add(comboBoxUserSpeciality);
             panel1.Controls.Add(labelUserFirstname);
             panel1.Controls.Add(textBoxUserFirstname);
             panel1.Controls.Add(textBoxUserName);
@@ -964,9 +972,35 @@
             textBoxUserPassword.Size = new Size(175, 27);
             textBoxUserPassword.TabIndex = 25;
             textBoxUserPassword.Visible = false;
-            // 
+            //
+            // labelUserSpeciality
+            //
+            labelUserSpeciality.AutoSize = true;
+            labelUserSpeciality.Location = new Point(240, 72);
+            labelUserSpeciality.Name = "labelUserSpeciality";
+            labelUserSpeciality.Size = new Size(77, 20);
+            labelUserSpeciality.TabIndex = 27;
+            labelUserSpeciality.Text = "Speciality :";
+            //
+            // textBoxUserSpeciality
+            //
+            textBoxUserSpeciality.Location = new Point(240, 95);
+            textBoxUserSpeciality.Name = "textBoxUserSpeciality";
+            textBoxUserSpeciality.ReadOnly = true;
+            textBoxUserSpeciality.Size = new Size(151, 27);
+            textBoxUserSpeciality.TabIndex = 28;
+            //
+            // comboBoxUserSpeciality
+            //
+            comboBoxUserSpeciality.FormattingEnabled = true;
+            comboBoxUserSpeciality.Location = new Point(240, 94);
+            comboBoxUserSpeciality.Name = "comboBoxUserSpeciality";
+            comboBoxUserSpeciality.Size = new Size(151, 28);
+            comboBoxUserSpeciality.TabIndex = 29;
+            comboBoxUserSpeciality.Visible = false;
+            //
             // labelUserFirstname
-            // 
+            //
             labelUserFirstname.AutoSize = true;
             labelUserFirstname.Location = new Point(46, 304);
             labelUserFirstname.Name = "labelUserFirstname";
@@ -1073,12 +1107,22 @@
             // 
             listUsers.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             listUsers.HorizontalScrollbar = true;
-            listUsers.Location = new Point(481, 27);
+            listUsers.Location = new Point(481, 62);
             listUsers.Margin = new Padding(3, 4, 3, 4);
             listUsers.Name = "listUsers";
-            listUsers.Size = new Size(300, 384);
+            listUsers.Size = new Size(300, 349);
             listUsers.TabIndex = 15;
             listUsers.SelectedIndexChanged += listUsers_SelectedIndexChanged;
+            //
+            // comboBoxUserSpecialityFilter
+            //
+            comboBoxUserSpecialityFilter.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            comboBoxUserSpecialityFilter.FormattingEnabled = true;
+            comboBoxUserSpecialityFilter.Location = new Point(481, 27);
+            comboBoxUserSpecialityFilter.Name = "comboBoxUserSpecialityFilter";
+            comboBoxUserSpecialityFilter.Size = new Size(300, 28);
+            comboBoxUserSpecialityFilter.TabIndex = 23;
+            comboBoxUserSpecialityFilter.SelectedIndexChanged += comboBoxUserSpecialityFilter_SelectedIndexChanged;
             // 
             // buttonUserAdd
             // 
@@ -1447,10 +1491,25 @@
             textBoxUserPassword.Location = new Point((int)(40 * scaleX), (int)(396 * scaleY));
             textBoxUserPassword.Size = new Size((int)(175 * scaleX), (int)(27 * scaleY));
 
+            labelUserSpeciality.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            labelUserSpeciality.Location = new Point((int)(240 * scaleX), (int)(72 * scaleY));
+
+            textBoxUserSpeciality.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            textBoxUserSpeciality.Location = new Point((int)(240 * scaleX), (int)(95 * scaleY));
+            textBoxUserSpeciality.Size = new Size((int)(151 * scaleX), (int)(27 * scaleY));
+
+            comboBoxUserSpeciality.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            comboBoxUserSpeciality.Location = new Point((int)(240 * scaleX), (int)(94 * scaleY));
+            comboBoxUserSpeciality.Size = new Size((int)(151 * scaleX), (int)(28 * scaleY));
+
             // Liste et boutons
+            comboBoxUserSpecialityFilter.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
+            comboBoxUserSpecialityFilter.Location = new Point((int)(481 * scaleX), (int)(27 * scaleY));
+            comboBoxUserSpecialityFilter.Size = new Size((int)(300 * scaleX), (int)(28 * scaleY));
+
             listUsers.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
-            listUsers.Location = new Point((int)(481 * scaleX), (int)(27 * scaleY));
-            listUsers.Size = new Size((int)(300 * scaleX), (int)(384 * scaleY));
+            listUsers.Location = new Point((int)(481 * scaleX), (int)(62 * scaleY));
+            listUsers.Size = new Size((int)(300 * scaleX), (int)(349 * scaleY));
 
             buttonUserAdd.Font = new Font("Segoe UI", 9F * scale, FontStyle.Regular, GraphicsUnit.Point);
             buttonUserAdd.Location = new Point((int)(481 * scaleX), (int)(440 * scaleY));
@@ -1542,6 +1601,10 @@
         private Label label7;
         private Label labelUserPassword;
         private TextBox textBoxUserPassword;
+        private Label labelUserSpeciality;
+        private TextBox textBoxUserSpeciality;
+        private ComboBox comboBoxUserSpeciality;
+        private ComboBox comboBoxUserSpecialityFilter;
         private Button buttonPrescriptionGenerate;
         private Button buttonUserDelete;
         private DataGridView dataPrescriptionMedicines;
